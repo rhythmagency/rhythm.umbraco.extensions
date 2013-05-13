@@ -48,18 +48,19 @@ namespace Rhythm.Extensions.DataTypes.AccessCode {
 		private void editor_Init(object sender, EventArgs e) {
 			var configuration = ((PrevalueEditor)PrevalueEditor).Configuration;
 
-			if (this.Data.Value != null) {
-				this.editor.Text = this.Data.Value.ToString();
-			} else {
-				if (this.data.Value == null || String.IsNullOrWhiteSpace(this.data.Value.ToString())) {
-					if (configuration.IncludeIdPrefix) {
-						var id = HttpContext.Current.Request.QueryString["id"];
-						var pw = PasswordGenerator.Generate(Math.Max(MIN_PASSWORD_LENGTH, configuration.Length - id.Length));
-						this.data.Value = String.Format("{0}{1}", pw, id);
-					} else {
-						this.data.Value = PasswordGenerator.Generate(Math.Max(MIN_PASSWORD_LENGTH, configuration.Length));
-					}
+			if (this.Data.Value == null || String.IsNullOrWhiteSpace(this.Data.Value.ToString())) {
+				if (configuration.IncludeIdPrefix) {
+					var id = HttpContext.Current.Request.QueryString["id"];
+					var pw = PasswordGenerator.Generate(Math.Max(MIN_PASSWORD_LENGTH, configuration.Length - id.Length));
+					this.data.Value = String.Format("{0}{1}", pw, id);
+				} else {
+					this.data.Value = PasswordGenerator.Generate(Math.Max(MIN_PASSWORD_LENGTH, configuration.Length));
 				}
+			}
+
+			var value = this.Data.Value;
+			if (value != null) {
+				this.editor.Text = value.ToString();
 			}
 		}
 	}
