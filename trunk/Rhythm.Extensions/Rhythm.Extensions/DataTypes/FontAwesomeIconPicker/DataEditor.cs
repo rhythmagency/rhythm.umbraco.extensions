@@ -19,7 +19,7 @@ namespace Rhythm.Extensions.DataTypes.FontAwesomeIconPicker {
 			this.CssClass = "umbEditorFontAwesomeIconPicker";
 
 			if (!this.Page.ClientScript.IsClientScriptIncludeRegistered(FONT_AWESOME_ICON_PICKER_REQUIRE_KEY)) {
-				this.Page.ClientScript.RegisterStartupScript(this.GetType(), FONT_AWESOME_ICON_PICKER_REQUIRE_KEY, "<script data-main='/App_Plugins/FontAwesomeIconPicker/js/main' src='/App_Plugins/FontAwesomeIconPicker/js/components/requirejs/require.js'></script>", false);
+				this.Page.ClientScript.RegisterStartupScript(this.GetType(), FONT_AWESOME_ICON_PICKER_REQUIRE_KEY, "<script src='/App_Plugins/FontAwesomeIconPicker/js/main.min.js'></script>", false);
 			}
 
 			if (!this.Page.ClientScript.IsClientScriptIncludeRegistered(FONT_AWESOME_ICON_PICKER_CSS_KEY)) {
