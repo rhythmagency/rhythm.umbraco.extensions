@@ -30,14 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="businesslogic">
-      <HintPath>..\Rhythm.Extensions.Website\Bin\businesslogic.dll</HintPath>
+    <Reference Include="businesslogic, Version=1.0.4869.18013, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\businesslogic.dll</HintPath>
     </Reference>
-    <Reference Include="cms">
-      <HintPath>..\Rhythm.Extensions.Website\Bin\cms.dll</HintPath>
+    <Reference Include="cms, Version=1.0.4869.18014, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\cms.dll</HintPath>
     </Reference>
-    <Reference Include="interfaces">
-      <HintPath>..\Rhythm.Extensions.Website\Bin\interfaces.dll</HintPath>
+    <Reference Include="interfaces, Version=1.0.4869.18012, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -47,8 +50,9 @@
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
-    <Reference Include="umbraco.DataLayer">
-      <HintPath>..\Rhythm.Extensions.Website\Bin\umbraco.DataLayer.dll</HintPath>
+    <Reference Include="umbraco.DataLayer, Version=1.0.4869.18013, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\umbraco.DataLayer.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

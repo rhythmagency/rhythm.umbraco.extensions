@@ -1,9 +1,0 @@
-{
-  "name": "selectik",
-  "version": "0.0.0",
-  "commit": "f60fef6e042c6adcf440b6cd46885cf7cedf834a",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/Brankub/selectik.git"
-  }
-}
