@@ -30,15 +30,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="businesslogic, Version=1.0.4869.18013, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="businesslogic, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\businesslogic.dll</HintPath>
     </Reference>
-    <Reference Include="cms, Version=1.0.4869.18014, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="cms, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\cms.dll</HintPath>
     </Reference>
-    <Reference Include="interfaces, Version=1.0.4869.18012, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Examine">
+      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\Examine.dll</HintPath>
+    </Reference>
+    <Reference Include="interfaces, Version=1.0.5021.24867, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\interfaces.dll</HintPath>
     </Reference>
@@ -46,27 +49,47 @@
       <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
-    <Reference Include="umbraco.DataLayer, Version=1.0.4869.18013, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="umbraco">
+      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\umbraco.dll</HintPath>
+    </Reference>
+    <Reference Include="Umbraco.Core, Version=1.0.5021.24867, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\Umbraco.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.DataLayer, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\umbraco.DataLayer.dll</HintPath>
     </Reference>
+    <Reference Include="Umbraco.Forms.Core">
+      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoContour_3.0.17\bin\Umbraco.Forms.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\DocumentTypes.cs" />
+    <Compile Include="Constants\Properties.cs" />
     <Compile Include="DataTypes\AccessCode\Configuration.cs" />
     <Compile Include="DataTypes\AccessCode\DataEditor.cs" />
     <Compile Include="DataTypes\AccessCode\DataType.cs" />
     <Compile Include="DataTypes\AccessCode\PrevalueEditor.cs" />
     <Compile Include="DataTypes\FontAwesomeIconPicker\DataEditor.cs" />
     <Compile Include="DataTypes\FontAwesomeIconPicker\DataType.cs" />
+    <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\FormExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\PublishedContentExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\UmbracoHelperExtensionMethods.cs" />
+    <Compile Include="Models\SimpleContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\FontAwesomeCssParser.cs" />
     <Compile Include="Utilities\PasswordGenerator.cs" />
-    <Compile Include="Utilities\StringExtensions.cs" />
-    <Compile Include="Utilities\XmlExtensions.cs" />
+    <Compile Include="ExtensionMethods\StringExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\XmlExtensionMethods.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
