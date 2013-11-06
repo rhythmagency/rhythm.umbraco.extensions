@@ -85,6 +85,8 @@
     <Compile Include="ExtensionMethods\PublishedContentExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\UmbracoHelperExtensionMethods.cs" />
     <Compile Include="Models\SimpleContent.cs" />
+    <Compile Include="Models\SimpleContentType.cs" />
+    <Compile Include="Models\SimpleTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\FontAwesomeCssParser.cs" />
     <Compile Include="Utilities\PasswordGenerator.cs" />
