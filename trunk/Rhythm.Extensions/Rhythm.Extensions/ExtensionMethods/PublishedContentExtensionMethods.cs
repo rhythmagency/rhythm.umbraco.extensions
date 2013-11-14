@@ -82,9 +82,10 @@ namespace Rhythm.Extensions.ExtensionMethods {
         /// </summary>
         /// <param name="source">The node with the picker property.</param>
         /// <param name="propertyAlias">The alias of the picker property.</param>
+        /// <param name="recursive">Recursively check ancestors (false by default)?</param>
         /// <returns>The picked node, the first of many picked nodes, or null.</returns>
-        public static IPublishedContent LocalizedGetPickedNode(this IPublishedContent source, string propertyAlias) {
-            return LocalizedGetPickedNodes(source, propertyAlias).FirstOrDefault();
+        public static IPublishedContent LocalizedGetPickedNode(this IPublishedContent source, string propertyAlias, bool recursive = false) {
+            return LocalizedGetPickedNodes(source, propertyAlias, recursive).FirstOrDefault();
         }
 
         /// <summary>
@@ -92,19 +93,27 @@ namespace Rhythm.Extensions.ExtensionMethods {
         /// </summary>
         /// <param name="source">The node with the picker property.</param>
         /// <param name="propertyAlias">The alias of the picker property.</param>
+        /// <param name="recursive">Recursively check ancestors (false by default)?</param>
         /// <returns>The picked nodes.</returns>
-        public static IEnumerable<IPublishedContent> LocalizedGetPickedNodes(this IPublishedContent source, string propertyAlias) {
-            string pickerXml = source.LocalizedPropertyValue<string>(propertyAlias);
-            if (pickerXml != null && !string.IsNullOrWhiteSpace(pickerXml as string))
-            {
-                var pickedNodes = new DynamicXml(pickerXml as string);
-                foreach (dynamic nodeItem in pickedNodes)
-                {
-                    int nodeId = int.Parse(nodeItem.InnerText);
-                    var pickedNode = GetHelper().TypedContent(nodeId);
-                    if (pickedNode != null)
-                    {
-                        yield return pickedNode;
+        public static IEnumerable<IPublishedContent> LocalizedGetPickedNodes(this IPublishedContent source, string propertyAlias, bool recursive = false) {
+            if (recursive) {
+                while (source != null) {
+                    if (source.HasValue(propertyAlias, false)) {
+                        break;
+                    }
+                    source = source.Parent;
+                }
+            }
+            if (source != null) {
+                string pickerXml = source.LocalizedPropertyValue<string>(propertyAlias);
+                if (pickerXml != null && !string.IsNullOrWhiteSpace(pickerXml as string)) {
+                    var pickedNodes = new DynamicXml(pickerXml as string);
+                    foreach (dynamic nodeItem in pickedNodes) {
+                        int nodeId = int.Parse(nodeItem.InnerText);
+                        var pickedNode = GetHelper().TypedContent(nodeId);
+                        if (pickedNode != null) {
+                            yield return pickedNode;
+                        }
                     }
                 }
             }
