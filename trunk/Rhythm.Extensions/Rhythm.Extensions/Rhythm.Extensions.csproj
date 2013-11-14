@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Rhythm.Extensions.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,23 +29,28 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Rhythm.Extensions.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="businesslogic, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\businesslogic.dll</HintPath>
+      <HintPath>..\ref\Umbraco_Bin\businesslogic.dll</HintPath>
     </Reference>
     <Reference Include="cms, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\cms.dll</HintPath>
+      <HintPath>..\ref\Umbraco_Bin\cms.dll</HintPath>
+    </Reference>
+    <Reference Include="Dimi.Polyglot">
+      <HintPath>..\ref\Polyglot_Bin\Dimi.Polyglot.dll</HintPath>
     </Reference>
     <Reference Include="Examine">
-      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\Examine.dll</HintPath>
+      <HintPath>..\ref\Umbraco_Bin\Examine.dll</HintPath>
     </Reference>
     <Reference Include="interfaces, Version=1.0.5021.24867, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\interfaces.dll</HintPath>
+      <HintPath>..\ref\Umbraco_Bin\interfaces.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -56,19 +62,23 @@
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="umbraco">
-      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\umbraco.dll</HintPath>
+      <HintPath>..\ref\Umbraco_Bin\umbraco.dll</HintPath>
     </Reference>
     <Reference Include="Umbraco.Core, Version=1.0.5021.24867, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\Umbraco.Core.dll</HintPath>
+      <HintPath>..\ref\Umbraco_Bin\Umbraco.Core.dll</HintPath>
     </Reference>
     <Reference Include="umbraco.DataLayer, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoCms.AllBinaries.6.1.6\umbraco.DataLayer.dll</HintPath>
+      <HintPath>..\ref\Umbraco_Bin\umbraco.DataLayer.dll</HintPath>
     </Reference>
     <Reference Include="Umbraco.Forms.Core">
-      <HintPath>..\..\..\..\..\Users\Michael\Documents\Visual Studio 2012\Libraries\UmbracoContour_3.0.17\bin\Umbraco.Forms.Core.dll</HintPath>
+      <HintPath>..\ref\Contour_Bin\Umbraco.Forms.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.MacroEngines">
+      <HintPath>..\ref\Umbraco_Bin\umbraco.MacroEngines.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
