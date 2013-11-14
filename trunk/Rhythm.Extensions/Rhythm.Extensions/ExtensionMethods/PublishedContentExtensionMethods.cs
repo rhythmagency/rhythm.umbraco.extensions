@@ -148,6 +148,30 @@ namespace Rhythm.Extensions.ExtensionMethods {
             return default(T);
         }
 
+        /// <summary>
+        /// Searches for the nearest ancestor with the specified content type.
+        /// </summary>
+        /// <param name="source">The node to start searching from.</param>
+        /// <param name="typeAlias">The alias of the content type.</param>
+        /// <param name="includeSelf">Include the supplied node in the search (by default the search will start at the parent)?</param>
+        /// <returns>The nearest matching ancestor, or null.</returns>
+        public static IPublishedContent NearestAncestorOfType(this IPublishedContent source, string typeAlias, bool includeSelf = false)
+        {
+            if (!includeSelf && source != null)
+            {
+                source = source.Parent;
+            }
+            while (source != null)
+            {
+                if (typeAlias.InvariantEquals(source.DocumentTypeAlias))
+                {
+                    return source;
+                }
+                source = source.Parent;
+            }
+            return null;
+        }
+
         #endregion
 
         #region Helper Methods
