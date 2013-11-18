@@ -106,17 +106,55 @@ namespace Rhythm.Extensions.ExtensionMethods {
             }
             if (source != null) {
                 string pickerXml = source.LocalizedPropertyValue<string>(propertyAlias);
-                if (pickerXml != null && !string.IsNullOrWhiteSpace(pickerXml as string)) {
-                    var pickedNodes = new DynamicXml(pickerXml as string);
-                    foreach (dynamic nodeItem in pickedNodes) {
-                        int nodeId = int.Parse(nodeItem.InnerText);
+                if (pickerXml != null)
+                {
+                    int nodeId;
+
+                    // Integer or XML?
+                    if (int.TryParse(pickerXml, out nodeId)) {
                         var pickedNode = GetHelper().TypedContent(nodeId);
                         if (pickedNode != null) {
                             yield return pickedNode;
                         }
                     }
+                    else if (!string.IsNullOrWhiteSpace(pickerXml as string)) {
+                        var pickedNodes = new DynamicXml(pickerXml as string);
+                        foreach (dynamic nodeItem in pickedNodes) {
+                            nodeId = int.Parse(nodeItem.InnerText);
+                            var pickedNode = GetHelper().TypedContent(nodeId);
+                            if (pickedNode != null) {
+                                yield return pickedNode;
+                            }
+                        }
+                    }
+
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the picked media.
+        /// </summary>
+        /// <param name="source">The node with the picker property.</param>
+        /// <param name="propertyAlias">The alias of the picker property.</param>
+        /// <param name="recursive">Recursively check ancestors (false by default)?</param>
+        /// <returns>The picked media node, or null.</returns>
+        public static IPublishedContent LocalizedGetPickedMedia(this IPublishedContent source, string propertyAlias, bool recursive = false) {
+            if (recursive) {
+                while (source != null) {
+                    if (source.HasValue(propertyAlias, false)) {
+                        break;
+                    }
+                    source = source.Parent;
+                }
+            }
+            if (source != null) {
+                int? pickedId = source.LocalizedPropertyValue<int?>(propertyAlias);
+                if (pickedId.HasValue) {
+                    return GetHelper().TypedMedia(pickedId.Value);
+                }
+            }
+            return null;
         }
 
         /// <summary>
