@@ -17,6 +17,7 @@ using DocumentTypes = Rhythm.Extensions.Constants.DocumentTypes;
 using DynamicNode = umbraco.MacroEngines.DynamicNode;
 using DynamicXml = Umbraco.Core.Dynamics.DynamicXml;
 using Properties = Rhythm.Extensions.Constants.Properties;
+using UmbracoLibrary = global::umbraco.library;
 
 namespace Rhythm.Extensions.ExtensionMethods {
 	public static class PublishedContentExtensionMethods {
@@ -187,6 +188,37 @@ namespace Rhythm.Extensions.ExtensionMethods {
         }
 
         /// <summary>
+        /// Gets a drop down value (aka, a pre-value) as a string.
+        /// </summary>
+        /// <param name="source">The node to start the search at.</param>
+        /// <param name="propertyAlias">The alias of the drop down property.</param>
+        /// <param name="recursive">Recursively check ancestors (false by default)?</param>
+        /// <returns>The selected drop down value.</returns>
+        public static string LocalizedDropDownValue(this IPublishedContent source, string propertyAlias, bool recursive = false) {
+            if (recursive) {
+                while (source != null) {
+                    if (source.HasValue(propertyAlias, false)) {
+                        break;
+                    }
+                    source = source.Parent;
+                }
+            }
+            if (source != null) {
+                var objectValue = source.LocalizedPropertyValue<object>(propertyAlias);
+                if (objectValue != null) {
+                    int parsedValue;
+                    string strValue = objectValue.ToString();
+                    if (!string.IsNullOrWhiteSpace(strValue) && int.TryParse(strValue, out parsedValue)) {
+                        return UmbracoLibrary.GetPreValueAsString(parsedValue);
+                    } else {
+                        return strValue;
+                    }
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Searches for the nearest ancestor with the specified content type.
         /// </summary>
         /// <param name="source">The node to start searching from.</param>
@@ -230,35 +262,28 @@ namespace Rhythm.Extensions.ExtensionMethods {
             var caseIgnorer = StringComparer.InvariantCultureIgnoreCase;
             string[] empties = { "Content,False,,,", "<items />" };
 
-
             // Check current page for property with language suffix.
-            if (page.HasProperty(suffixedAlias) && !string.IsNullOrEmpty(page.GetPropertyValue(suffixedAlias)))
-            {
+            if (page.HasProperty(suffixedAlias) && !string.IsNullOrEmpty(page.GetPropertyValue(suffixedAlias))) {
                 if (UmbracoContext.Current.PageId != null)
                     return GetPropertyValue<T>(page.Id, suffixedAlias);
             }
 
             // Check child nodes for a translation folder?
-            foreach (DynamicNode child in page.GetChildrenAsList)
-            {
+            foreach (DynamicNode child in page.GetChildrenAsList) {
                 if (!string.Equals(child.NodeTypeAlias, page.NodeTypeAlias + "_TranslationFolder", ignoreCase)) continue;
-                foreach (DynamicNode translation in child.GetChildrenAsList)
-                {
+                foreach (DynamicNode translation in child.GetChildrenAsList) {
                     var language = translation.GetPropertyValue("language");
                     if (language == null || !string.Equals(language, selectedLanguage, ignoreCase)) continue;
                     if (translation.HasProperty(propertyAlias)
                         && !string.IsNullOrEmpty(translation.GetPropertyValue(propertyAlias))
-                        && !empties.Contains(translation.GetPropertyValue(propertyAlias), caseIgnorer))
-                    {
+                        && !empties.Contains(translation.GetPropertyValue(propertyAlias), caseIgnorer)) {
                         return GetPropertyValue<T>(translation.Id, propertyAlias);
                     }
                 }
             }
 
-
             // Return the primary property?
-            if (page.HasProperty(propertyAlias) && !string.IsNullOrEmpty(page.GetPropertyValue(propertyAlias)))
-            {
+            if (page.HasProperty(propertyAlias) && !string.IsNullOrEmpty(page.GetPropertyValue(propertyAlias))) {
                 if (UmbracoContext.Current.PageId != null)
                     return GetPropertyValue<T>(page.Id, propertyAlias);
             }
