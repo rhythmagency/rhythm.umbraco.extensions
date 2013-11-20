@@ -284,8 +284,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 
             // Return the primary property?
             if (page.HasProperty(propertyAlias) && !string.IsNullOrEmpty(page.GetPropertyValue(propertyAlias))) {
-                if (UmbracoContext.Current.PageId != null)
-                    return GetPropertyValue<T>(page.Id, propertyAlias);
+                return GetPropertyValue<T>(page.Id, propertyAlias);
             }
 
             // Property not found. Return the default for the type.
