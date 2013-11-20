@@ -14,10 +14,15 @@ namespace Rhythm.Extensions.ExtensionMethods
         /// <returns>An ExpandoObject version of the supplied object.</returns>
         /// <remarks>
         /// This is useful to pass around anonymous objects.
+        /// If null is passed in, null will be returned.
         /// </remarks>
         public static ExpandoObject ToExpando(this object source)
         {
             IDictionary<string, object> expando = new ExpandoObject();
+            if (source == null)
+            {
+                return null;
+            }
             foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(source.GetType()))
             {
                 expando.Add(prop.Name, prop.GetValue(source));
