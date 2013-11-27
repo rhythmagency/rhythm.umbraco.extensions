@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="Constants\DocumentTypes.cs" />
     <Compile Include="Constants\Properties.cs" />
+    <Compile Include="Contour\PrevalueSourceTypes\PrevaluesFromNodesOfType.cs" />
     <Compile Include="DataTypes\AccessCode\Configuration.cs" />
     <Compile Include="DataTypes\AccessCode\DataEditor.cs" />
     <Compile Include="DataTypes\AccessCode\DataType.cs" />
