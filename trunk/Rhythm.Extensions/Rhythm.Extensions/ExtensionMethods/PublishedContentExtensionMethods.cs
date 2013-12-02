@@ -260,7 +260,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
             var suffixedAlias = propertyAlias + "_" + selectedLanguage;
             var ignoreCase = StringComparison.InvariantCultureIgnoreCase;
             var caseIgnorer = StringComparer.InvariantCultureIgnoreCase;
-            string[] empties = { "Content,False,,,", "<items />" };
+            string[] empties = { "Content,False,,,", "<items />", "<values />" };
 
             // Check current page for property with language suffix.
             if (page.HasProperty(suffixedAlias) && !string.IsNullOrEmpty(page.GetPropertyValue(suffixedAlias))) {
@@ -283,7 +283,9 @@ namespace Rhythm.Extensions.ExtensionMethods {
             }
 
             // Return the primary property?
-            if (page.HasProperty(propertyAlias) && !string.IsNullOrEmpty(page.GetPropertyValue(propertyAlias))) {
+            if (page.HasProperty(propertyAlias)
+                && !string.IsNullOrEmpty(page.GetPropertyValue(propertyAlias))
+                && !empties.Contains(page.GetPropertyValue(propertyAlias), caseIgnorer)) {
                 return GetPropertyValue<T>(page.Id, propertyAlias);
             }
 
@@ -300,7 +302,28 @@ namespace Rhythm.Extensions.ExtensionMethods {
         /// <param name="propertyAlias">The property alias.</param>
         /// <returns>The value of the specified type.</returns>
         private static T GetPropertyValue<T>(int nodeId, string propertyAlias) {
-            return (new UmbracoHelper(UmbracoContext.Current)).TypedContent(nodeId).GetPropertyValue<T>(propertyAlias);
+
+            // Variables.
+            var page = (new UmbracoHelper(UmbracoContext.Current)).TypedContent(nodeId);
+
+            // Special case for a multiple textstring.
+            if (typeof(T) == typeof(string[]))
+            {
+                var result = page.GetPropertyValue<DynamicXml>(propertyAlias);
+                if (result != null)
+                {
+                    var strItems = new List<string>();
+                    foreach (dynamic child in result)
+                    {
+                        strItems.Add(child.InnerText as string);
+                    }
+                    return (T)(strItems.ToArray() as object);
+                }
+            }
+
+            // Fallback to Umbraco's implementation.
+            return page.GetPropertyValue<T>(propertyAlias);
+
         }
 
         /// <summary>
