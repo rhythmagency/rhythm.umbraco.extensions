@@ -105,6 +105,7 @@
     <Compile Include="Utilities\PasswordGenerator.cs" />
     <Compile Include="ExtensionMethods\StringExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\XmlExtensionMethods.cs" />
+    <Compile Include="Utilities\PrevalueUtility.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
