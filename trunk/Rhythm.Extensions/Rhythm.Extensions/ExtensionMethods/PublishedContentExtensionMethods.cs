@@ -320,6 +320,31 @@ namespace Rhythm.Extensions.ExtensionMethods {
                     return (T)(strItems.ToArray() as object);
                 }
             }
+            // Special case for a textstring array.
+            else if (typeof(T) == typeof(List<string[]>))
+            {
+                var result = page.GetPropertyValue<DynamicXml>(propertyAlias);
+                if (result != null)
+                {
+                    var strItems = new List<string[]>();
+                    foreach (var child in result)
+                    {
+                        if ("values".InvariantEquals(child.BaseElement.Name.LocalName))
+                        {
+                            var subItems = new List<string>();
+                            foreach (var subChild in child)
+                            {
+                                if ("value".InvariantEquals(subChild.BaseElement.Name.LocalName))
+                                {
+                                    subItems.Add(subChild.InnerText);
+                                }
+                            }
+                            strItems.Add(subItems.ToArray());
+                        }
+                    }
+                    return (T)(strItems as object);
+                }
+            }
 
             // Fallback to Umbraco's implementation.
             return page.GetPropertyValue<T>(propertyAlias);
