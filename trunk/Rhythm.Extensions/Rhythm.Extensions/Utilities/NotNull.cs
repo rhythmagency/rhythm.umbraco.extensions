@@ -5,8 +5,10 @@
     /// </summary>
     /// <typeparam name="T">The type of the instance to wrap.</typeparam>
     /// <remarks>
-    /// This is used to work around an Umbraco/MVC limitation,
-    /// which seemed to be causing an exception when a null model was passed to a partial view.
+    /// This is used to work around an MVC bug/limitation,
+    /// which seemed to be causing an exception when a null model was passed to a partial view:
+    ///     https://aspnet.codeplex.com/workitem/8872
+    ///     http://stackoverflow.com/questions/650393/renderpartial-with-null-model-gets-passed-the-wrong-type
     /// </remarks>
     public class NotNull<T> {
 
