@@ -93,6 +93,7 @@
     <Compile Include="DataTypes\FontAwesomeIconPicker\DataType.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\FormExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\HtmlHelperExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\ObjectExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\PublishedContentExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\UmbracoHelperExtensionMethods.cs" />
