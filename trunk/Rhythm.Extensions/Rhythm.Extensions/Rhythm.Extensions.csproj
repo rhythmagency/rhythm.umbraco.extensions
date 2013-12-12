@@ -92,6 +92,7 @@
     <Compile Include="DataTypes\FontAwesomeIconPicker\DataEditor.cs" />
     <Compile Include="DataTypes\FontAwesomeIconPicker\DataType.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\ExpandoObjectExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\FormExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\HtmlHelperExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\ObjectExtensionMethods.cs" />
