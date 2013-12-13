@@ -108,6 +108,7 @@
     <Compile Include="ExtensionMethods\StringExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\XmlExtensionMethods.cs" />
     <Compile Include="Utilities\PrevalueUtility.cs" />
+    <Compile Include="Utilities\ReflectionUtility.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
