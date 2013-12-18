@@ -55,9 +55,12 @@ namespace Rhythm.Extensions.ExtensionMethods {
         /// </summary>
         /// <param name="source">The node with the property.</param>
         /// <param name="propertyAlias">The property alias.</param>
+        /// <param name="recursive">
+        /// Recursively check ancestors?
+        /// </param>
         /// <returns>The value.</returns>
-        public static string LocalizedPropertyValue(this IPublishedContent source, string propertyAlias) {
-            return LocalizedPropertyValue<string>(source, propertyAlias);
+        public static string LocalizedPropertyValue(this IPublishedContent source, string propertyAlias, bool recursive = false) {
+            return LocalizedPropertyValue<string>(source, propertyAlias, recursive);
         }
 
         /// <summary>
@@ -66,15 +69,18 @@ namespace Rhythm.Extensions.ExtensionMethods {
         /// <typeparam name="T">The type to return.</typeparam>
         /// <param name="source">The node with the property.</param>
         /// <param name="propertyAlias">The property alias.</param>
+        /// <param name="recursive">
+        /// Recursively check ancestors?
+        /// </param>
         /// <returns>The value with the specified type.</returns>
-        public static T LocalizedPropertyValue<T>(this IPublishedContent source, string propertyAlias) {
+        public static T LocalizedPropertyValue<T>(this IPublishedContent source, string propertyAlias, bool recursive = false) {
             if (source == null)
             {
                 return default(T);
             }
             else
             {
-                return LocalizedPropertyValueHelper<T>(new DynamicNode(source.Id), propertyAlias);
+                return LocalizedPropertyValueHelper<T>(new DynamicNode(source.Id), propertyAlias, recursive);
             }
         }
 
@@ -252,8 +258,17 @@ namespace Rhythm.Extensions.ExtensionMethods {
         /// <typeparam name="T">The type to return.</typeparam>
         /// <param name="page">Page Content</param>
         /// <param name="propertyAlias">The property alias.</param>
+        /// <param name="recursive">
+        /// Recursively check ancestors?
+        /// </param>
         /// <returns>The value.</returns>
-        private static T LocalizedPropertyValueHelper<T>(DynamicNode page, string propertyAlias) {
+        private static T LocalizedPropertyValueHelper<T>(DynamicNode page, string propertyAlias, bool recursive = false) {
+
+            // Validation / base case.
+            if (page == null)
+            {
+                return default(T);
+            }
 
             // Variables.
             var selectedLanguage = LocalizationSelectedLanguage();
@@ -287,6 +302,11 @@ namespace Rhythm.Extensions.ExtensionMethods {
                 && !string.IsNullOrEmpty(page.GetPropertyValue(propertyAlias))
                 && !empties.Contains(page.GetPropertyValue(propertyAlias), caseIgnorer)) {
                 return GetPropertyValue<T>(page.Id, propertyAlias);
+            }
+
+            // Recursive?
+            if (recursive) {
+                return LocalizedPropertyValueHelper<T>(page.Parent, propertyAlias, recursive);
             }
 
             // Property not found. Return the default for the type.
