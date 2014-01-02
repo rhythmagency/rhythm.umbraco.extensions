@@ -113,7 +113,7 @@
                     nodes.AddRange(contentService.GetContentOfContentType(typeId));
                 }
                 var nodeIds = nodes.Select(x => x.Id).Distinct().ToArray();
-                var publishedNodes = helper.TypedContent(nodeIds);
+                var publishedNodes = helper.TypedContent(nodeIds).Where(x => x != null);
 
 
                 // Get prevalues.
