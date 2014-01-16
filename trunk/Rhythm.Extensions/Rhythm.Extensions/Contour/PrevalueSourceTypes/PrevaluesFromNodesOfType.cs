@@ -95,9 +95,9 @@
 
                 // Get content type ID's.
                 typeIds.Add(int.Parse(PrimaryContentType));
-                foreach (var typeAlis in splitTypes)
+                foreach (var typeAlias in splitTypes)
                 {
-                    var extraType = typeService.GetContentType(typeAlis);
+                    var extraType = typeService.GetContentType(typeAlias);
                     if (extraType != null && extraType.Id > 0)
                     {
                         typeIds.Add(extraType.Id);
