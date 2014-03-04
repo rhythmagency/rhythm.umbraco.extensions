@@ -1,5 +1,9 @@
 # Rhythm Umbraco Extensions
 
+## Prerequisites
+Before installing Rhythm Umbraco Extensions, you must install:
+* [Umbraco Contour](http://our.umbraco.org/projects/umbraco-pro/contour).
+
 ## Constants
 
 ##### Document Types
