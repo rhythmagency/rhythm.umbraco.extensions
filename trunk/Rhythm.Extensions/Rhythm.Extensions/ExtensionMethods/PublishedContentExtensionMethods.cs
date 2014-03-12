@@ -1,10 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Dimi.Polyglot.BLL;
+using Newtonsoft.Json.Linq;
 using Rhythm.Extensions.Models;
-using System.Collections.Generic;
-using Umbraco.Core;
-using Umbraco.Core.Models;
-using Umbraco.Web;
-using Dimi.Polyglot.BLL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +20,8 @@ namespace Rhythm.Extensions.ExtensionMethods {
 
         #region Variables
 
-        private static readonly Regex LangRegex = new Regex("^[a-z]{2}(-[a-z]{2})?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex LangRegex = new Regex(@"^[a-z]{2}(-[a-z]{2})?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex CsvRegex = new Regex(@"\s*[0-9](\s*,\s*[0-9]+)+\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         #endregion
 
@@ -112,23 +109,37 @@ namespace Rhythm.Extensions.ExtensionMethods {
                 }
             }
             if (source != null) {
-                string pickerXml = source.LocalizedPropertyValue<string>(propertyAlias);
-                if (pickerXml != null)
+                string pickerValue = source.LocalizedPropertyValue<string>(propertyAlias);
+                var helper = null as UmbracoHelper;
+                if (pickerValue != null)
                 {
                     int nodeId;
 
-                    // Integer or XML?
-                    if (int.TryParse(pickerXml, out nodeId)) {
+                    // Integer, CSV, or XML?
+                    if (int.TryParse(pickerValue, out nodeId)) {
                         var pickedNode = GetHelper().TypedContent(nodeId);
                         if (pickedNode != null) {
                             yield return pickedNode;
                         }
                     }
-                    else if (!string.IsNullOrWhiteSpace(pickerXml as string)) {
-                        var pickedNodes = new DynamicXml(pickerXml as string);
+                    else if (CsvRegex.IsMatch(pickerValue))
+                    {
+                        var pickedNodes = pickerValue.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var nodeItem in pickedNodes)
+                        {
+                            nodeId = int.Parse(nodeItem.Trim());
+                            helper = helper ?? GetHelper();
+                            var pickedNode = helper.TypedContent(nodeId);
+                            if (pickedNode != null) {
+                                yield return pickedNode;
+                            }
+                        }
+                    }
+                    else if (!string.IsNullOrWhiteSpace(pickerValue as string)) {
+                        var pickedNodes = new DynamicXml(pickerValue as string);
                         foreach (dynamic nodeItem in pickedNodes) {
                             nodeId = int.Parse(nodeItem.InnerText);
-                            var pickedNode = GetHelper().TypedContent(nodeId);
+                            var pickedNode = helper.TypedContent(nodeId);
                             if (pickedNode != null) {
                                 yield return pickedNode;
                             }

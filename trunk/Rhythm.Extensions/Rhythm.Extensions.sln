@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Rhythm.Extensions.Website", "http://localhost:51295", "{9245C122-02C1-4E76-8A1B-70F9721E13F0}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
@@ -25,6 +27,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Rhythm.Extensions.Website",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhythm.Extensions", "Rhythm.Extensions\Rhythm.Extensions.csproj", "{0129ED87-1ABB-43D0-81B9-E602943400B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhythm.Extensions.Umbraco7", "Rhythm.Extensions7\Rhythm.Extensions.Umbraco7.csproj", "{911F0B60-D307-46BB-9708-8CC5A44C25F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,10 @@ Global
 		{0129ED87-1ABB-43D0-81B9-E602943400B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0129ED87-1ABB-43D0-81B9-E602943400B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0129ED87-1ABB-43D0-81B9-E602943400B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{911F0B60-D307-46BB-9708-8CC5A44C25F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{911F0B60-D307-46BB-9708-8CC5A44C25F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{911F0B60-D307-46BB-9708-8CC5A44C25F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{911F0B60-D307-46BB-9708-8CC5A44C25F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

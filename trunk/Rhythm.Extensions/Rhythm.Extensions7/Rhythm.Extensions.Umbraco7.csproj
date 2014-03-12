@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{911F0B60-D307-46BB-9708-8CC5A44C25F3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rhythm.Extensions</RootNamespace>
+    <AssemblyName>Rhythm.Extensions.Umbraco7</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Rhythm.Extensions.Umbraco7.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Rhythm.Extensions.Umbraco7.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="businesslogic, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\businesslogic.dll</HintPath>
+    </Reference>
+    <Reference Include="cms, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\cms.dll</HintPath>
+    </Reference>
+    <Reference Include="Dimi.Polyglot, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Polyglot_Bin\Dimi.Polyglot.dll</HintPath>
+    </Reference>
+    <Reference Include="Examine, Version=0.1.52.2941, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\Examine.dll</HintPath>
+    </Reference>
+    <Reference Include="interfaces, Version=1.0.5021.24867, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="umbraco, Version=1.0.5021.24870, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\umbraco.dll</HintPath>
+    </Reference>
+    <Reference Include="Umbraco.Core, Version=1.0.5021.24867, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\Umbraco.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.DataLayer, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\umbraco.DataLayer.dll</HintPath>
+    </Reference>
+    <Reference Include="Umbraco.Forms.Core, Version=3.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Contour_Bin\Umbraco.Forms.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.MacroEngines, Version=1.0.5021.24871, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\umbraco.MacroEngines.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Rhythm.Extensions\Constants\DocumentTypes.cs">
+      <Link>Constants\DocumentTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Constants\Properties.cs">
+      <Link>Constants\Properties.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Contour\PrevalueSourceTypes\PrevaluesFromNodesOfType.cs">
+      <Link>Contour\PrevalueSourceTypes\PrevaluesFromNodesOfType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Contour\WorkflowTypes\SubscribeToExactTargetNewsletter.cs">
+      <Link>Contour\WorkflowTypes\SubscribeToExactTargetNewsletter.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\AccessCode\Configuration.cs">
+      <Link>DataTypes\AccessCode\Configuration.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\AccessCode\DataEditor.cs">
+      <Link>DataTypes\AccessCode\DataEditor.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\AccessCode\DataType.cs">
+      <Link>DataTypes\AccessCode\DataType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\AccessCode\PrevalueEditor.cs">
+      <Link>DataTypes\AccessCode\PrevalueEditor.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\FontAwesomeIconPicker\DataEditor.cs">
+      <Link>DataTypes\FontAwesomeIconPicker\DataEditor.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\FontAwesomeIconPicker\DataType.cs">
+      <Link>DataTypes\FontAwesomeIconPicker\DataType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\ControllerExtensionMethods.cs">
+      <Link>ExtensionMethods\ControllerExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\DateTimeExtensionMethods.cs">
+      <Link>ExtensionMethods\DateTimeExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\ExpandoObjectExtensionMethods.cs">
+      <Link>ExtensionMethods\ExpandoObjectExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\FormExtensionMethods.cs">
+      <Link>ExtensionMethods\FormExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\HtmlHelperExtensionMethods.cs">
+      <Link>ExtensionMethods\HtmlHelperExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\ObjectExtensionMethods.cs">
+      <Link>ExtensionMethods\ObjectExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\PublishedContentExtensionMethods.cs">
+      <Link>ExtensionMethods\PublishedContentExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\StringExtensionMethods.cs">
+      <Link>ExtensionMethods\StringExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\UmbracoHelperExtensionMethods.cs">
+      <Link>ExtensionMethods\UmbracoHelperExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\XmlExtensionMethods.cs">
+      <Link>ExtensionMethods\XmlExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Models\SimpleContent.cs">
+      <Link>Models\SimpleContent.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Models\SimpleContentType.cs">
+      <Link>Models\SimpleContentType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Models\SimpleTemplate.cs">
+      <Link>Models\SimpleTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\FontAwesomeCssParser.cs">
+      <Link>Utilities\FontAwesomeCssParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\NetUtility.cs">
+      <Link>Utilities\NetUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\NotNull.cs">
+      <Link>Utilities\NotNull.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\PasswordGenerator.cs">
+      <Link>Utilities\PasswordGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\PrevalueUtility.cs">
+      <Link>Utilities\PrevalueUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\ReflectionUtility.cs">
+      <Link>Utilities\ReflectionUtility.cs</Link>
+    </Compile>
+    <Compile Include="Models\SimpleContent_Umbraco7.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
