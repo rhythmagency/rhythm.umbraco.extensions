@@ -376,6 +376,22 @@ namespace Rhythm.Extensions.ExtensionMethods {
                     return (T)(strItems as object);
                 }
             }
+            // Special case for multinode treepicker/CSV.
+            else if (typeof(T) == typeof(int[]))
+            {
+                var result = page.GetPropertyValue<string>(propertyAlias) ?? string.Empty;
+                var resultItems = result.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                var intItems = new List<int>();
+                int intItem;
+                foreach (var item in resultItems)
+                {
+                    if (int.TryParse(item.Trim(), out intItem))
+                    {
+                        intItems.Add(intItem);
+                    }
+                }
+                return (T)(intItems.ToArray() as object);
+            }
 
             // Fallback to Umbraco's implementation.
             return page.GetPropertyValue<T>(propertyAlias);
