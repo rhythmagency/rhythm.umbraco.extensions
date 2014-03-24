@@ -98,6 +98,9 @@
     <Compile Include="..\Rhythm.Extensions\Constants\Properties.cs">
       <Link>Constants\Properties.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Constants\RegexPatterns.cs">
+      <Link>Constants\RegexPatterns.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Contour\PrevalueSourceTypes\PrevaluesFromNodesOfType.cs">
       <Link>Contour\PrevalueSourceTypes\PrevaluesFromNodesOfType.cs</Link>
     </Compile>
