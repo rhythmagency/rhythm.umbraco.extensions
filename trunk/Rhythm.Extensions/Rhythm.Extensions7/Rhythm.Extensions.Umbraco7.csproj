@@ -164,6 +164,9 @@
     <Compile Include="..\Rhythm.Extensions\Models\SimpleTemplate.cs">
       <Link>Models\SimpleTemplate.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Types\ValueLabelPair.cs">
+      <Link>Types\ValueLabelPair.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Utilities\FontAwesomeCssParser.cs">
       <Link>Utilities\FontAwesomeCssParser.cs</Link>
     </Compile>
