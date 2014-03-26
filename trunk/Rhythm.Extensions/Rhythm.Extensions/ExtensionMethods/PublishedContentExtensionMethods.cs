@@ -259,6 +259,44 @@ namespace Rhythm.Extensions.ExtensionMethods {
             return null;
         }
 
+        /// <summary>
+        /// Finds the highest-level ancestor (typically the homepage).
+        /// </summary>
+        /// <param name="source">The node to start from.</param>
+        /// <returns>The ancestor.</returns>
+        public static IPublishedContent RootAncestor(this IPublishedContent source) {
+            var parent = source;
+            var ancestor = parent;
+            while (parent != null) {
+                ancestor = parent;
+                parent = parent.Parent;
+            }
+            return ancestor;
+        }
+
+        /// <summary>
+        /// Finds the first child that is a descendent that matches the specified list of content type aliases,
+        /// relative to the specified page.
+        /// </summary>
+        /// <param name="source">The parent page to start the search.</param>
+        /// <param name="typeAliases">The content type aliases.</param>
+        /// <returns>The node, if one was found; otherwise, false.</returns>
+        /// <remarks>
+        /// Only looks at the first matching child at each step (for performance).
+        /// </remarks>
+        public static IPublishedContent ChildByTypePath(this IPublishedContent source, params string[] typeAliases) {
+            var child = source;
+            if (child != null) {
+                foreach (var alias in typeAliases) {
+                    child = child.Children.Where(x => alias.InvariantEquals(x.DocumentTypeAlias)).FirstOrDefault();
+                    if (child == null) {
+                        break;
+                    }
+                }
+            }
+            return child;
+        }
+
         #endregion
 
         #region Helper Methods
