@@ -25,6 +25,22 @@ namespace Rhythm.Extensions.ExtensionMethods {
 
         #endregion
 
+        #region Cache
+
+        private static Dictionary<int, Tuple<int?, DateTime>> TranslationCache { get; set; }
+        private static object TranslationLock { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        static PublishedContentExtensionMethods() {
+            TranslationCache = new Dictionary<int,Tuple<int?,DateTime>>();
+            TranslationLock = new object();
+        }
+
+        #endregion
+
         #region Extension Methods
 
         public static string GetTitle(this IPublishedContent content) {
@@ -139,6 +155,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
                         var pickedNodes = new DynamicXml(pickerValue as string);
                         foreach (dynamic nodeItem in pickedNodes) {
                             nodeId = int.Parse(nodeItem.InnerText);
+                            helper = helper ?? GetHelper();
                             var pickedNode = helper.TypedContent(nodeId);
                             if (pickedNode != null) {
                                 yield return pickedNode;
@@ -333,17 +350,60 @@ namespace Rhythm.Extensions.ExtensionMethods {
             }
 
             // Check child nodes for a translation folder?
-            foreach (DynamicNode child in page.GetChildrenAsList) {
-                if (!string.Equals(child.NodeTypeAlias, page.NodeTypeAlias + "_TranslationFolder", ignoreCase)) continue;
-                foreach (DynamicNode translation in child.GetChildrenAsList) {
-                    var language = translation.GetPropertyValue("language");
-                    if (language == null || !string.Equals(language, selectedLanguage, ignoreCase)) continue;
-                    if (translation.HasProperty(propertyAlias)
-                        && !string.IsNullOrEmpty(translation.GetPropertyValue(propertyAlias))
-                        && !empties.Contains(translation.GetPropertyValue(propertyAlias), caseIgnorer)) {
-                        return GetPropertyValue<T>(translation.Id, propertyAlias);
+            lock (TranslationLock) {
+
+                // Variables.
+                Tuple<int?, DateTime> translationInfo;
+                bool recache = false;
+                int? translationId = null;
+
+                // Check the cache first (a hit is cached longer than a miss).
+                if (TranslationCache.TryGetValue(page.Id, out translationInfo)) {
+                    translationId = translationInfo.Item1;
+                    if (translationInfo.Item1.HasValue) {
+                        var span = DateTime.Now.Subtract(translationInfo.Item2);
+                        if (span > TimeSpan.FromMinutes(5)) {
+                            recache = true;
+                        }
+                    }
+                    else {
+                        var span = DateTime.Now.Subtract(translationInfo.Item2);
+                        if (span > TimeSpan.FromMinutes(1)) {
+                            recache = true;
+                        }
                     }
                 }
+                else {
+                    recache = true;
+                }
+
+                // Repopulate the cache?
+                if (recache) {
+                    foreach (DynamicNode child in page.GetChildrenAsList) {
+                        if (!string.Equals(child.NodeTypeAlias, page.NodeTypeAlias + "_TranslationFolder", ignoreCase)) continue;
+                        translationId = child.Id;
+                        break;
+                    }
+                    TranslationCache[page.Id] = new Tuple<int?,DateTime>(translationId, DateTime.Now);
+                }
+
+                // Check translations under translation folder.
+                if (translationId.HasValue) {
+                    var translationFolder = new DynamicNode(translationId.Value);
+                    foreach (DynamicNode translation in translationFolder.GetChildrenAsList) {
+                        var language = translation.GetPropertyValue("language");
+                        if (language == null || !string.Equals(language, selectedLanguage, ignoreCase)) continue;
+                        if (translation.HasProperty(propertyAlias))
+                        {
+                            var translationValue = translation.GetPropertyValue(propertyAlias);
+                            if (!string.IsNullOrEmpty(translationValue)
+                                && !empties.Contains(translationValue, caseIgnorer)) {
+                                return GetPropertyValue<T>(translation.Id, propertyAlias);
+                            }
+                        }
+                    }
+                }
+
             }
 
             // Return the primary property?
