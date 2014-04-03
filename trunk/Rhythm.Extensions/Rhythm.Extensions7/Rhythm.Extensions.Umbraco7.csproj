@@ -170,6 +170,9 @@
     <Compile Include="..\Rhythm.Extensions\Types\ValueLabelPair.cs">
       <Link>Types\ValueLabelPair.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\ActionUtility.cs">
+      <Link>Utilities\ActionUtility.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Utilities\FontAwesomeCssParser.cs">
       <Link>Utilities\FontAwesomeCssParser.cs</Link>
     </Compile>
