@@ -11,7 +11,7 @@
 
 		/// <summary>
 		/// Attempts to execute an action in the specified time limit,
-		/// optionally executing an alternate task on failure.
+		/// optionally executing an alternate action on failure.
 		/// </summary>
 		/// <param name="action">The action to attempt to execute.</param>
 		/// <param name="limit">The duration of time the action is allowed to execute for.</param>
@@ -24,6 +24,8 @@
 		/// </returns>
 		/// <remarks>
 		/// If the action does not execute within the given time limit, it will be aborted.
+		/// If the abort operation doesn't complete quickly,
+		/// the alternate action will be executed before the abort operation completes.
 		/// </remarks>
 		public static bool Attempt(Action action, TimeSpan limit, Action alternate = null) {
 
@@ -90,8 +92,22 @@
 				else {
 
 					// Abort thread and try alternate.
+					var abortLimit = TimeSpan.FromSeconds(Math.Max(0.1, Math.Min(limit.TotalSeconds / 2, 1)));
 					requestingAbort = true;
-					t.Abort();
+					var abortThread = new Thread(() => {
+						try {
+							t.Abort();
+						}
+						catch (ThreadAbortException) {
+							try {
+								Thread.ResetAbort();
+							}
+							catch { }
+						}
+						catch { }
+					});
+					abortThread.Start();
+					abortThread.Join(abortLimit);
 					if (alternate != null) {
 						alternate();
 					}
