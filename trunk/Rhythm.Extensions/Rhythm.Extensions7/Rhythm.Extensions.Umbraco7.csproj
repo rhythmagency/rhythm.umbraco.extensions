@@ -58,6 +58,7 @@
       <HintPath>..\ref\Umbraco7\Umbraco_Bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -92,6 +93,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Rhythm.Extensions\Attributes\IpAddressBinderAttribute.cs">
+      <Link>Attributes\IpAddressBinderAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Attributes\ValidateRecaptchaAttribute.cs">
+      <Link>Attributes\ValidateRecaptchaAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Binding\RhythmModelBinder.cs">
+      <Link>Binding\RhythmModelBinder.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Constants\DocumentTypes.cs">
       <Link>Constants\DocumentTypes.cs</Link>
     </Compile>
@@ -124,6 +134,12 @@
     </Compile>
     <Compile Include="..\Rhythm.Extensions\DataTypes\FontAwesomeIconPicker\DataType.cs">
       <Link>DataTypes\FontAwesomeIconPicker\DataType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Enums\ConfigKeys.cs">
+      <Link>Enums\ConfigKeys.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Events\RhythmEventHandler.cs">
+      <Link>Events\RhythmEventHandler.cs</Link>
     </Compile>
     <Compile Include="..\Rhythm.Extensions\ExtensionMethods\ControllerExtensionMethods.cs">
       <Link>ExtensionMethods\ControllerExtensionMethods.cs</Link>
@@ -172,6 +188,9 @@
     </Compile>
     <Compile Include="..\Rhythm.Extensions\Utilities\ActionUtility.cs">
       <Link>Utilities\ActionUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\ConfigUtility.cs">
+      <Link>Utilities\ConfigUtility.cs</Link>
     </Compile>
     <Compile Include="..\Rhythm.Extensions\Utilities\FontAwesomeCssParser.cs">
       <Link>Utilities\FontAwesomeCssParser.cs</Link>

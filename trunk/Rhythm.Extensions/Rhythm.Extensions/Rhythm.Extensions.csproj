@@ -55,6 +55,7 @@
       <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
@@ -82,6 +83,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\IpAddressBinderAttribute.cs" />
+    <Compile Include="Attributes\ValidateRecaptchaAttribute.cs" />
+    <Compile Include="Binding\RhythmModelBinder.cs" />
     <Compile Include="Constants\DocumentTypes.cs" />
     <Compile Include="Constants\Properties.cs" />
     <Compile Include="Constants\RegexPatterns.cs" />
@@ -93,6 +97,8 @@
     <Compile Include="DataTypes\AccessCode\PrevalueEditor.cs" />
     <Compile Include="DataTypes\FontAwesomeIconPicker\DataEditor.cs" />
     <Compile Include="DataTypes\FontAwesomeIconPicker\DataType.cs" />
+    <Compile Include="Enums\ConfigKeys.cs" />
+    <Compile Include="Events\RhythmEventHandler.cs" />
     <Compile Include="ExtensionMethods\ControllerExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\ExpandoObjectExtensionMethods.cs" />
@@ -109,6 +115,7 @@
     <Compile Include="Types\InstanceCache.cs" />
     <Compile Include="Types\ValueLabelPair.cs" />
     <Compile Include="Utilities\ActionUtility.cs" />
+    <Compile Include="Utilities\ConfigUtility.cs" />
     <Compile Include="Utilities\FontAwesomeCssParser.cs" />
     <Compile Include="Utilities\NetUtility.cs" />
     <Compile Include="Utilities\NotNull.cs" />
