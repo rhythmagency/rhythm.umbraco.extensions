@@ -106,6 +106,7 @@
     <Compile Include="ExtensionMethods\HtmlHelperExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\ObjectExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\PublishedContentExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\TimeZoneExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\UmbracoHelperExtensionMethods.cs" />
     <Compile Include="Models\SimpleContent.cs" />
     <Compile Include="Models\SimpleContentType.cs" />

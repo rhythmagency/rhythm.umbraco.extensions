@@ -165,6 +165,9 @@
     <Compile Include="..\Rhythm.Extensions\ExtensionMethods\StringExtensionMethods.cs">
       <Link>ExtensionMethods\StringExtensionMethods.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\TimeZoneExtensionMethods.cs">
+      <Link>ExtensionMethods\TimeZoneExtensionMethods.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\ExtensionMethods\UmbracoHelperExtensionMethods.cs">
       <Link>ExtensionMethods\UmbracoHelperExtensionMethods.cs</Link>
     </Compile>
