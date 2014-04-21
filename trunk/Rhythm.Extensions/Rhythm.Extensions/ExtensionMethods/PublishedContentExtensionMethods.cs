@@ -303,6 +303,43 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		}
 
 		/// <summary>
+		/// Returns all siblings of the specified types.
+		/// </summary>
+		/// <param name="source">The node to start the search at.</param>
+		/// <param name="typeAliases">The aliases of the content types.</param>
+		/// <returns>The siblings.</returns>
+		/// <remarks>
+		/// The source node is excluded from the results.
+		/// </remarks>
+		public static IEnumerable<IPublishedContent> SiblingsOfTypes(this IPublishedContent source,
+			params string[] typeAliases) {
+			return source.Siblings()
+				.Where(x => x.Id != source.Id && typeAliases.Any(y => y.InvariantEquals(x.DocumentTypeAlias)));
+		}
+
+		/// <summary>
+		/// Returns all descendants of the specified types.
+		/// </summary>
+		/// <param name="source">The node to start the search at.</param>
+		/// <param name="typeAliases">The aliases of the content types.</param>
+		/// <returns>
+		/// The matching descendants.
+		/// </returns>
+		public static IEnumerable<IPublishedContent> DescendantsOfTypes(this IPublishedContent source,
+			params string[] typeAliases) {
+			if (source != null && typeAliases != null && typeAliases.Length > 0) {
+				foreach (var child in source.Children) {
+					if (typeAliases.Any(x => x.InvariantEquals(child.DocumentTypeAlias))) {
+						yield return child;
+					}
+					foreach (var subchild in child.DescendantsOfTypes(typeAliases)) {
+						yield return subchild;
+					}
+				}
+			}
+		}
+
+		/// <summary>
 		/// Finds the highest-level ancestor (typically the homepage).
 		/// </summary>
 		/// <param name="source">The node to start from.</param>
@@ -318,7 +355,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		}
 
 		/// <summary>
-		/// Finds the first child that is a descendent that matches the specified list of content type aliases,
+		/// Finds the first child that is a descendant that matches the specified list of content type aliases,
 		/// relative to the specified page.
 		/// </summary>
 		/// <param name="source">The parent page to start the search.</param>
