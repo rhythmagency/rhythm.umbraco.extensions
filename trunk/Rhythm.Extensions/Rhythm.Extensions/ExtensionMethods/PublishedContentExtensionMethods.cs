@@ -13,6 +13,7 @@ using DocumentTypes = Rhythm.Extensions.Constants.DocumentTypes;
 using DynamicNode = umbraco.MacroEngines.DynamicNode;
 using DynamicXml = Umbraco.Core.Dynamics.DynamicXml;
 using Properties = Rhythm.Extensions.Constants.Properties;
+using StringUtility = Rhythm.Extensions.Utilities.StringUtility;
 using UmbracoLibrary = global::umbraco.library;
 
 namespace Rhythm.Extensions.ExtensionMethods {
@@ -144,7 +145,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 					}
 					else if (CsvRegex.IsMatch(pickerValue))
 					{
-						var pickedNodes = pickerValue.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+						var pickedNodes = StringUtility.SplitCsv(pickerValue);
 						foreach (var nodeItem in pickedNodes)
 						{
 							nodeId = int.Parse(nodeItem.Trim());
@@ -262,6 +263,19 @@ namespace Rhythm.Extensions.ExtensionMethods {
 				}
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// Gets the drop down values (aka, pre-values) as a collection of strings.
+		/// </summary>
+		/// <param name="source">The node to start the search at.</param>
+		/// <param name="propertyAlias">The alias of the drop down property.</param>
+		/// <param name="recursive">Recursively check ancestors (false by default)?</param>
+		/// <returns>The selected drop down values.</returns>
+		public static string[] LocalizedDropDownValues(this IPublishedContent source, string propertyAlias, bool recursive = false)
+		{
+			var value = source.LocalizedDropDownValue(propertyAlias, recursive);
+			return StringUtility.SplitCsv(value);
 		}
 
 		/// <summary>
@@ -516,12 +530,12 @@ namespace Rhythm.Extensions.ExtensionMethods {
 			else if (typeof(T) == typeof(int[]))
 			{
 				var result = page.GetPropertyValue<string>(propertyAlias) ?? string.Empty;
-				var resultItems = result.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+				var resultItems = StringUtility.SplitCsv(result);
 				var intItems = new List<int>();
 				int intItem;
 				foreach (var item in resultItems)
 				{
-					if (int.TryParse(item.Trim(), out intItem))
+					if (int.TryParse(item, out intItem))
 					{
 						intItems.Add(intItem);
 					}
