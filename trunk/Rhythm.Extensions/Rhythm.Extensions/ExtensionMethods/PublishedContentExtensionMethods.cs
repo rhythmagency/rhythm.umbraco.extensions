@@ -121,6 +121,33 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		/// <param name="recursive">Recursively check ancestors (false by default)?</param>
 		/// <returns>The picked nodes.</returns>
 		public static IEnumerable<IPublishedContent> LocalizedGetPickedNodes(this IPublishedContent source, string propertyAlias, bool recursive = false) {
+			var nodeIds = source.LocalizedGetPickedNodeIds(propertyAlias, recursive);
+			if (nodeIds.Any()) {
+				var helper = GetHelper();
+				foreach (var id in nodeIds) {
+					var pickedNode = helper.TypedContent(id);
+					if (pickedNode != null) {
+						yield return pickedNode;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets the ID's of the picked nodes.
+		/// </summary>
+		/// <param name="source">The node with the picker property.</param>
+		/// <param name="propertyAlias">The alias of the picker property.</param>
+		/// <param name="recursive">Recursively check ancestors (false by default)?</param>
+		/// <returns>
+		/// The picked node ID's.
+		/// </returns>
+		/// <remarks>
+		/// This is faster than LocalizedGetPickedNodes when you only need node ID's.
+		/// </remarks>
+		public static IEnumerable<int> LocalizedGetPickedNodeIds(this IPublishedContent source,
+			string propertyAlias, bool recursive = false)
+		{
 			if (recursive) {
 				while (source != null) {
 					if (source.HasValue(propertyAlias, false)) {
@@ -131,17 +158,13 @@ namespace Rhythm.Extensions.ExtensionMethods {
 			}
 			if (source != null) {
 				string pickerValue = source.LocalizedPropertyValue<string>(propertyAlias);
-				var helper = null as UmbracoHelper;
 				if (pickerValue != null)
 				{
 					int nodeId;
 
 					// Integer, CSV, or XML?
 					if (int.TryParse(pickerValue, out nodeId)) {
-						var pickedNode = GetHelper().TypedContent(nodeId);
-						if (pickedNode != null) {
-							yield return pickedNode;
-						}
+						yield return nodeId;
 					}
 					else if (CsvRegex.IsMatch(pickerValue))
 					{
@@ -149,22 +172,14 @@ namespace Rhythm.Extensions.ExtensionMethods {
 						foreach (var nodeItem in pickedNodes)
 						{
 							nodeId = int.Parse(nodeItem.Trim());
-							helper = helper ?? GetHelper();
-							var pickedNode = helper.TypedContent(nodeId);
-							if (pickedNode != null) {
-								yield return pickedNode;
-							}
+							yield return nodeId;
 						}
 					}
 					else if (!string.IsNullOrWhiteSpace(pickerValue as string)) {
 						var pickedNodes = new DynamicXml(pickerValue as string);
 						foreach (dynamic nodeItem in pickedNodes) {
 							nodeId = int.Parse(nodeItem.InnerText);
-							helper = helper ?? GetHelper();
-							var pickedNode = helper.TypedContent(nodeId);
-							if (pickedNode != null) {
-								yield return pickedNode;
-							}
+							yield return nodeId;
 						}
 					}
 
