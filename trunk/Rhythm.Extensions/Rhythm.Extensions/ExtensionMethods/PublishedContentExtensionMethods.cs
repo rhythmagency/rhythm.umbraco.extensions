@@ -355,6 +355,25 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		}
 
 		/// <summary>
+		/// Returns all direct children of the specified types.
+		/// </summary>
+		/// <param name="source">The parent node.</param>
+		/// <param name="typeAliases">The aliases of the content types.</param>
+		/// <returns>
+		/// The matching children.
+		/// </returns>
+		public static IEnumerable<IPublishedContent> ChildrenOfTypes(this IPublishedContent source,
+			params string[] typeAliases) {
+			if (source != null && typeAliases != null && typeAliases.Length > 0) {
+				foreach (var child in source.Children) {
+					if (typeAliases.Any(x => x.InvariantEquals(child.DocumentTypeAlias))) {
+						yield return child;
+					}
+				}
+			}
+		}
+
+		/// <summary>
 		/// Finds the highest-level ancestor (typically the homepage).
 		/// </summary>
 		/// <param name="source">The node to start from.</param>
