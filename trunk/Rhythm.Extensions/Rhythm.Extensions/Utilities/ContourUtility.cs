@@ -5,11 +5,13 @@
 	using Rhythm.Extensions.Types;
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using Umbraco.Core;
+	using Umbraco.Forms.Core;
 	using Umbraco.Forms.Core.Services;
 	using Umbraco.Forms.Data.Storage;
-	using ValueLabelStrings = Types.ValueLabelPair<string, string>;
 	using KeyValueStrings = System.Collections.Generic.KeyValuePair<string, string>;
+	using ValueLabelStrings = Types.ValueLabelPair<string, string>;
 
 	/// <summary>
 	/// Utility to help with Contour.
@@ -24,7 +26,6 @@
 
 		#endregion
 
-
 		#region Constructors
 
 		/// <summary>
@@ -37,7 +38,6 @@
 		}
 
 		#endregion
-
 
 		#region Methods
 
@@ -85,6 +85,94 @@
 				}
 				return results;
 			});
+
+		}
+
+		/// <summary>
+		/// Stores a form submission to Contour.
+		/// </summary>
+		/// <param name="formName">The name of the form.</param>
+		/// <param name="fieldValues">The values to store to contour.</param>
+		/// <param name="ipAddress">The user's IP address.</param>
+		/// <param name="pageId">The ID of the page the user entered the values on.</param>
+		/// <returns>True, if the data was stored successfully; otherwise, false.</returns>
+		public static bool StoreRecord(string formName, Dictionary<string, List<object>> fieldValues,
+			string ipAddress, int pageId) {
+
+			// Variables.
+			var success = true;
+
+			// Ensure keys are lowercase.
+			fieldValues = new Dictionary<string,List<object>>(fieldValues);
+			var oldKeys = fieldValues.Keys;
+			foreach (var key in oldKeys) {
+				var lowerKey = key == null ? key : key.ToLower();
+				if (key != lowerKey)
+				{
+					var value = fieldValues[key];
+					fieldValues.Remove(key);
+					fieldValues[lowerKey] = value;
+				}
+			}
+
+			// Add record.
+			using (var formStorage = new FormStorage()) {
+				var form = formStorage.GetForm(formName);
+				using (var recordStorage = new RecordStorage())
+				using (var recordService = new RecordService(form)) {
+
+					// Open record service.
+					recordService.Open();
+
+					// Create record.
+					var record = recordService.Record;
+					record.IP = ipAddress;
+					record.UmbracoPageId = pageId;
+					recordStorage.InsertRecord(record, form);
+
+					// Assign field values for record.
+					foreach (var field in recordService.Form.AllFields) {
+
+						// Check which field this is.
+						bool knownField = false;
+						List<object> values = null;
+						if (fieldValues.TryGetValue((field.Caption ?? string.Empty).ToLower(), out values)) {
+							knownField = true;
+						}
+
+						// If the field is one of those that are known, store it.
+						if (knownField && values != null && values.Any(x => x != null)) {
+
+							// Create field.
+							var key = Guid.NewGuid();
+							var recordField = new RecordField {
+								Field = field,
+								Key = key,
+								Record = record.Id,
+								Values = values
+							};
+
+							// Store field.
+							using (var recordFieldStorage = new RecordFieldStorage()) {
+								recordFieldStorage.InsertRecordField(recordField);
+							}
+
+							// Add field to record.
+							record.RecordFields.Add(key, recordField);
+
+						}
+
+					}
+
+					// Submit / save record.
+					recordService.Submit();
+					success = success && recordService.SaveFormToRecord();
+
+				}
+			}
+
+			// Succeeded?
+			return success;
 
 		}
 
