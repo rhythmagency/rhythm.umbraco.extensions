@@ -195,6 +195,9 @@
     <Compile Include="..\Rhythm.Extensions\Utilities\ConfigUtility.cs">
       <Link>Utilities\ConfigUtility.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\ContourUtility.cs">
+      <Link>Utilities\ContourUtility.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Utilities\FontAwesomeCssParser.cs">
       <Link>Utilities\FontAwesomeCssParser.cs</Link>
     </Compile>

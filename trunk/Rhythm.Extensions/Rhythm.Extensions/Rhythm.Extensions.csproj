@@ -117,6 +117,7 @@
     <Compile Include="Types\ValueLabelPair.cs" />
     <Compile Include="Utilities\ActionUtility.cs" />
     <Compile Include="Utilities\ConfigUtility.cs" />
+    <Compile Include="Utilities\ContourUtility.cs" />
     <Compile Include="Utilities\FontAwesomeCssParser.cs" />
     <Compile Include="Utilities\NetUtility.cs" />
     <Compile Include="Utilities\NotNull.cs" />
