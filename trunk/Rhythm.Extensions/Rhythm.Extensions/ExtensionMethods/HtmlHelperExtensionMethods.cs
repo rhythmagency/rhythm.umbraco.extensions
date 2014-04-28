@@ -1,6 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
-using Umbraco.Core;
 
 namespace Rhythm.Extensions.ExtensionMethods {
 	public static class HtmlHelperExtensionMethods {
@@ -12,17 +12,11 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static Regex InvalidClassChars { get; set; }
 
 		/// <summary>
-		/// The regex to check if a URL is valid.
-		/// </summary>
-		private static Regex RegexValidUrl { get; set; }
-
-		/// <summary>
 		/// Static constructor.
 		/// </summary>
 		static HtmlHelperExtensionMethods() {
 			var defaultOptions = RegexOptions.Compiled | RegexOptions.IgnoreCase;
 			InvalidClassChars = new Regex(@"((?![a-z0-9])(.|\r|\n))+|$[0-9]+", defaultOptions);
-			RegexValidUrl = new Regex(@"^(https?:)?//([a-z]|\.|[0-9]|-|_)+(/([a-z()'0-9._,%]|-)+)*/?(\?([a-z()'0-9._,%=&]|-)*)?(#([a-z()'0-9._|,%=&]|-)*)?$", defaultOptions);
 		}
 
 		/// <summary>
@@ -36,22 +30,56 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		}
 
 		/// <summary>
-		/// Ensures the specified URL starts with "http://".
+		/// Ensures the specified URL starts with "http://" or "https://".
 		/// </summary>
 		/// <param name="helper">Ignored (just used to make this method an extension method).</param>
 		/// <param name="url">The URL to normalize.</param>
 		/// <returns>The normalized URL, or an empty string.</returns>
 		public static string NormalizeUrl(this System.Web.Mvc.HtmlHelper helper, string url) {
+
+			// Variables.
 			url = url ?? string.Empty;
-			if (!url.ToLower().StartsWith("http://") &&
-				!url.ToLower().StartsWith("https://") &&
-				!url.ToLower().StartsWith("//")) {
-				url = "http://" + url;
+			var ignoreCase = StringComparison.InvariantCultureIgnoreCase;
+
+			// Adjust schemeless URL's.
+			if (url.StartsWith("//", ignoreCase)) {
+				url = "http:" + url;
 			}
-			if (!RegexValidUrl.IsMatch(url)) {
+
+			// Ensure the scheme is HTTP or HTTPS.
+			if (!url.StartsWith("http://", ignoreCase) &&
+				!url.StartsWith("https://", ignoreCase)) {
+
+				// Avoid alternate schemes (e.g., FTP).
+				if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
+					url = string.Empty;
+				}
+				else {
+					url = "http://" + url;
+				}
+
+			}
+
+			// URL is valid?
+			if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
+				var sampleUrl = null as Uri;
+				if (Uri.TryCreate(url, UriKind.Absolute, out sampleUrl)) {
+					var scheme = sampleUrl.Scheme;
+					if (scheme != Uri.UriSchemeHttp && scheme != Uri.UriSchemeHttps) {
+						url = string.Empty;
+					}
+				}
+				else {
+					url = string.Empty;
+				}
+			}
+			else {
 				url = string.Empty;
 			}
+
+			// Return adjusted URL.
 			return url;
+
 		}
 
 	}
