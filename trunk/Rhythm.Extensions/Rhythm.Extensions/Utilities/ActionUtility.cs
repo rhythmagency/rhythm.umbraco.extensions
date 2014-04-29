@@ -118,6 +118,40 @@
 			}
 		}
 
+		/// <summary>
+		/// Runs an action in a thread an ensures no exceptions escape the thread.
+		/// </summary>
+		/// <param name="action">The action to run in the thread.</param>
+		/// <param name="errorHandler">The action to call if an exception is caught. Optional.</param>
+		/// <returns>The thread (already started).</returns>
+		public static Thread SafeThread(Action action, Action<Exception> errorHandler = null)
+		{
+			var thread = new Thread(() =>
+			{
+				try {
+					action();
+				}
+				catch (ThreadAbortException ex) {
+					Thread.ResetAbort();
+					if (errorHandler != null) {
+						errorHandler(ex);
+					}
+				}
+				catch (Exception ex) {
+					if (errorHandler != null) {
+						errorHandler(ex);
+					}
+				}
+				catch {
+					if (errorHandler != null) {
+						errorHandler(null);
+					}
+				}
+			});
+			thread.Start();
+			return thread;
+		}
+
 	}
 
 }
