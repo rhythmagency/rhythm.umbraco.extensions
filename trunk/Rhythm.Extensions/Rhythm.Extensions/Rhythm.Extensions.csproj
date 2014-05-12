@@ -101,6 +101,7 @@
     <Compile Include="Events\RhythmEventHandler.cs" />
     <Compile Include="ExtensionMethods\ControllerExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\DictionaryExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\ExpandoObjectExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\FormExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\HtmlHelperExtensionMethods.cs" />

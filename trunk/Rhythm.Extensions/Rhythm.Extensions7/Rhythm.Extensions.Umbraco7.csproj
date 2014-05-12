@@ -147,6 +147,9 @@
     <Compile Include="..\Rhythm.Extensions\ExtensionMethods\DateTimeExtensionMethods.cs">
       <Link>ExtensionMethods\DateTimeExtensionMethods.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\DictionaryExtensionMethods.cs">
+      <Link>ExtensionMethods\DictionaryExtensionMethods.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\ExtensionMethods\ExpandoObjectExtensionMethods.cs">
       <Link>ExtensionMethods\ExpandoObjectExtensionMethods.cs</Link>
     </Compile>
