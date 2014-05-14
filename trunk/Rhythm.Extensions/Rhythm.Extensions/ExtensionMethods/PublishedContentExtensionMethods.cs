@@ -23,6 +23,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 
 		private static readonly Regex LangRegex = new Regex(@"^[a-z]{2}(-[a-z]{2})?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex CsvRegex = new Regex(@"\s*[0-9](\s*,\s*[0-9]+)+\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		private static readonly TimeSpan SettingCacheDuration = TimeSpan.FromMinutes(5);
 
 		#endregion
 
@@ -32,6 +33,9 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static object TranslationLock { get; set; }
 		private static Dictionary<int, string> PrevalueCache { get; set; }
 		private static object PrevalueLock { get; set; }
+		private static Dictionary<Tuple<int, string, Type>, Tuple<object, DateTime>> SettingCache { get; set; }
+		private static Dictionary<int, int> SettingsNodeCache { get; set; }
+		private static object SettingLock { get; set; }
 
 		#endregion
 
@@ -42,6 +46,9 @@ namespace Rhythm.Extensions.ExtensionMethods {
 			TranslationLock = new object();
 			PrevalueCache = new Dictionary<int,string>();
 			PrevalueLock = new object();
+			SettingCache = new Dictionary<Tuple<int,string,Type>,Tuple<object,DateTime>>();
+			SettingsNodeCache = new Dictionary<int,int>();
+			SettingLock = new object();
 		}
 
 		#endregion
@@ -221,24 +228,116 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		/// <returns>The setting value.</returns>
 		/// <remarks>The nearest ancestor with the specified setting will be used.</remarks>
 		public static T LocalizedGetSetting<T>(this IPublishedContent source, string settingKey) {
-			//TODO: Cache by page ID and key. Maybe allow a duration to be configured on the setting node?
-			if (!string.IsNullOrWhiteSpace(settingKey))
-			{
-				while (source != null)
-				{
-					var settingsNode = source.Children.Where(x => DocumentTypes.SETTINGS.InvariantEquals(x.DocumentTypeAlias)).FirstOrDefault();
-					if (settingsNode != null)
-					{
-						var settingNode = settingsNode.Children.Where(x => settingKey.InvariantEquals(x.Name)).FirstOrDefault();
-						if (settingNode != null)
-						{
-							return settingNode.LocalizedPropertyValue<T>(Properties.VALUE);
+
+			/* This method uses some complicated caching techniques to improve performance.
+			 * For one, all nodes visited have their corresponding settings node cached.
+			 * Secondly, setting values are cached by the settings node.
+			 * In the best case, two cache lookups (one for the settings node, and one for the setting value)
+			 * are used to retrieve a setting.
+			 */
+
+			// Variables.
+			var visitedSettingsNodes = new HashSet<int>();
+			var validKey = !string.IsNullOrWhiteSpace(settingKey);
+
+			// Validation.
+			if (validKey) {
+
+				//Variables.
+				var visitedSources = new HashSet<int>();
+
+				// Visit ancestors until settings node is found.
+				while (source != null) {
+
+					// Variables.
+					var settingsNodeId = null as int?;
+					var tempId = 0;
+					var settingsNode = null as IPublishedContent;
+
+					// First, try to get the settings node from the cache.
+					lock (SettingLock) {
+						var sourceId = source.Id;
+						if (SettingsNodeCache.TryGetValue(sourceId, out tempId)) {
+							settingsNodeId = tempId;
+						} else {
+							visitedSources.Add(sourceId);
 						}
 					}
+
+					// Try to get the settings node from the children?
+					if (!settingsNodeId.HasValue) {
+						settingsNode = source.Children
+							.Where(x => DocumentTypes.SETTINGS.InvariantEquals(x.DocumentTypeAlias))
+							.FirstOrDefault();
+						if (settingsNode != null) {
+							settingsNodeId = settingsNode.Id;
+							lock (SettingLock) {
+								foreach (var id in visitedSources) {
+									SettingsNodeCache[id] = settingsNodeId.Value;
+								}
+								visitedSources.Clear();
+							}
+						}
+					}
+
+					// Settings node found?
+					if (settingsNodeId.HasValue) {
+
+						// Remember visiting this settings node.
+						visitedSettingsNodes.Add(settingsNodeId.Value);
+
+						// Settings are cached by the settings node ID, the setting key, and the type requested.
+						var cacheKey = new Tuple<int, string, Type>(settingsNodeId.Value, settingKey, typeof(T));
+						var settingValue = null as Tuple<object, DateTime>;
+
+						// First, try to get the setting from the cache.
+						lock (SettingLock) {
+							if (SettingCache.TryGetValue(cacheKey, out settingValue)) {
+								var duration = DateTime.Now.Subtract(settingValue.Item2);
+								if (duration <= SettingCacheDuration) {
+									return (T)settingValue.Item1;
+								}
+							}
+						}
+
+						// Get setting.
+						settingsNode = settingsNode ?? GetHelper().TypedContent(settingsNodeId.Value);
+						var settingNode = settingsNode.Descendants()
+							.Where(x => settingKey.InvariantEquals(x.Name)).FirstOrDefault();
+						if (settingNode != null) {
+							var result = settingNode.LocalizedPropertyValue<T>(Properties.VALUE);
+							var cacheResult = new Tuple<object,DateTime>(result, DateTime.Now);
+							lock (SettingLock) {
+								SettingCache[cacheKey] = cacheResult;
+							}
+							return result;
+						}
+
+					}
+
+					// Keep looking through ancestors.
 					source = source.Parent;
+
+				}
+
+			}
+
+			// If no value was found to cache, cache the default value to avoid subsequent lookups.
+			var defaultValue = default(T);
+			if (validKey && visitedSettingsNodes.Any()) {
+				var typeOfT = typeof(T);
+				var cacheResult = new Tuple<object,DateTime>(defaultValue, DateTime.Now);
+				lock (SettingLock) {
+					foreach (var id in visitedSettingsNodes) {
+						var cacheKey = new Tuple<int, string, Type>(id, settingKey, typeOfT);
+						SettingCache[cacheKey] = cacheResult;
+					}
 				}
 			}
-			return default(T);
+
+			// Return default.
+			return defaultValue;
+
 		}
 
 		/// <summary>
