@@ -271,6 +271,14 @@ namespace Rhythm.Extensions.ExtensionMethods {
 							.FirstOrDefault();
 						if (settingsNode != null) {
 							settingsNodeId = settingsNode.Id;
+						}
+					}
+
+					// Settings node found?
+					if (settingsNodeId.HasValue) {
+
+						// Cache settings node for visited sources.
+						if (visitedSources.Any()) {
 							lock (SettingLock) {
 								foreach (var id in visitedSources) {
 									SettingsNodeCache[id] = settingsNodeId.Value;
@@ -278,10 +286,6 @@ namespace Rhythm.Extensions.ExtensionMethods {
 								visitedSources.Clear();
 							}
 						}
-					}
-
-					// Settings node found?
-					if (settingsNodeId.HasValue) {
 
 						// Remember visiting this settings node.
 						visitedSettingsNodes.Add(settingsNodeId.Value);
