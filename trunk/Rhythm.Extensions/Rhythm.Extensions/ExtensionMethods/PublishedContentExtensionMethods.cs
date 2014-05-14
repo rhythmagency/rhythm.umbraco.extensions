@@ -436,6 +436,18 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		}
 
 		/// <summary>
+		/// Returns all siblings of the specified types, in addition to the specified node.
+		/// </summary>
+		/// <param name="source">The node to start the search at.</param>
+		/// <param name="typeAliases">The aliases of the content types of the siblings.</param>
+		/// <returns>The siblings and the specified node.</returns>
+		public static IEnumerable<IPublishedContent> SiblingsAndSelf(this IPublishedContent source,
+			params string[] typeAliases) {
+			return source.Siblings()
+				.Where(x => x.Id == source.Id || typeAliases.Any(y => y.InvariantEquals(x.DocumentTypeAlias)));
+		}
+
+		/// <summary>
 		/// Returns all descendants of the specified types.
 		/// </summary>
 		/// <param name="source">The node to start the search at.</param>
