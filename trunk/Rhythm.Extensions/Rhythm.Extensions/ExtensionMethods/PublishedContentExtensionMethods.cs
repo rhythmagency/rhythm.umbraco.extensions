@@ -569,7 +569,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static T LocalizedPropertyValueHelper<T>(DynamicNode page, string propertyAlias, bool recursive = false) {
 
 			// Validation / base case.
-			if (page == null)
+			if (page == null || page.Level < 1 || page.Id <= 0)
 			{
 				return default(T);
 			}
