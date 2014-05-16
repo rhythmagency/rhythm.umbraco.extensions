@@ -23,7 +23,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 
 		private static readonly Regex LangRegex = new Regex(@"^[a-z]{2}(-[a-z]{2})?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex CsvRegex = new Regex(@"\s*[0-9](\s*,\s*[0-9]+)+\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-		private static readonly TimeSpan SettingCacheDuration = TimeSpan.FromMinutes(5);
+		private static readonly TimeSpan FallbackSettingCacheDuration = TimeSpan.FromMinutes(5);
 
 		#endregion
 
@@ -34,7 +34,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static Dictionary<int, string> PrevalueCache { get; set; }
 		private static object PrevalueLock { get; set; }
 		private static Dictionary<Tuple<int, string, Type>, Tuple<object, DateTime>> SettingCache { get; set; }
-		private static Dictionary<int, int> SettingsNodeCache { get; set; }
+		private static Dictionary<int, Tuple<int, TimeSpan>> SettingsNodeCache { get; set; }
 		private static object SettingLock { get; set; }
 
 		#endregion
@@ -47,7 +47,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 			PrevalueCache = new Dictionary<int,string>();
 			PrevalueLock = new object();
 			SettingCache = new Dictionary<Tuple<int,string,Type>,Tuple<object,DateTime>>();
-			SettingsNodeCache = new Dictionary<int,int>();
+			SettingsNodeCache = new Dictionary<int,Tuple<int,TimeSpan>>();
 			SettingLock = new object();
 		}
 
@@ -251,14 +251,16 @@ namespace Rhythm.Extensions.ExtensionMethods {
 
 					// Variables.
 					var settingsNodeId = null as int?;
-					var tempId = 0;
+					var cacheDuration = FallbackSettingCacheDuration;
+					var tempId = null as Tuple<int, TimeSpan>;
 					var settingsNode = null as IPublishedContent;
 
 					// First, try to get the settings node from the cache.
 					lock (SettingLock) {
 						var sourceId = source.Id;
 						if (SettingsNodeCache.TryGetValue(sourceId, out tempId)) {
-							settingsNodeId = tempId;
+							settingsNodeId = tempId.Item1;
+							cacheDuration = tempId.Item2;
 						} else {
 							visitedSources.Add(sourceId);
 						}
@@ -271,6 +273,12 @@ namespace Rhythm.Extensions.ExtensionMethods {
 							.FirstOrDefault();
 						if (settingsNode != null) {
 							settingsNodeId = settingsNode.Id;
+							var cacheSeconds = settingsNode.LocalizedPropertyValue<int?>("defaultCacheDuration");
+							if (cacheSeconds.HasValue && cacheSeconds.Value > 0) {
+								cacheDuration = TimeSpan.FromSeconds(cacheSeconds.Value);
+							} else {
+								cacheDuration = FallbackSettingCacheDuration;
+							}
 						}
 					}
 
@@ -281,7 +289,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 						if (visitedSources.Any()) {
 							lock (SettingLock) {
 								foreach (var id in visitedSources) {
-									SettingsNodeCache[id] = settingsNodeId.Value;
+									SettingsNodeCache[id] = new Tuple<int,TimeSpan>(settingsNodeId.Value, cacheDuration);
 								}
 								visitedSources.Clear();
 							}
@@ -298,7 +306,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 						lock (SettingLock) {
 							if (SettingCache.TryGetValue(cacheKey, out settingValue)) {
 								var duration = DateTime.Now.Subtract(settingValue.Item2);
-								if (duration <= SettingCacheDuration) {
+								if (duration <= cacheDuration) {
 									return (T)settingValue.Item1;
 								}
 							}
