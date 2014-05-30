@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Web;
+using Rhythm.Extensions.Enums;
 
 namespace Rhythm.Extensions.Utilities {
 
@@ -59,6 +62,24 @@ namespace Rhythm.Extensions.Utilities {
             var responseStream = response.GetResponseStream();
             var reader = new StreamReader(responseStream);
             return reader.ReadToEnd();
+        }
+
+        /// <summary>
+        /// Forces 301 redirect to SSL if configured in <appSettings></appSettings>
+        /// </summary>
+        public static void ForceSSL()
+        {
+            var context = HttpContext.Current;
+
+            if (!context.Request.IsSecureConnection && ConfigUtility.GetBool(ConfigKeys.ForceSSL))
+            {
+                var builder = new UriBuilder(new Uri(context.Request.Url, context.Request.RawUrl))
+                {
+                    Scheme = Uri.UriSchemeHttps
+                };
+
+                context.Response.Redirect(builder.Uri.AbsoluteUri);
+            }
         }
 
     }
