@@ -2,6 +2,6 @@
 	public enum ConfigKeys {
 		RecaptchaPrivateKey,
 		RecaptchaPublicKey,
-        ForceSSL
+		ForceSSL
 	}
 }

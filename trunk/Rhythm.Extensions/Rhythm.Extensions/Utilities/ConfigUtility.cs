@@ -22,20 +22,20 @@
 			return value;
 		}
 
-        public static bool GetBool(ConfigKeys key)
-        {
-            bool value;
+		public static bool GetBool(ConfigKeys key)
+		{
+			bool value;
 
-            switch (key)
-            {
-                case ConfigKeys.ForceSSL:
-                    value = !string.IsNullOrEmpty(ConfigurationManager.AppSettings["ForceSSL"]) && (ConfigurationManager.AppSettings["ForceSSL"].ToLower() == "true");
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown configuration key.");
-            }
+			switch (key)
+			{
+				case ConfigKeys.ForceSSL:
+					value = !string.IsNullOrEmpty(ConfigurationManager.AppSettings["ForceSSL"]) && (ConfigurationManager.AppSettings["ForceSSL"].ToLower() == "true");
+					break;
+				default:
+					throw new InvalidOperationException("Unknown configuration key.");
+			}
 
-            return value;
-        }
+			return value;
+		}
 	}
 }
