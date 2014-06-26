@@ -138,6 +138,12 @@
             Through this class new application trees can be created, modified and deleted. 
             </summary>
         </member>
+        <member name="M:umbraco.BusinessLogic.ApplicationTree.GetRuntimeType">
+            <summary>
+            Returns the CLR type based on it's assembly name stored in the config
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:umbraco.BusinessLogic.ApplicationTree.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:umbraco.BusinessLogic.ApplicationTree"/> class.
@@ -1921,7 +1927,7 @@
         </member>
         <member name="M:umbraco.BusinessLogic.User.Save">
             <summary>
-            Used to persist object changes to the database. In Version3.0 it's just a stub for future compatibility
+            Used to persist object changes to the database.
             </summary>
         </member>
         <member name="M:umbraco.BusinessLogic.User.GetPassword">
@@ -2008,7 +2014,7 @@
             Gets all users by login name.
             </summary>
             <param name="login">The login.</param>
-            <param name="">whether to use a partial match</param>
+            <param name="partialMatch">whether to use a partial match</param>
             <returns></returns>
         </member>
         <member name="M:umbraco.BusinessLogic.User.MakeNew(System.String,System.String,System.String,umbraco.BusinessLogic.UserType)">
@@ -2028,7 +2034,7 @@
             <param name="lname">The lname.</param>
             <param name="passw">The passw.</param>
             <param name="email">The email.</param>
-            <param name="ut">The ut.</param>
+            <param name="ut">The ut.</param>        
         </member>
         <member name="M:umbraco.BusinessLogic.User.Update(System.Int32,System.String,System.String,System.String,umbraco.BusinessLogic.UserType)">
             <summary>
@@ -2103,10 +2109,21 @@
             Initializes the notifications and caches them.
             </summary>
         </member>
+        <member name="M:umbraco.BusinessLogic.User.ClearApplications">
+            <summary>
+            Clears the list of applications the user has access to, ensure to call Save afterwords
+            </summary>
+        </member>
         <member name="M:umbraco.BusinessLogic.User.clearApplications">
             <summary>
             Clears the list of applications the user has access to.
             </summary>
+        </member>
+        <member name="M:umbraco.BusinessLogic.User.AddApplication(System.String)">
+            <summary>
+            Adds a application to the list of allowed applications, ensure to call Save() afterwords
+            </summary>
+            <param name="appAlias"></param>
         </member>
         <member name="M:umbraco.BusinessLogic.User.addApplication(System.String)">
             <summary>
@@ -2216,12 +2233,7 @@
             </summary>
             <value><c>true</c> if disabled; otherwise, <c>false</c>.</value>
         </member>
-        <member name="P:umbraco.BusinessLogic.User.StartNodeId">
-            <summary>
-            Gets or sets the start content node id.
-            </summary>
-            <value>The start node id.</value>
-        </member>
+        <!-- Badly formed XML comment ignored for member "P:umbraco.BusinessLogic.User.StartNodeId" -->
         <member name="P:umbraco.BusinessLogic.User.StartMediaId">
             <summary>
             Gets or sets the start media id.

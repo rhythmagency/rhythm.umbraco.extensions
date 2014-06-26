@@ -1055,7 +1055,7 @@
         </member>
         <member name="T:umbraco.cms.businesslogic.cache.Cache">
             <summary>
-            Used to easily store and retreive items from the cache.
+            Used to easily store and retrieve items from the cache.
             </summary>
             <remarks>
             This whole class will become obsolete, however one of the methods is still used that is not ported over to the new CacheHelper
@@ -1217,6 +1217,15 @@
             </summary>
             <param name="Id">The id.</param>
         </member>
+        <member name="M:umbraco.cms.businesslogic.CMSNode.#ctor(System.Int32,System.Object[])">
+            <summary>
+            This is purely for a hackity hack hack hack in order to make the new Document(id, version) constructor work because
+            the Version property needs to be set on the object before setupNode is called, otherwise it never works! this allows
+            inheritors to set default data before setupNode() is called.
+            </summary>
+            <param name="id"></param>
+            <param name="ctorArgs"></param>
+        </member>
         <member name="M:umbraco.cms.businesslogic.CMSNode.#ctor(System.Int32,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:umbraco.cms.businesslogic.CMSNode"/> class.
@@ -1282,6 +1291,13 @@
             This allows inheritors to set the underlying text property without persisting the change to the database.
             </summary>
             <param name="txt"></param>
+        </member>
+        <member name="M:umbraco.cms.businesslogic.CMSNode.PreSetupNode(System.Object[])">
+            <summary>
+            This is purely for a hackity hack hack hack in order to make the new Document(id, version) constructor work because
+            the Version property needs to be set on the object before setupNode is called, otherwise it never works!
+            </summary>
+            <param name="ctorArgs"></param>
         </member>
         <member name="M:umbraco.cms.businesslogic.CMSNode.setupNode">
             <summary>
@@ -1616,6 +1632,13 @@
             Deletes the current Content object, must be overridden in the child class.
             </summary>
         </member>
+        <member name="M:umbraco.cms.businesslogic.Content.PreSetupNode(System.Object[])">
+            <summary>
+            This is purely for a hackity hack hack hack in order to make the new Document(id, version) constructor work because
+            the Version property needs to be set on the object before setupNode is called, otherwise it never works!
+            </summary>
+            <param name="ctorArgs"></param>
+        </member>
         <member name="M:umbraco.cms.businesslogic.Content.InitializeContent(System.Int32,System.Guid,System.DateTime,System.String)">
             <summary>
             Sets up the ContentType property for this content item and sets the addition content properties manually.
@@ -1770,6 +1793,7 @@
             <param name="icon"></param>
             <param name="thumbnail"></param>
             <param name="masterContentType"></param>
+            <param name="isContainer"></param>
             <remarks>
             This is like creating a ContentType node using optimized mode but this lets you set
             all of the properties that are initialized normally from the database.
@@ -3697,6 +3721,12 @@
             </summary>
             <param name="dt">The membertype which are being deleted</param>
         </member>
+        <member name="M:umbraco.cms.businesslogic.member.Member.Save(System.Boolean)">
+            <summary>
+            Used to persist object changes to the database
+            </summary>
+            <param name="raiseEvents"></param>
+        </member>
         <member name="M:umbraco.cms.businesslogic.member.Member.Save">
             <summary>
             Used to persist object changes to the database. In Version3.0 it's just a stub for future compatibility
@@ -3717,7 +3747,8 @@
         </member>
         <member name="M:umbraco.cms.businesslogic.member.Member.ChangePassword(System.String)">
             <summary>
-            Sets the password for the user - ensure it is encrypted or hashed based on the active membership provider.
+            Sets the password for the user - ensure it is encrypted or hashed based on the active membership provider - you must 
+            call Save() after using this method
             </summary>
             <param name="newPassword"></param>
         </member>
@@ -3845,11 +3876,6 @@
             A list of all members in the current umbraco install
             
             Note: is ressource intensive, use with care.
-            </summary>
-        </member>
-        <member name="P:umbraco.cms.businesslogic.member.Member.Text">
-            <summary>
-            The name of the member
             </summary>
         </member>
         <member name="P:umbraco.cms.businesslogic.member.Member.Password">
@@ -3994,7 +4020,6 @@
             MemberType
             
             Due to the inheritance of the ContentType class, it enables definition of generic datafields on a Members.
-            
         </member>
         <member name="M:umbraco.cms.businesslogic.member.MemberType.#ctor(System.Int32)">
             <summary>
@@ -4056,7 +4081,7 @@
         </member>
         <member name="M:umbraco.cms.businesslogic.member.MemberType.Save">
             <summary>
-            Used to persist object changes to the database. In Version3.0 it's just a stub for future compatibility
+            Used to persist object changes to the database
             </summary>
         </member>
         <member name="M:umbraco.cms.businesslogic.member.MemberType.GetByAlias(System.String)">
@@ -5267,6 +5292,12 @@
             Summary description for Access.
             </summary>
         </member>
+        <member name="M:umbraco.cms.businesslogic.web.Access.UpdateInMemoryDocument(System.Xml.XmlDocument)">
+            <summary>
+            Used to refresh cache among servers in an LB scenario
+            </summary>
+            <param name="newDoc"></param>
+        </member>
         <member name="T:umbraco.cms.businesslogic.web.Document">
             <summary>
             Document represents a webpage,
@@ -5406,7 +5437,7 @@
         </member>
         <member name="M:umbraco.cms.businesslogic.web.Document.SendToPublication(umbraco.BusinessLogic.User)">
             <summary>
-            Executes handlers and events for the Send To Publication action.
+            Saves and executes handlers and events for the Send To Publication action.
             </summary>
             <param name="u">The User</param>
         </member>

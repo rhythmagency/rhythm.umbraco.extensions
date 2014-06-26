@@ -854,7 +854,7 @@
             </summary>
             <remarks>
             The data type definition id is persisted between request as a query string.
-            This is used to retreive values from the cookie which are easier persisted values
+            This is used to retrieve values from the cookie which are easier persisted values
             than trying to append everything to custom query strings.
             </remarks>
             <param name="tree"></param>
@@ -2908,24 +2908,6 @@
             </summary>
             <param name="postedFile"></param>
             <returns></returns>
-        </member>
-        <member name="M:umbraco.editorControls.uploadField.FindControlRecursive``1(System.Web.UI.Control,System.String)">
-            <summary>
-            Recursively finds a control with the specified identifier.
-            </summary>
-            <typeparam name="T">
-            The type of control to be found.
-            </typeparam>
-            <param name="parent">
-            The parent control from which the search will start.
-            </param>
-            <param name="id">
-            The identifier of the control to be found.
-            </param>
-            <returns>
-            The control with the specified identifier, otherwise <see langword="null"/> if the control 
-            is not found.
-            </returns>
         </member>
         <member name="M:umbraco.editorControls.uploadField.Render(System.Web.UI.HtmlTextWriter)">
             <summary> 

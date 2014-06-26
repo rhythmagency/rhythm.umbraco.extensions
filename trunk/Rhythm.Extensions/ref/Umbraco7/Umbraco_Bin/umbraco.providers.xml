@@ -259,6 +259,11 @@
             <param name="context">A <see cref="T:System.Configuration.SettingsContext"/> describing the current application usage.</param>
             <param name="collection">A <see cref="T:System.Configuration.SettingsPropertyValueCollection"/> representing the group of property settings to set.</param>
         </member>
+        <member name="T:umbraco.providers.members.UmbracoRoleProvider">
+            <summary>
+            A role provider for members
+            </summary>
+        </member>
         <member name="M:umbraco.providers.members.UmbracoRoleProvider.Initialize(System.String,System.Collections.Specialized.NameValueCollection)">
             <summary>
             Initializes the provider.
@@ -458,10 +463,6 @@
             <returns>
             true if the password was updated successfully; otherwise, false.
             </returns>
-            <remarks>
-            During installation the application will not be configured, if this is the case and the 'default' password 
-            is stored in the database then we will validate the user - this will allow for an admin password reset if required
-            </remarks>
         </member>
         <member name="M:umbraco.providers.UsersMembershipProvider.PerformChangePasswordQuestionAndAnswer(System.String,System.String,System.String,System.String)">
             <summary>
