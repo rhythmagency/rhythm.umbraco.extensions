@@ -186,6 +186,9 @@
     <Compile Include="..\Rhythm.Extensions\Models\SimpleTemplate.cs">
       <Link>Models\SimpleTemplate.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Routing\FragmentUrlProvider.cs">
+      <Link>Routing\FragmentUrlProvider.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Types\InstanceCache.cs">
       <Link>Types\InstanceCache.cs</Link>
     </Compile>

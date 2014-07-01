@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using Umbraco.Core.Models;
-using Umbraco.Web;
 
 namespace Rhythm.Extensions.Models
 {
-    public partial class SimpleContent
-    {
-        /// <summary>
+	public partial class SimpleContent
+	{
+		/// <summary>
 		/// Converts an IPublishedContent instance to SimpleContent.
 		/// </summary>
 		/// <param name="content">The IPublishedContent instance you wish to convert.</param>
@@ -28,8 +25,8 @@ namespace Rhythm.Extensions.Models
 			 */
 			var properties =
 				content.Properties
-				       .Where(p => !String.IsNullOrWhiteSpace(p.Value.ToString()))
-				       .ToDictionary(prop => prop.PropertyTypeAlias, prop => prop.Value);
+					.Where(p => !String.IsNullOrWhiteSpace(p.Value.ToString()))
+					.ToDictionary(prop => prop.PropertyTypeAlias, prop => prop.Value);
 			
 			var result = new SimpleContent() {
 				Id = content.Id,
@@ -48,5 +45,5 @@ namespace Rhythm.Extensions.Models
 
 			return result;
 		}
-    }
+	}
 }

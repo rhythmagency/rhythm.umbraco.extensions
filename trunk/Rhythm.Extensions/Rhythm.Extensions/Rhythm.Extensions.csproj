@@ -114,6 +114,7 @@
     <Compile Include="Models\SimpleContent_Umbraco6.cs" />
     <Compile Include="Models\SimpleTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Routing\FragmentUrlProvider.cs" />
     <Compile Include="Types\InstanceCache.cs" />
     <Compile Include="Types\ValueLabelPair.cs" />
     <Compile Include="Utilities\ActionUtility.cs" />

@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using Umbraco.Core.Models;
-using Umbraco.Web;
 
 namespace Rhythm.Extensions.Models {
 	/// <summary>
