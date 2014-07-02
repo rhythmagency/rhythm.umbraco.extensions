@@ -24,6 +24,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static readonly Regex LangRegex = new Regex(@"^[a-z]{2}(-[a-z]{2})?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex CsvRegex = new Regex(@"\s*[0-9](\s*,\s*[0-9]+)+\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly TimeSpan FallbackSettingCacheDuration = TimeSpan.FromMinutes(5);
+		private static readonly Regex TitleRegex = new Regex(@"{(page|page-name|\*|name|parent|parent-name|parent-title)}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 		#endregion
 
@@ -57,6 +58,57 @@ namespace Rhythm.Extensions.ExtensionMethods {
 
 		public static string GetTitle(this IPublishedContent content) {
 			return content.HasProperty(Constants.Properties.TITLE) ? content.GetPropertyValue<string>(Constants.Properties.TITLE) : content.Name;
+		}
+
+		/// <summary>
+		/// Gets the title to show in the browser address bar.
+		/// </summary>
+		/// <param name="content">The content node.</param>
+		/// <returns>The title.</returns>
+		public static string GetBrowserTitle(this IPublishedContent content) {
+
+			// Validation.
+			if (content == null) {
+				return string.Empty;
+			}
+
+			// Variables.
+			var pageTitle = content.LocalizedPropertyValue<string>(Constants.Properties.PAGE_TITLE);
+			var parentNode = content.Parent;
+
+			// Functions to defer execution.
+			var getPageName = new Func<string>(() => content.Name);
+			var getParentName = new Func<string>(() => content.Parent == null ? string.Empty : content.Parent.Name);
+			var getParentTitle = new Func<string>(() => GetBrowserTitle(content.Parent));
+
+			// Map tokens to functions.
+			var replacers = new Dictionary<string, Func<string>>() {
+				// Page name.
+				{ "{page}", getPageName },
+				{ "{page-name}", getPageName },
+				{ "{*}", getPageName },
+				{ "{name}", getPageName },
+				// Parent name.
+				{ "{parent}", getParentName },
+				{ "{parent-name}", getParentName },
+				// Parent title.
+				{ "{parent-title}", getParentTitle }
+			};
+
+			// Use parent template or title?
+			if (string.IsNullOrWhiteSpace(pageTitle) && parentNode != null) {
+				var pageTemplate = parentNode.LocalizedPropertyValue<string>(Constants.Properties.PAGE_TITLE_TEMPLATE, true);
+				pageTitle =  DoTitleReplacement(pageTemplate, replacers);
+			} else {
+				pageTitle = DoTitleReplacement(pageTitle, replacers);
+			}
+			if (string.IsNullOrWhiteSpace(pageTitle)) {
+				pageTitle = getPageName();
+			}
+
+			// Return page title.
+			return pageTitle;
+
 		}
 
 		public static string ToJson(this IPublishedContent content) {
@@ -769,6 +821,28 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		/// <returns>An Umbraco helper.</returns>
 		private static UmbracoHelper GetHelper() {
 			return (new UmbracoHelper(UmbracoContext.Current));
+		}
+
+		/// <summary>
+		/// Replaces tokens in a title template.
+		/// </summary>
+		/// <param name="template">The title template.</param>
+		/// <param name="replacers">The dictionary of replacer functions by token.</param>
+		/// <returns>The title.</returns>
+		private static string DoTitleReplacement(string template, Dictionary<string, Func<string>> replacers) {
+			if (string.IsNullOrWhiteSpace(template)) {
+				return template;
+			} else {
+				return TitleRegex.Replace(template, new MatchEvaluator(m => {
+					var replacer = null as Func<string>;
+					var key = m.Value.ToLower();
+					if (replacers.TryGetValue(key, out replacer)) {
+						return replacer();
+					} else {
+						return m.Value;
+					}
+				}));
+			}
 		}
 
 		#endregion
