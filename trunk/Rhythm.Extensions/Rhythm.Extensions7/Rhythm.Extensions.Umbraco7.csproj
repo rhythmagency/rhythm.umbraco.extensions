@@ -135,6 +135,9 @@
     <Compile Include="..\Rhythm.Extensions\DataTypes\FontAwesomeIconPicker\DataType.cs">
       <Link>DataTypes\FontAwesomeIconPicker\DataType.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Enums\CacheGetMethod.cs">
+      <Link>Enums\CacheGetMethod.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Enums\ConfigKeys.cs">
       <Link>Enums\ConfigKeys.cs</Link>
     </Compile>

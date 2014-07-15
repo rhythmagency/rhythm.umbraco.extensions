@@ -97,6 +97,7 @@
     <Compile Include="DataTypes\AccessCode\PrevalueEditor.cs" />
     <Compile Include="DataTypes\FontAwesomeIconPicker\DataEditor.cs" />
     <Compile Include="DataTypes\FontAwesomeIconPicker\DataType.cs" />
+    <Compile Include="Enums\CacheGetMethod.cs" />
     <Compile Include="Enums\ConfigKeys.cs" />
     <Compile Include="Events\RhythmEventHandler.cs" />
     <Compile Include="ExtensionMethods\ControllerExtensionMethods.cs" />
