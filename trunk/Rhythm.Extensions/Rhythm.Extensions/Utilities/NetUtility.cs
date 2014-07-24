@@ -71,6 +71,11 @@ namespace Rhythm.Extensions.Utilities {
 				var builder = new UriBuilder(new Uri(context.Request.Url, context.Request.RawUrl)) {
 					Scheme = Uri.UriSchemeHttps
 				};
+				if (builder.Port == 80)
+				{
+					builder.Port = -1;
+				}
+
 
 				context.Response.Redirect(builder.Uri.AbsoluteUri);
 			}
