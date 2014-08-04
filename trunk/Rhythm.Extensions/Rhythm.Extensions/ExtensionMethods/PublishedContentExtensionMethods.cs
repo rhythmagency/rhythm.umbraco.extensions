@@ -1,6 +1,7 @@
 ﻿using Dimi.Polyglot.BLL;
 using Newtonsoft.Json.Linq;
 using Rhythm.Extensions.Models;
+using Rhythm.Extensions.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ using DynamicNode = umbraco.MacroEngines.DynamicNode;
 using DynamicXml = Umbraco.Core.Dynamics.DynamicXml;
 using Properties = Rhythm.Extensions.Constants.Properties;
 using StringUtility = Rhythm.Extensions.Utilities.StringUtility;
+using ConfigUtility = Rhythm.Extensions.Utilities.ConfigUtility;
 using UmbracoLibrary = global::umbraco.library;
 
 namespace Rhythm.Extensions.ExtensionMethods {
@@ -25,6 +27,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static readonly Regex CsvRegex = new Regex(@"\s*[0-9](\s*,\s*[0-9]+)+\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly TimeSpan FallbackSettingCacheDuration = TimeSpan.FromMinutes(5);
 		private static readonly Regex TitleRegex = new Regex(@"{(page|page-name|\*|name|parent|parent-name|parent-title)}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		private static bool? BypassLocalization = null;
 
 		#endregion
 
@@ -573,7 +576,8 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		/// <remarks>
 		/// Only looks at the first matching child at each step (for performance).
 		/// </remarks>
-		public static IPublishedContent ChildByTypePath(this IPublishedContent source, params string[] typeAliases) {
+		public static IPublishedContent ChildByTypePath(this IPublishedContent source,
+			params string[] typeAliases) {
 			var child = source;
 			if (child != null) {
 				foreach (var alias in typeAliases) {
@@ -597,7 +601,8 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		/// This is faster than Umbraco's implementation of Descendants() because this version
 		/// does not need to scan the entire content tree under the specified node.
 		/// </remarks>
-		public static List<IPublishedContent> ChildrenByTypePath(this IPublishedContent source, params string[] typeAliases) {
+		public static List<IPublishedContent> ChildrenByTypePath(this IPublishedContent source,
+			params string[] typeAliases) {
 			var children = new List<IPublishedContent>();
 			if (source != null) {
 				children.Add(source);
@@ -626,83 +631,94 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		/// Recursively check ancestors?
 		/// </param>
 		/// <returns>The value.</returns>
-		private static T LocalizedPropertyValueHelper<T>(DynamicNode page, string propertyAlias, bool recursive = false) {
+		private static T LocalizedPropertyValueHelper<T>(DynamicNode page, string propertyAlias,
+			bool recursive = false) {
 
 			// Validation / base case.
-			if (page == null || page.Level < 1 || page.Id <= 0)
-			{
+			if (page == null || page.Level < 1 || page.Id <= 0) {
 				return default(T);
 			}
 
 			// Variables.
-			var selectedLanguage = LocalizationSelectedLanguage();
-			var suffixedAlias = propertyAlias + "_" + selectedLanguage;
-			var ignoreCase = StringComparison.InvariantCultureIgnoreCase;
+			var empties = new [] { "Content,False,,,", "<items />", "<values />" };
 			var caseIgnorer = StringComparer.InvariantCultureIgnoreCase;
-			string[] empties = { "Content,False,,,", "<items />", "<values />" };
 
-			// Check current page for property with language suffix.
-			if (page.HasProperty(suffixedAlias) && !string.IsNullOrEmpty(page.GetPropertyValue(suffixedAlias))) {
-				if (UmbracoContext.Current.PageId != null)
-					return GetPropertyValue<T>(page.Id, suffixedAlias);
+			// Bypass localization (improves speed)?
+			if (!BypassLocalization.HasValue) {
+				BypassLocalization = ConfigUtility.GetBool(ConfigKeys.BypassLocalization);
 			}
-
-			// Check child nodes for a translation folder?
-			lock (TranslationLock) {
+			if (!BypassLocalization.Value) {
 
 				// Variables.
-				Tuple<int?, DateTime> translationInfo;
-				bool recache = false;
-				int? translationId = null;
+				var selectedLanguage = LocalizationSelectedLanguage();
+				var suffixedAlias = propertyAlias + "_" + selectedLanguage;
+				var ignoreCase = StringComparison.InvariantCultureIgnoreCase;
 
-				// Check the cache first (a hit is cached longer than a miss).
-				if (TranslationCache.TryGetValue(page.Id, out translationInfo)) {
-					translationId = translationInfo.Item1;
-					if (translationInfo.Item1.HasValue) {
-						var span = DateTime.Now.Subtract(translationInfo.Item2);
-						if (span > TimeSpan.FromMinutes(5)) {
-							recache = true;
+				// Check current page for property with language suffix.
+				if (page.HasProperty(suffixedAlias) && !string.IsNullOrEmpty(page.GetPropertyValue(suffixedAlias))) {
+					if (UmbracoContext.Current.PageId != null)
+						return GetPropertyValue<T>(page.Id, suffixedAlias);
+				}
+
+				// Check child nodes for a translation folder?
+				lock (TranslationLock) {
+
+					// Variables.
+					Tuple<int?, DateTime> translationInfo;
+					bool recache = false;
+					int? translationId = null;
+
+					// Check the cache first (a hit is cached longer than a miss).
+					if (TranslationCache.TryGetValue(page.Id, out translationInfo)) {
+						translationId = translationInfo.Item1;
+						if (translationInfo.Item1.HasValue) {
+							var span = DateTime.Now.Subtract(translationInfo.Item2);
+							if (span > TimeSpan.FromMinutes(5)) {
+								recache = true;
+							}
 						}
-					}
-					else {
-						var span = DateTime.Now.Subtract(translationInfo.Item2);
-						if (span > TimeSpan.FromMinutes(1)) {
-							recache = true;
-						}
-					}
-				}
-				else {
-					recache = true;
-				}
-
-				// Repopulate the cache?
-				if (recache) {
-					foreach (DynamicNode child in page.GetChildrenAsList) {
-						if (!string.Equals(child.NodeTypeAlias, page.NodeTypeAlias + "_TranslationFolder", ignoreCase)) continue;
-						translationId = child.Id;
-						break;
-					}
-					TranslationCache[page.Id] = new Tuple<int?,DateTime>(translationId, DateTime.Now);
-				}
-
-				// Check translations under translation folder.
-				if (translationId.HasValue) {
-					var translationFolder = new DynamicNode(translationId.Value);
-					foreach (DynamicNode translation in translationFolder.GetChildrenAsList) {
-						var language = translation.GetPropertyValue("language");
-						if (language == null || !string.Equals(language, selectedLanguage, ignoreCase)) continue;
-						if (translation.HasProperty(propertyAlias))
-						{
-							var translationValue = translation.GetPropertyValue(propertyAlias);
-							if (!string.IsNullOrEmpty(translationValue)
-								&& !empties.Contains(translationValue, caseIgnorer)) {
-								return GetPropertyValue<T>(translation.Id, propertyAlias);
+						else {
+							var span = DateTime.Now.Subtract(translationInfo.Item2);
+							if (span > TimeSpan.FromMinutes(1)) {
+								recache = true;
 							}
 						}
 					}
+					else {
+						recache = true;
+					}
+
+					// Repopulate the cache?
+					if (recache) {
+						foreach (DynamicNode child in page.GetChildrenAsList) {
+							if (!string.Equals(child.NodeTypeAlias, page.NodeTypeAlias + "_TranslationFolder", ignoreCase)) continue;
+							translationId = child.Id;
+							break;
+						}
+						TranslationCache[page.Id] = new Tuple<int?,DateTime>(translationId, DateTime.Now);
+					}
+
+					// Check translations under translation folder.
+					if (translationId.HasValue) {
+						var translationFolder = new DynamicNode(translationId.Value);
+						foreach (DynamicNode translation in translationFolder.GetChildrenAsList) {
+							var language = translation.GetPropertyValue("language");
+							if (language == null || !string.Equals(language, selectedLanguage, ignoreCase)) continue;
+							if (translation.HasProperty(propertyAlias)) {
+								var translationValue = translation.GetPropertyValue(propertyAlias);
+								if (!string.IsNullOrEmpty(translationValue)
+									&& !empties.Contains(translationValue, caseIgnorer)) {
+									return GetPropertyValue<T>(translation.Id, propertyAlias);
+								}
+							}
+						}
+					}
+
 				}
 
 			}
+
+
 
 			// Return the primary property?
 			if (page.HasProperty(propertyAlias)
@@ -799,16 +815,13 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		/// </summary>
 		/// <returns>The selected language.</returns>
 		private static string LocalizationSelectedLanguage() {
-			var selectedLanguage = "";
+			var selectedLanguage = string.Empty;
 			var lang = HttpContext.Current.Request.Params["lang"];
 
-			if (!string.IsNullOrEmpty(lang) && LangRegex.IsMatch(lang))
-			{
+			if (!string.IsNullOrEmpty(lang) && LangRegex.IsMatch(lang)) {
 				selectedLanguage = lang.Length == 5 ? string.Format("{0}{1}", lang.Substring(0, 3).ToLower(),
 					lang.Substring(3, 2).ToUpper()) : lang.ToLower();
-			}
-			else
-			{
+			} else {
 				selectedLanguage = Languages.GetDefaultLanguage();
 			}
 
@@ -829,7 +842,8 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		/// <param name="template">The title template.</param>
 		/// <param name="replacers">The dictionary of replacer functions by token.</param>
 		/// <returns>The title.</returns>
-		private static string DoTitleReplacement(string template, Dictionary<string, Func<string>> replacers) {
+		private static string DoTitleReplacement(string template,
+			Dictionary<string, Func<string>> replacers) {
 			if (string.IsNullOrWhiteSpace(template)) {
 				return template;
 			} else {

@@ -107,8 +107,7 @@
 			var oldKeys = fieldValues.Keys;
 			foreach (var key in oldKeys) {
 				var lowerKey = key == null ? key : key.ToLower();
-				if (key != lowerKey)
-				{
+				if (key != lowerKey) {
 					var value = fieldValues[key];
 					fieldValues.Remove(key);
 					fieldValues[lowerKey] = value;

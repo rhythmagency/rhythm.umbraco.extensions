@@ -29,7 +29,13 @@
 			switch (key)
 			{
 				case ConfigKeys.ForceSSL:
-					value = !string.IsNullOrEmpty(ConfigurationManager.AppSettings["ForceSSL"]) && (ConfigurationManager.AppSettings["ForceSSL"].ToLower() == "true");
+					value = !string.IsNullOrEmpty(ConfigurationManager.AppSettings["ForceSSL"])
+						&& (ConfigurationManager.AppSettings["ForceSSL"].ToLower() == "true");
+					break;
+				case ConfigKeys.BypassLocalization:
+					var strBypass = ConfigurationManager.AppSettings["BypassLocalization"];
+					value = !string.IsNullOrEmpty(strBypass)
+						&& ConfigurationManager.AppSettings["BypassLocalization"].ToLower() == "true";
 					break;
 				default:
 					throw new InvalidOperationException("Unknown configuration key.");
