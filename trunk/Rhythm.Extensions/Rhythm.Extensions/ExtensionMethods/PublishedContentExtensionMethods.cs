@@ -718,8 +718,6 @@ namespace Rhythm.Extensions.ExtensionMethods {
 
 			}
 
-
-
 			// Return the primary property?
 			if (page.HasProperty(propertyAlias)
 				&& !string.IsNullOrEmpty(page.GetPropertyValue(propertyAlias))
