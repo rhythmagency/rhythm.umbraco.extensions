@@ -27,7 +27,13 @@
 		/// <summary>
 		/// Gets a new value and stores the result to the cache.
 		/// </summary>
-		Recache
+		Recache,
+
+		/// <summary>
+		/// Gets the cached value, or null.
+		/// Does not modify the cached value or call the replenisher.
+		/// </summary>
+		FromCache
 
 	}
 

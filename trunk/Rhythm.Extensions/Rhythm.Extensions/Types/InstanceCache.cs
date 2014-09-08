@@ -40,7 +40,11 @@
 		/// <param name="method">Optional. The cache method to use when retrieving the value.</returns>
 		public T Get(TimeSpan duration, Func<T> replenisher,
 			CacheGetMethod method = CacheGetMethod.Default) {
-				if (method == CacheGetMethod.NoCache) {
+				if (method == CacheGetMethod.FromCache) {
+					lock (InstanceLock) {
+						return LastCache.HasValue ? Instance : default(T);
+					}
+				} else if (method == CacheGetMethod.NoCache) {
 					return replenisher();
 				} else {
 					lock (InstanceLock) {
