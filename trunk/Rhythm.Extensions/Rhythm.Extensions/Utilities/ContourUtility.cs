@@ -16,8 +16,7 @@
 	/// <summary>
 	/// Utility to help with Contour.
 	/// </summary>
-	public class ContourUtility
-	{
+	public class ContourUtility {
 
 		#region Properties
 
@@ -31,8 +30,7 @@
 		/// <summary>
 		/// Static constructor.
 		/// </summary>
-		static ContourUtility()
-		{
+		static ContourUtility() {
 			FieldValues = new Dictionary<KeyValueStrings, InstanceCache<List<ValueLabelStrings>>>();
 			FieldValuesLock = new object();
 		}

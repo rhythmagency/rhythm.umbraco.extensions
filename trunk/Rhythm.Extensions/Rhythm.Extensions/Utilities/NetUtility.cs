@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Web;
-using Rhythm.Extensions.Enums;
+﻿namespace Rhythm.Extensions.Utilities {
 
-namespace Rhythm.Extensions.Utilities {
+	// Namespaces.
+	using Rhythm.Extensions.Enums;
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Net;
+	using System.Text;
+	using System.Web;
+
 	/// <summary>
 	/// Utility to help with network operations.
 	/// </summary>
@@ -62,7 +64,7 @@ namespace Rhythm.Extensions.Utilities {
 		}
 
 		/// <summary>
-		/// Forces 301 redirect to SSL if configured in <appSettings></appSettings>
+		/// Forces a 301 redirect to HTTPS if configured in appSettings.
 		/// </summary>
 		public static void ForceSSL() {
 			var context = HttpContext.Current;
@@ -71,14 +73,35 @@ namespace Rhythm.Extensions.Utilities {
 				var builder = new UriBuilder(new Uri(context.Request.Url, context.Request.RawUrl)) {
 					Scheme = Uri.UriSchemeHttps
 				};
-				if (builder.Port == 80)
-				{
+
+				// Strip default HTTP port.
+				if (builder.Port == 80) {
 					builder.Port = -1;
 				}
-
 
 				context.Response.Redirect(builder.Uri.AbsoluteUri);
 			}
 		}
+
+		/// <summary>
+		/// Forces a 301 redirect to HTTP if configured in appSettings.
+		/// </summary>
+		public static void ForceHttp() {
+			var context = HttpContext.Current;
+
+			if (context.Request.IsSecureConnection && ConfigUtility.GetBool(ConfigKeys.ForceHttp)) {
+				var builder = new UriBuilder(new Uri(context.Request.Url, context.Request.RawUrl)) {
+					Scheme = Uri.UriSchemeHttp
+				};
+
+				// Strip default HTTPS port.
+				if (builder.Port == 443) {
+					builder.Port = -1;
+				}
+				
+				context.Response.Redirect(builder.Uri.AbsoluteUri);
+			}
+		}
 	}
+
 }

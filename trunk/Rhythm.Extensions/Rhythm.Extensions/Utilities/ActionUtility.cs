@@ -124,10 +124,8 @@
 		/// <param name="action">The action to run in the thread.</param>
 		/// <param name="errorHandler">The action to call if an exception is caught. Optional.</param>
 		/// <returns>The thread (already started).</returns>
-		public static Thread SafeThread(Action action, Action<Exception> errorHandler = null)
-		{
-			var thread = new Thread(() =>
-			{
+		public static Thread SafeThread(Action action, Action<Exception> errorHandler = null) {
+			var thread = new Thread(() => {
 				try {
 					action();
 				}

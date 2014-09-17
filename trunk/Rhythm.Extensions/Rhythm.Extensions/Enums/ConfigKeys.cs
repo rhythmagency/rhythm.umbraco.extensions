@@ -3,6 +3,7 @@
 		RecaptchaPrivateKey,
 		RecaptchaPublicKey,
 		ForceSSL,
+		ForceHttp,
 		BypassLocalization
 	}
 }
