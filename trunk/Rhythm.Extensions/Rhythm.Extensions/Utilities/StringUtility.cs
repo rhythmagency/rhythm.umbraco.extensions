@@ -24,13 +24,18 @@ namespace Rhythm.Extensions.Utilities {
 		private static Regex InvalidClassChars { get; set; }
 
 		/// <summary>
+		/// Matches lines in multi-line text.
+		/// </summary>
+		private static Regex LineRegex { get; set; }
+
+		/// <summary>
 		/// Static constructor.
 		/// </summary>
-		static StringUtility()
-		{
+		static StringUtility() {
 			var defaultOptions = RegexOptions.Compiled | RegexOptions.IgnoreCase;
 			WhitespaceRegex = new Regex("( |\t|\r|\n)+", defaultOptions);
 			InvalidClassChars = new Regex(@"((?![a-z0-9_])(.|\r|\n))+", defaultOptions);
+			LineRegex = new Regex(@"((?!\r|\n).)+", defaultOptions);
 		}
 
 		/// <summary>
@@ -126,6 +131,28 @@ namespace Rhythm.Extensions.Utilities {
 				}
 			}
 			return str;
+		}
+
+		/// <summary>
+		/// Splits text on line breaks.
+		/// </summary>
+		/// <param name="text">The text containing line breaks.</param>
+		/// <returns>
+		/// The individual lines.
+		/// </returns>
+		/// <remarks>
+		/// Lines that are null or whitespace will be excluded.
+		/// </remarks>
+		public static string[] SplitOnLineBreaks(string text) {
+			if (text == null) {
+				return new string[] { };
+			}
+			if (string.IsNullOrEmpty(text)) {
+				return new [] { text };
+			} else {
+				return LineRegex.Matches(text).Cast<Match>().Select(x => x.Value)
+					.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+			}
 		}
 
 	}
