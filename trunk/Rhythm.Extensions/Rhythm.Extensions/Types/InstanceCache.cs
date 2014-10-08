@@ -66,6 +66,15 @@
 				}
 		}
 
+		/// <summary>
+		/// Clears the cache.
+		/// </summary>
+		public void Clear() {
+			lock (InstanceLock) {
+				LastCache = null;
+			}
+		}
+
 		#endregion
 
 	}
