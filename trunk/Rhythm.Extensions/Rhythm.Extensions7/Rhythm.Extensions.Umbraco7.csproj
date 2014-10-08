@@ -184,6 +184,9 @@
     <Compile Include="..\Rhythm.Extensions\ExtensionMethods\XmlExtensionMethods.cs">
       <Link>ExtensionMethods\XmlExtensionMethods.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Interfaces\ICacheInvalidator.cs">
+      <Link>Interfaces\ICacheInvalidator.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Models\SimpleContent.cs">
       <Link>Models\SimpleContent.cs</Link>
     </Compile>
@@ -195,6 +198,9 @@
     </Compile>
     <Compile Include="..\Rhythm.Extensions\Routing\FragmentUrlProvider.cs">
       <Link>Routing\FragmentUrlProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Types\CacheInvalidator.cs">
+      <Link>Types\CacheInvalidator.cs</Link>
     </Compile>
     <Compile Include="..\Rhythm.Extensions\Types\InstanceCache.cs">
       <Link>Types\InstanceCache.cs</Link>
@@ -232,6 +238,7 @@
     <Compile Include="..\Rhythm.Extensions\Utilities\StringUtility.cs">
       <Link>Utilities\StringUtility.cs</Link>
     </Compile>
+    <Compile Include="Events\RhythmEventHandler_Umbraco7.cs" />
     <Compile Include="Models\SimpleContent_Umbraco7.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
