@@ -132,7 +132,7 @@ string LocalizedDropDownValue(this IPublishedContent source, string propertyAlia
 IPublishedContent NearestAncestorOfType(this IPublishedContent source, string typeAlias, bool includeSelf = false)
 
 	Searches for the nearest ancestor with the specified content type.
-	
+
 T LocalizedPropertyValueHelper<T>(DynamicNode page, string propertyAlias)
 
 	Returns the localized value of the specified property.
@@ -140,26 +140,26 @@ T LocalizedPropertyValueHelper<T>(DynamicNode page, string propertyAlias)
 T GetPropertyValue<T>(int nodeId, string propertyAlias)
 
 	Gets the typed value of the property on the specified node ID.
-	
+
 string LocalizationSelectedLanguage()
 
 	Returns user's selected language.
-	
+
 UmbracoHelper GetHelper()
-	
+
 	Gets an Umbraco helper.
-	
+
 
 ##### StringExtensionMethods
 
 string ToMd5Hash(this string input)
-	
+
 	Converts a string into an MD5 hash.	
 
 ##### UmbracoHelperExtensionMethods
 
 IPublishedContent GetContentAtRootByDocumentType(this UmbracoHelper helper, string documentType)
-	
+
 	Gets the root most content node of a specific document type.
 
 IPublishedContent GetHome(this UmbracoHelper helper)
@@ -191,9 +191,8 @@ bool TryParseXml(string xml)
 XmlDocument LoadXml(string xml)
 
 	Loads an xml string into an XmlDocument and returns the XmlDocument instance.
-	
-	
-	
+
+
 ## Models
 
 ##### SimpleContent
@@ -225,3 +224,17 @@ Utility to help work with Umbraco prevalues.
 
 ##### ReflectionUtility
 Utility to help with reflection operations.
+
+
+## InstanceCache and CacheInvalidator
+
+InstanceCache allows you to cache an object instance in memory and will refresh
+periodically based on a duration you specify. You can wrap an InstanceCache with a
+CacheInvalidator. The CacheInvalidator will force the InstanceCache to refresh
+whenever Umbraco nodes of the content types you specific are changed (published, moved, deleted).
+Here is an example showing the basic usage of both:
+
+	var HomeIdCache = new InstanceCache<int>();
+	var HomeIdInvalidator = new CacheInvalidator<int>(HomeIdCache, "Home", "Homepage");
+	var duration = TimeSpan.FromHours(1);
+	var homeId = HomeIdCache.Get(duration, () => helper.GetHome().Id, CacheGetMethod.Default);
