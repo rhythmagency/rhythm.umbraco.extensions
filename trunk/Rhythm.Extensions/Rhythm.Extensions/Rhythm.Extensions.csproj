@@ -94,6 +94,7 @@
     <Compile Include="Constants\Properties.cs" />
     <Compile Include="Constants\RegexPatterns.cs" />
     <Compile Include="Contour\PrevalueSourceTypes\PrevaluesFromNodesOfType.cs" />
+    <Compile Include="Contour\WorkflowTypes\SendMailWhenFieldsMatch.cs" />
     <Compile Include="Contour\WorkflowTypes\SubscribeToExactTargetNewsletter.cs" />
     <Compile Include="DataTypes\AccessCode\Configuration.cs" />
     <Compile Include="DataTypes\AccessCode\DataEditor.cs" />

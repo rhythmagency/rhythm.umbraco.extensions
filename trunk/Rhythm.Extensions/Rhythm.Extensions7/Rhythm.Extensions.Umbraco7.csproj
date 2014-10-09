@@ -118,6 +118,9 @@
     <Compile Include="..\Rhythm.Extensions\Contour\PrevalueSourceTypes\PrevaluesFromNodesOfType.cs">
       <Link>Contour\PrevalueSourceTypes\PrevaluesFromNodesOfType.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Contour\WorkflowTypes\SendMailWhenFieldsMatch.cs">
+      <Link>Contour\WorkflowTypes\SendMailWhenFieldsMatch.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Contour\WorkflowTypes\SubscribeToExactTargetNewsletter.cs">
       <Link>Contour\WorkflowTypes\SubscribeToExactTargetNewsletter.cs</Link>
     </Compile>
