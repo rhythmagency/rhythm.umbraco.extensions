@@ -64,6 +64,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
@@ -117,6 +118,28 @@
     <Compile Include="ExtensionMethods\TimeZoneExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\UmbracoHelperExtensionMethods.cs" />
     <Compile Include="Interfaces\ICacheInvalidator.cs" />
+    <Compile Include="Mapping\ContentMapping.cs" />
+    <Compile Include="Mapping\IContentMapping.cs" />
+    <Compile Include="Mapping\IMapping.cs" />
+    <Compile Include="Mapping\IMappingRule.cs" />
+    <Compile Include="Mapping\IMappingSession.cs" />
+    <Compile Include="Mapping\MappingBase.cs" />
+    <Compile Include="Mapping\MappingExecutor.cs" />
+    <Compile Include="Mapping\MappingOptions.cs" />
+    <Compile Include="Mapping\MappingSession.cs" />
+    <Compile Include="Mapping\PublishedContentBase.cs" />
+    <Compile Include="Mapping\PublishedContentBaseMap.cs" />
+    <Compile Include="Mapping\ReflectionHelper.cs" />
+    <Compile Include="Mapping\ComponentMapping.cs" />
+    <Compile Include="Mapping\Rules\ComponentMappingRule.cs" />
+    <Compile Include="Mapping\Rules\ContentCollectionMappingRule.cs" />
+    <Compile Include="Mapping\Rules\ContentMappingRule.cs" />
+    <Compile Include="Mapping\Rules\CustomPropertyMappingRule.cs" />
+    <Compile Include="Mapping\Rules\NodeMappingRule.cs" />
+    <Compile Include="Mapping\Rules\PropertyMappingRule.cs" />
+    <Compile Include="Mapping\Rules\UmbracoHelperCollectionMappingRule.cs" />
+    <Compile Include="Mapping\Rules\UmbracoHelperMappingRule.cs" />
+    <Compile Include="Mapping\UmbracoMapper.cs" />
     <Compile Include="Models\SimpleContent.cs" />
     <Compile Include="Models\SimpleContentType.cs" />
     <Compile Include="Models\SimpleContent_Umbraco6.cs" />

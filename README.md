@@ -4,6 +4,7 @@
 Before installing Rhythm Umbraco Extensions, you must install:
 * [Umbraco Contour](http://our.umbraco.org/projects/umbraco-pro/contour).
 * [Polyglot](http://our.umbraco.org/projects/backoffice-extensions/polyglot).
+* [Archetype](http://our.umbraco.org/projects/backoffice-extensions/archetype) (only required for Umbraco 7 release).
 
 ## Constants
 

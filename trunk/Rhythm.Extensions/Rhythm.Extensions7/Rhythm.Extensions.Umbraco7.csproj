@@ -33,6 +33,9 @@
     <DocumentationFile>bin\Release\Rhythm.Extensions.Umbraco7.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Archetype">
+      <HintPath>..\ref\Archetype_Bin\Archetype.dll</HintPath>
+    </Reference>
     <Reference Include="businesslogic, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ref\Umbraco7\Umbraco_Bin\businesslogic.dll</HintPath>
@@ -68,6 +71,7 @@
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
@@ -190,6 +194,72 @@
     <Compile Include="..\Rhythm.Extensions\Interfaces\ICacheInvalidator.cs">
       <Link>Interfaces\ICacheInvalidator.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\ComponentMapping.cs">
+      <Link>Mapping\ComponentMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\ContentMapping.cs">
+      <Link>Mapping\ContentMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\IContentMapping.cs">
+      <Link>Mapping\IContentMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\IMapping.cs">
+      <Link>Mapping\IMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\IMappingRule.cs">
+      <Link>Mapping\IMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\IMappingSession.cs">
+      <Link>Mapping\IMappingSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\MappingBase.cs">
+      <Link>Mapping\MappingBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\MappingExecutor.cs">
+      <Link>Mapping\MappingExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\MappingOptions.cs">
+      <Link>Mapping\MappingOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\MappingSession.cs">
+      <Link>Mapping\MappingSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\PublishedContentBase.cs">
+      <Link>Mapping\PublishedContentBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\PublishedContentBaseMap.cs">
+      <Link>Mapping\PublishedContentBaseMap.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\ReflectionHelper.cs">
+      <Link>Mapping\ReflectionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\ComponentMappingRule.cs">
+      <Link>Mapping\Rules\ComponentMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\ContentCollectionMappingRule.cs">
+      <Link>Mapping\Rules\ContentCollectionMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\ContentMappingRule.cs">
+      <Link>Mapping\Rules\ContentMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\CustomPropertyMappingRule.cs">
+      <Link>Mapping\Rules\CustomPropertyMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\NodeMappingRule.cs">
+      <Link>Mapping\Rules\NodeMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\PropertyMappingRule.cs">
+      <Link>Mapping\Rules\PropertyMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\UmbracoHelperCollectionMappingRule.cs">
+      <Link>Mapping\Rules\UmbracoHelperCollectionMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\UmbracoHelperMappingRule.cs">
+      <Link>Mapping\Rules\UmbracoHelperMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\UmbracoMapper.cs">
+      <Link>Mapping\UmbracoMapper.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Models\SimpleContent.cs">
       <Link>Models\SimpleContent.cs</Link>
     </Compile>
@@ -242,6 +312,11 @@
       <Link>Utilities\StringUtility.cs</Link>
     </Compile>
     <Compile Include="Events\RhythmEventHandler_Umbraco7.cs" />
+    <Compile Include="Mapping\ArchetypeMappingExecutor_Umbraco7.cs" />
+    <Compile Include="Mapping\MappingBase_Umbraco7.cs" />
+    <Compile Include="Mapping\MappingSession_Umbraco7.cs" />
+    <Compile Include="Mapping\Rules\ArchetypeCollectionMappingRule_Umbraco7.cs" />
+    <Compile Include="Mapping\Rules\ArchetypeMappingRule_Umbraco7.cs" />
     <Compile Include="Models\SimpleContent_Umbraco7.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
