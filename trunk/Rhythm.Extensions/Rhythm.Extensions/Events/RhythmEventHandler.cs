@@ -11,6 +11,8 @@ using Umbraco.Core.Models;
 using Umbraco.Core.Publishing;
 using Umbraco.Core.Services;
 using Umbraco.Web.Routing;
+using Rhythm.Extensions.Utilities;
+using Rhythm.Extensions.Enums;
 namespace Rhythm.Extensions.Events {
 
 	/// <summary>
@@ -65,7 +67,12 @@ namespace Rhythm.Extensions.Events {
 			ModelBinders.Binders.DefaultBinder = new RhythmModelBinder();
 
 			// URL provider to facilitate linking to fragment identifiers.
-			UrlProviderResolver.Current.InsertTypeBefore<DefaultUrlProvider, FragmentUrlProvider>();
+			var disableProvider = ConfigUtility.GetBool(ConfigKeys.DisableFragmentUrlProvider);
+			if (!disableProvider) {
+				try {
+					UrlProviderResolver.Current.InsertTypeBefore<DefaultUrlProvider, FragmentUrlProvider>();
+				} catch { }
+			}
 
 			// Listen for content change events.
 			ContentService.Moved += ContentService_Moved;

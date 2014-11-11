@@ -23,22 +23,26 @@
 			bool value;
 			switch (key) {
 				case ConfigKeys.ForceSSL:
-					value = !string.IsNullOrEmpty(ConfigurationManager.AppSettings["ForceSSL"])
-						&& (ConfigurationManager.AppSettings["ForceSSL"].ToLower() == "true");
+					value = GetBoolForKey("ForceSSL");
 					break;
 				case ConfigKeys.ForceHttp:
-					value = !string.IsNullOrEmpty(ConfigurationManager.AppSettings["ForceHTTP"])
-						&& (ConfigurationManager.AppSettings["ForceHTTP"].ToLower() == "true");
+					value = GetBoolForKey("ForceHTTP");
 					break;
 				case ConfigKeys.BypassLocalization:
-					var strBypass = ConfigurationManager.AppSettings["BypassLocalization"];
-					value = !string.IsNullOrEmpty(strBypass)
-						&& ConfigurationManager.AppSettings["BypassLocalization"].ToLower() == "true";
+					value = GetBoolForKey("BypassLocalization");
+					break;
+				case ConfigKeys.DisableFragmentUrlProvider:
+					value = GetBoolForKey("DisableFragmentUrlProvider");
 					break;
 				default:
 					throw new InvalidOperationException("Unknown bool configuration key.");
 			}
 			return value;
+		}
+
+		private static bool GetBoolForKey(string strKey) {
+			var strVal = (ConfigurationManager.AppSettings[strKey] ?? string.Empty).ToLower();
+			return !string.IsNullOrWhiteSpace(strVal) && strVal == "true";
 		}
 	}
 }

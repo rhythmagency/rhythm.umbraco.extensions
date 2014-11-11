@@ -4,6 +4,7 @@
 		RecaptchaPublicKey,
 		ForceSSL,
 		ForceHttp,
-		BypassLocalization
+		BypassLocalization,
+		DisableFragmentUrlProvider
 	}
 }
