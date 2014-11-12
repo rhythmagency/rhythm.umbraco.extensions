@@ -313,10 +313,13 @@
     </Compile>
     <Compile Include="Events\RhythmEventHandler_Umbraco7.cs" />
     <Compile Include="Mapping\ArchetypeMappingExecutor_Umbraco7.cs" />
+    <Compile Include="Mapping\ArchetypeMapping_Umbraco7.cs" />
     <Compile Include="Mapping\MappingBase_Umbraco7.cs" />
     <Compile Include="Mapping\MappingSession_Umbraco7.cs" />
     <Compile Include="Mapping\Rules\ArchetypeCollectionMappingRule_Umbraco7.cs" />
     <Compile Include="Mapping\Rules\ArchetypeMappingRule_Umbraco7.cs" />
+    <Compile Include="Mapping\Rules\ArchetypeNodeMappingRule_Umbraco7.cs" />
+    <Compile Include="Mapping\Rules\ArchetypePropertyMappingRule_Umbraco7.cs" />
     <Compile Include="Models\SimpleContent_Umbraco7.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
