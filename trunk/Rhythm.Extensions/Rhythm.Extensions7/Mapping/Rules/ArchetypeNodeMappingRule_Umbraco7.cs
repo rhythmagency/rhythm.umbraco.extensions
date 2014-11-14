@@ -1,8 +1,8 @@
 ﻿namespace Rhythm.Extensions.Mapping.Rules {
 	using Archetype.Models;
+	using Helpers;
 	using System;
 	using System.Reflection;
-	using Umbraco.Web;
 	public class ArchetypeNodeMappingRule<TModel> : IMappingRule where TModel : class {
 		private readonly string _propertyAlias;
 		private readonly string _propertyName;
@@ -30,7 +30,7 @@
 
 			var srcValue = fieldset.GetValue<string>(_propertyAlias);
 
-			var helper = new UmbracoHelper(UmbracoContext.Current);
+			var helper = ContentHelper.GetHelper();
 
 			var node = _isMedia ? helper.TypedMedia(srcValue) : helper.TypedContent(srcValue);
 

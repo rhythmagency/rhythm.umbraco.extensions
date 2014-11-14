@@ -55,7 +55,8 @@
 				var mapping = Activator.CreateInstance(type) as IMapping;
 
 				if (mapping == null) {
-					throw new Exception(string.Format("Type: {0} could not be converted to IMapping", type.FullName));
+					throw new Exception(string.Format("Type: {0} could not be converted to IMapping",
+						type.FullName));
 				}
 
 				if (_mappings.ContainsKey(mapping.Type)) {

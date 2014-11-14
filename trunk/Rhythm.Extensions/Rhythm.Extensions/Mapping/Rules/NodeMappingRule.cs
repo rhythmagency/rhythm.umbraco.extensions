@@ -1,9 +1,10 @@
 ﻿namespace Rhythm.Extensions.Mapping.Rules {
+	using ExtensionMethods;
+	using Helpers;
 	using System;
 	using System.Reflection;
 	using Umbraco.Core.Models;
-	using Umbraco.Web;
-	public partial class NodeMappingRule<TModel> : IMappingRule where TModel : class {
+	public class NodeMappingRule<TModel> : IMappingRule where TModel : class {
 		private readonly string _propertyAlias;
 		private readonly string _propertyName;
 		private bool _isMedia;
@@ -13,24 +14,24 @@
 			_propertyAlias = propertyAlias;
 		}
 
-		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model, Type type, object source) {
+		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model,
+			Type type, object source) {
 			var content = source as IPublishedContent;
 
 			if (content == null) {
 				throw new Exception("Expected source type IPublishedContent");
 			}
 
-			var destProperty = type.GetProperty(_propertyName, BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public) ?? type.GetProperty(_propertyName);
+			var destProperty = type.GetProperty(_propertyName, BindingFlags.DeclaredOnly |
+				BindingFlags.Instance | BindingFlags.Public) ?? type.GetProperty(_propertyName);
 
-			var srcProperty = content.GetProperty(_propertyAlias);
+			var srcValue = content.LocalizedPropertyValue<object>(_propertyAlias);
 
-			if (!PropertyHasValue(srcProperty)) {
+			if (srcValue == null || string.IsNullOrWhiteSpace(srcValue.ToString())) {
 				return;
 			}
 
-			var srcValue = srcProperty.Value;
-
-			var helper = new UmbracoHelper(UmbracoContext.Current);
+			var helper = ContentHelper.GetHelper();
 
 			var node = _isMedia ? helper.TypedMedia(srcValue) : helper.TypedContent(srcValue);
 

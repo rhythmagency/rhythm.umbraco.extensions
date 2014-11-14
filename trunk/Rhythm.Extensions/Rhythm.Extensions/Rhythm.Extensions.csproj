@@ -117,6 +117,7 @@
     <Compile Include="ExtensionMethods\PublishedContentExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\TimeZoneExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\UmbracoHelperExtensionMethods.cs" />
+    <Compile Include="Helpers\ContentHelper.cs" />
     <Compile Include="Interfaces\ICacheInvalidator.cs" />
     <Compile Include="Mapping\ContentMapping.cs" />
     <Compile Include="Mapping\IContentMapping.cs" />
@@ -136,7 +137,6 @@
     <Compile Include="Mapping\Rules\ContentMappingRule.cs" />
     <Compile Include="Mapping\Rules\CustomPropertyMappingRule.cs" />
     <Compile Include="Mapping\Rules\NodeMappingRule.cs" />
-    <Compile Include="Mapping\Rules\NodeMappingRule_Umbraco6.cs" />
     <Compile Include="Mapping\Rules\PropertyMappingRule.cs" />
     <Compile Include="Mapping\Rules\UmbracoHelperCollectionMappingRule.cs" />
     <Compile Include="Mapping\Rules\UmbracoHelperMappingRule.cs" />

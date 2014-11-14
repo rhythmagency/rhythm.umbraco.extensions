@@ -1,8 +1,8 @@
 ﻿namespace Rhythm.Extensions.Mapping.Rules {
+	using ExtensionMethods;
 	using System;
 	using System.Reflection;
 	using Umbraco.Core.Models;
-	using Umbraco.Web;
 	public class PropertyMappingRule<T> : IMappingRule {
 		private readonly string _propertyAlias;
 		private readonly string _propertyName;
@@ -23,7 +23,7 @@
 			var destProperty = type.GetProperty(_propertyName, BindingFlags.DeclaredOnly |
 				BindingFlags.Instance | BindingFlags.Public) ?? type.GetProperty(_propertyName);
 
-			var srcValue = content.GetPropertyValue<T>(_propertyAlias);
+			var srcValue = content.LocalizedPropertyValue<T>(_propertyAlias);
 
 			destProperty.SetValue(model, srcValue);
 		}

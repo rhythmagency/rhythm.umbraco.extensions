@@ -1,5 +1,6 @@
 ﻿namespace Rhythm.Extensions.Mapping.Rules {
 	using Archetype.Models;
+	using ExtensionMethods;
 	using System;
 	using System.Linq;
 	using System.Reflection;
@@ -33,9 +34,9 @@
 				dataTypeDefinition = dataTypeService.GetDataTypeDefinitionById(property.DataTypeId);
 			} else {
 				var content = source as IPublishedContent;
-				var srcProperty = content.GetProperty(_propertyAlias);
+				var value = content.LocalizedPropertyValue<object>(_propertyAlias);
 
-				if (srcProperty == null) {
+				if (value == null) {
 					return;
 				}
 
@@ -43,7 +44,7 @@
 
 				dataTypeDefinition = dataTypeService.GetDataTypeDefinitionById(propertyType.DataTypeId);
 
-				srcValue = srcProperty.Value as ArchetypeModel;
+				srcValue = value as ArchetypeModel;
 			}
 
 			if (srcValue == null) {

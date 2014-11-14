@@ -12,14 +12,16 @@
 			_sourceProperty = sourceProperty;
 		}
 
-		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model, Type type, object source) {
+		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model,
+			Type type, object source) {
 			var content = source as IPublishedContent;
 
 			if (content == null) {
 				throw new Exception("Expected source type IPublishedContent");
 			}
 
-			var destProperty = type.GetProperty(_propertyName, BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public) ?? type.GetProperty(_propertyName);
+			var destProperty = type.GetProperty(_propertyName, BindingFlags.DeclaredOnly |
+				BindingFlags.Instance | BindingFlags.Public) ?? type.GetProperty(_propertyName);
 
 			var contentValue = _sourceProperty(content);
 

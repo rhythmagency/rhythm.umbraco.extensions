@@ -11,7 +11,8 @@
 			_filter = filter;
 		}
 
-		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model, Type type, object source) {
+		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model,
+			Type type, object source) {
 			var content = source as IPublishedContent;
 
 			if (content == null) {
@@ -20,7 +21,8 @@
 
 			var relatedContent = session.Map<TModel>(_filter(content)).WithOptions(options).Single();
 
-			var destProperty = type.GetProperty(_propertyName, BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public) ?? type.GetProperty(_propertyName);
+			var destProperty = type.GetProperty(_propertyName, BindingFlags.DeclaredOnly |
+				BindingFlags.Instance | BindingFlags.Public) ?? type.GetProperty(_propertyName);
 
 			destProperty.SetValue(model, relatedContent);
 		}

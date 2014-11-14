@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using Umbraco.Core.Models;
 	using Umbraco.Web;
+	using Helpers;
 	public partial class MappingSession : IMappingSession {
 		private readonly IDictionary<string, object> _cache;
 
@@ -19,7 +20,8 @@
 		}
 
 		public MappingExecutor<T> Map<T>(int id) where T : class {
-			var content = new UmbracoHelper(UmbracoContext.Current).TypedContent(id);
+			var helper = ContentHelper.GetHelper();
+			var content = helper.TypedContent(id);
 
 			return Map<T>(content);
 		}
@@ -36,7 +38,8 @@
 				throw new Exception(string.Format("No mapping content source defined for type: {0}", type));
 			}
 
-			var contents = mapping.ContentSource(new UmbracoHelper(UmbracoContext.Current));
+			var helper = ContentHelper.GetHelper();
+			var contents = mapping.ContentSource(helper);
 
 			return Map<T>(contents);
 		}
@@ -53,7 +56,8 @@
 			var item = _cache[key] as T;
 
 			if (item == null) {
-				throw new Exception(string.Format("Content with key {0} could not be mapped to type {1}", key, typeof(T).FullName));
+				throw new Exception(string.Format("Content with key {0} could not be mapped to type {1}",
+					key, typeof(T).FullName));
 			}
 
 			return item;
