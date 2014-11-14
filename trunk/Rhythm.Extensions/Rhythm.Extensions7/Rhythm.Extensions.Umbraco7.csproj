@@ -320,6 +320,7 @@
     <Compile Include="Mapping\Rules\ArchetypeMappingRule_Umbraco7.cs" />
     <Compile Include="Mapping\Rules\ArchetypeNodeMappingRule_Umbraco7.cs" />
     <Compile Include="Mapping\Rules\ArchetypePropertyMappingRule_Umbraco7.cs" />
+    <Compile Include="Mapping\Rules\NodeMappingRule_Umbraco7.cs" />
     <Compile Include="Models\SimpleContent_Umbraco7.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,27 +1,21 @@
-﻿using System;
-using System.Reflection;
-using Umbraco.Core;
-using Umbraco.Core.Models;
-
-namespace Rhythm.Extensions.Mapping.Rules
-{
-	public class CustomPropertyMappingRule : IMappingRule
-	{
+﻿namespace Rhythm.Extensions.Mapping.Rules {
+	using System;
+	using System.Reflection;
+	using Umbraco.Core;
+	using Umbraco.Core.Models;
+	public class CustomPropertyMappingRule : IMappingRule {
 		private readonly string _propertyName;
 		private readonly Func<IPublishedContent, object> _sourceProperty;
 
-		public CustomPropertyMappingRule(string propertyName, Func<IPublishedContent, object> sourceProperty)
-		{
+		public CustomPropertyMappingRule(string propertyName, Func<IPublishedContent, object> sourceProperty) {
 			_propertyName = propertyName;
 			_sourceProperty = sourceProperty;
 		}
 
-		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model, Type type, object source)
-		{
+		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model, Type type, object source) {
 			var content = source as IPublishedContent;
 
-			if (content == null)
-			{
+			if (content == null) {
 				throw new Exception("Expected source type IPublishedContent");
 			}
 
@@ -29,17 +23,12 @@ namespace Rhythm.Extensions.Mapping.Rules
 
 			var contentValue = _sourceProperty(content);
 
-			if (destProperty.PropertyType.IsInstanceOfType(contentValue))
-			{
+			if (destProperty.PropertyType.IsInstanceOfType(contentValue)) {
 				destProperty.SetValue(model, contentValue);
-			}
-
-			else
-			{
+			} else {
 				var convert = contentValue.TryConvertTo(destProperty.PropertyType);
 
-				if (convert.Success)
-				{
+				if (convert.Success) {
 					destProperty.SetValue(model, convert.Result);
 				}
 			}

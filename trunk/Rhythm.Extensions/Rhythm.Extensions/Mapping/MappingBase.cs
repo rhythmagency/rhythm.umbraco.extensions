@@ -1,45 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using Umbraco.Core.Models;
-using Umbraco.Web;
-
-namespace Rhythm.Extensions.Mapping
-{
+﻿namespace Rhythm.Extensions.Mapping {
 	using Rules;
-	public abstract partial class MappingBase<T> : IMapping where T : class
-	{
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Linq.Expressions;
+	using Umbraco.Core.Models;
+	using Umbraco.Web;
+	public abstract partial class MappingBase<T> : IMapping where T : class {
 		public Type Type { get; private set; }
 		private readonly IDictionary<string, IMappingRule> _rules;
 
-		protected MappingBase()
-		{
+		protected MappingBase() {
 			Type = typeof(T);
 			_rules = new Dictionary<string, IMappingRule>();
 		}
 
-		public IDictionary<string, IMappingRule> GetRules()
-		{
+		public IDictionary<string, IMappingRule> GetRules() {
 			return _rules;
 		}
 
-		public IMappingRule GetRuleByProperty(string name)
-		{
-			if (!_rules.ContainsKey(name))
-			{
+		public IMappingRule GetRuleByProperty(string name) {
+			if (!_rules.ContainsKey(name)) {
 				throw new Exception(string.Format("No rule exists for property {0}", name));
 			}
 
 			return _rules[name];
 		}
 
-		public void Property<TModel>(Expression<Func<T, TModel>> property, string alias)
-		{
+		public void Property<TModel>(Expression<Func<T, TModel>> property, string alias) {
 			var member = property.Body.ToMember();
 
-			if (member == null)
-			{
+			if (member == null) {
 				throw new Exception("param [property] must be a member expression");
 			}
 
@@ -48,12 +39,10 @@ namespace Rhythm.Extensions.Mapping
 			_rules.Add(member.Name, rule);
 		}
 
-		public void Property(Expression<Func<T, object>> name, Func<IPublishedContent, object> sourceProperty)
-		{
+		public void Property(Expression<Func<T, object>> name, Func<IPublishedContent, object> sourceProperty) {
 			var member = name.Body.ToMember();
 
-			if (member == null)
-			{
+			if (member == null) {
 				throw new Exception("param [property] must be a member expression");
 			}
 
@@ -62,12 +51,10 @@ namespace Rhythm.Extensions.Mapping
 			_rules.Add(member.Name, mapping);
 		}
 
-		public NodeMappingRule<TModel> Node<TModel>(Expression<Func<T, TModel>> property, string alias) where TModel : class
-		{
+		public NodeMappingRule<TModel> Node<TModel>(Expression<Func<T, TModel>> property, string alias) where TModel : class {
 			var member = property.Body.ToMember();
 
-			if (member == null)
-			{
+			if (member == null) {
 				throw new Exception("param [property] must be a member expression");
 			}
 
@@ -78,27 +65,22 @@ namespace Rhythm.Extensions.Mapping
 			return rule;
 		}
 
-		public void Parent<TModel>(Expression<Func<T, TModel>> property) where TModel : class
-		{
+		public void Parent<TModel>(Expression<Func<T, TModel>> property) where TModel : class {
 			Content(property, x => x.Parent);
 		}
 
-		public ContentCollectionMappingRule<TModel> Children<TModel>(Expression<Func<T, IEnumerable<TModel>>> property, string childAlias) where TModel : class
-		{
+		public ContentCollectionMappingRule<TModel> Children<TModel>(Expression<Func<T, IEnumerable<TModel>>> property, string childAlias) where TModel : class {
 			return Children(property, new[] { childAlias });
 		}
 
-		public ContentCollectionMappingRule<TModel> Children<TModel>(Expression<Func<T, IEnumerable<TModel>>> property, params string[] childAliases) where TModel : class
-		{
+		public ContentCollectionMappingRule<TModel> Children<TModel>(Expression<Func<T, IEnumerable<TModel>>> property, params string[] childAliases) where TModel : class {
 			return Content(property, x => x.Children.Where(c => childAliases.Contains(c.DocumentTypeAlias)));
 		}
 
-		public void Content<TModel>(Expression<Func<T, TModel>> property, Func<IPublishedContent, IPublishedContent> filter) where TModel : class
-		{
+		public void Content<TModel>(Expression<Func<T, TModel>> property, Func<IPublishedContent, IPublishedContent> filter) where TModel : class {
 			var member = property.Body.ToMember();
 
-			if (member == null)
-			{
+			if (member == null) {
 				throw new Exception("param [property] must be a member expression");
 			}
 
@@ -107,12 +89,10 @@ namespace Rhythm.Extensions.Mapping
 			_rules.Add(member.Name, rule);
 		}
 
-		public ContentCollectionMappingRule<TModel> Content<TModel>(Expression<Func<T, IEnumerable<TModel>>> property, Func<IPublishedContent, IEnumerable<IPublishedContent>> filter) where TModel : class
-		{
+		public ContentCollectionMappingRule<TModel> Content<TModel>(Expression<Func<T, IEnumerable<TModel>>> property, Func<IPublishedContent, IEnumerable<IPublishedContent>> filter) where TModel : class {
 			var member = property.Body.ToMember();
 
-			if (member == null)
-			{
+			if (member == null) {
 				throw new Exception("param [property] must be a member expression");
 			}
 
@@ -123,12 +103,10 @@ namespace Rhythm.Extensions.Mapping
 			return rule;
 		}
 
-		public void Content<TModel>(Expression<Func<T, TModel>> property, Func<UmbracoHelper, IPublishedContent> filter) where TModel : class
-		{
+		public void Content<TModel>(Expression<Func<T, TModel>> property, Func<UmbracoHelper, IPublishedContent> filter) where TModel : class {
 			var member = property.Body.ToMember();
 
-			if (member == null)
-			{
+			if (member == null) {
 				throw new Exception("param [property] must be a member expression");
 			}
 
@@ -137,12 +115,10 @@ namespace Rhythm.Extensions.Mapping
 			_rules.Add(member.Name, rule);
 		}
 
-		public UmbracoHelperCollectionMappingRule<TModel> Content<TModel>(Expression<Func<T, TModel>> property, Func<UmbracoHelper, IEnumerable<IPublishedContent>> filter) where TModel : class
-		{
+		public UmbracoHelperCollectionMappingRule<TModel> Content<TModel>(Expression<Func<T, TModel>> property, Func<UmbracoHelper, IEnumerable<IPublishedContent>> filter) where TModel : class {
 			var member = property.Body.ToMember();
 
-			if (member == null)
-			{
+			if (member == null) {
 				throw new Exception("param [property] must be a member expression");
 			}
 
@@ -153,8 +129,7 @@ namespace Rhythm.Extensions.Mapping
 			return rule;
 		}
 
-		public void Component<TModel>(Expression<Func<T, TModel>> property, Action<ComponentMapping<TModel>> action) where TModel : class, new()
-		{
+		public void Component<TModel>(Expression<Func<T, TModel>> property, Action<ComponentMapping<TModel>> action) where TModel : class, new() {
 			var member = property.Body.ToMember();
 			var mapper = new ComponentMapping<TModel>();
 
@@ -163,14 +138,12 @@ namespace Rhythm.Extensions.Mapping
 			_rules.Add(member.Name, new ComponentMappingRule<TModel>(member.Name, mapper));
 		}
 
-		public void Component<TModel>(Expression<Func<T, TModel>> property) where TModel : class, new()
-		{
+		public void Component<TModel>(Expression<Func<T, TModel>> property) where TModel : class, new() {
 			/*TODO: Can't call GetMapperForType() here because the mapper might not be registered yet*/
 			var member = property.Body.ToMember();
 			var mapping = UmbracoMapper.GetMappingForType(typeof(TModel)) as ComponentMapping<TModel>;
 
-			if (mapping == null)
-			{
+			if (mapping == null) {
 				throw new Exception(string.Format("No component mapper is defined for type: {0}", typeof(TModel).FullName));
 			}
 

@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using Umbraco.Core.Models;
-
-namespace Rhythm.Extensions.Mapping
-{
-	public class MappingExecutor<T> where T : class
-	{
+﻿namespace Rhythm.Extensions.Mapping {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Linq.Expressions;
+	using Umbraco.Core.Models;
+	public class MappingExecutor<T> where T : class {
 		private readonly MappingSession _session;
 		private readonly IEnumerable<IPublishedContent> _contents;
 		private readonly IList<T> _results;
 		private readonly Type _type;
 		private MappingOptions _options;
 
-		public MappingExecutor(MappingSession session, IEnumerable<IPublishedContent> contents)
-		{
+		public MappingExecutor(MappingSession session, IEnumerable<IPublishedContent> contents) {
 			_session = session;
 			_contents = contents;
 			_type = typeof(T);
@@ -23,39 +19,31 @@ namespace Rhythm.Extensions.Mapping
 			_options = new MappingOptions();
 		}
 
-		private void Execute()
-		{
-			foreach (var content in _contents)
-			{
+		private void Execute() {
+			foreach (var content in _contents) {
 				var currentType = UmbracoMapper.GetRegisteredType(content.DocumentTypeAlias, _type);
 				var typeHierarchy = currentType.GetHierarchy();
 
 				var cacheKey = string.Format("{0}|{1}", content.Id, currentType.FullName);
 
-				if (_session.Contains(cacheKey))
-				{
+				if (_session.Contains(cacheKey)) {
 					var cachedModel = _session.Get<T>(cacheKey);
 
-					foreach (var type in typeHierarchy)
-					{
-						if (!_options.IncludedProperties.ContainsKey(type))
-						{
+					foreach (var type in typeHierarchy) {
+						if (!_options.IncludedProperties.ContainsKey(type)) {
 							continue;
 						}
 
-						foreach (var propertyName in _options.IncludedProperties[type])
-						{
+						foreach (var propertyName in _options.IncludedProperties[type]) {
 							var prop = type.GetProperty(propertyName);
 
-							if (prop.GetValue(cachedModel) != null)
-							{
+							if (prop.GetValue(cachedModel) != null) {
 								continue;
 							}
 
 							var mapping = UmbracoMapper.GetMappingForType(type);
 
-							if (mapping == null)
-							{
+							if (mapping == null) {
 								continue;
 							}
 
@@ -74,17 +62,14 @@ namespace Rhythm.Extensions.Mapping
 
 				_session.Add(cacheKey, model);
 
-				foreach (var type in typeHierarchy)
-				{
+				foreach (var type in typeHierarchy) {
 					var mapping = UmbracoMapper.GetMappingForType(type);
 
-					if (mapping == null)
-					{
+					if (mapping == null) {
 						continue;
 					}
 
-					foreach (var rule in mapping.GetRules())
-					{
+					foreach (var rule in mapping.GetRules()) {
 						rule.Value.Execute(_session, _options, model, type, content);
 					}
 				}
@@ -93,24 +78,20 @@ namespace Rhythm.Extensions.Mapping
 			}
 		}
 
-		public T Single()
-		{
+		public T Single() {
 			return List().FirstOrDefault();
 		}
 
-		public IEnumerable<T> List()
-		{
+		public IEnumerable<T> List() {
 			Execute();
 
 			return _results;
 		}
 
-		public MappingExecutor<T> Include(Expression<Func<T, object>> expression)
-		{
+		public MappingExecutor<T> Include(Expression<Func<T, object>> expression) {
 			var member = expression.Body.ToMember();
 
-			if (!_options.IncludedProperties.ContainsKey(member.ReflectedType))
-			{
+			if (!_options.IncludedProperties.ContainsKey(member.ReflectedType)) {
 				_options.IncludedProperties.Add(member.ReflectedType, new List<string>());
 			}
 
@@ -119,8 +100,7 @@ namespace Rhythm.Extensions.Mapping
 			return this;
 		}
 
-		public MappingExecutor<T> WithOptions(MappingOptions options)
-		{
+		public MappingExecutor<T> WithOptions(MappingOptions options) {
 			_options = options;
 
 			return this;

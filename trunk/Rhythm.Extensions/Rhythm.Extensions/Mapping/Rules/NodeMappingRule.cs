@@ -1,28 +1,22 @@
-﻿using System;
-using System.Reflection;
-using Umbraco.Core.Models;
-using Umbraco.Web;
-
-namespace Rhythm.Extensions.Mapping.Rules
-{
-	public class NodeMappingRule<TModel> : IMappingRule where TModel : class
-	{
+﻿namespace Rhythm.Extensions.Mapping.Rules {
+	using System;
+	using System.Reflection;
+	using Umbraco.Core.Models;
+	using Umbraco.Web;
+	public partial class NodeMappingRule<TModel> : IMappingRule where TModel : class {
 		private readonly string _propertyAlias;
 		private readonly string _propertyName;
 		private bool _isMedia;
 
-		public NodeMappingRule(string propertyName, string propertyAlias)
-		{
+		public NodeMappingRule(string propertyName, string propertyAlias) {
 			_propertyName = propertyName;
 			_propertyAlias = propertyAlias;
 		}
 
-		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model, Type type, object source)
-		{
+		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model, Type type, object source) {
 			var content = source as IPublishedContent;
 
-			if (content == null)
-			{
+			if (content == null) {
 				throw new Exception("Expected source type IPublishedContent");
 			}
 
@@ -30,11 +24,9 @@ namespace Rhythm.Extensions.Mapping.Rules
 
 			var srcProperty = content.GetProperty(_propertyAlias);
 
-			//TODO: Doesn't exist in v6 API?
-			/*if (srcProperty == null || !srcProperty.HasValue)
-			{
+			if (!PropertyHasValue(srcProperty)) {
 				return;
-			}*/
+			}
 
 			var srcValue = srcProperty.Value;
 
@@ -47,8 +39,7 @@ namespace Rhythm.Extensions.Mapping.Rules
 			destProperty.SetValue(model, mappedNode);
 		}
 
-		public void AsMedia()
-		{
+		public void AsMedia() {
 			_isMedia = true;
 		}
 	}

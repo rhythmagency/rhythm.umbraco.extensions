@@ -136,6 +136,7 @@
     <Compile Include="Mapping\Rules\ContentMappingRule.cs" />
     <Compile Include="Mapping\Rules\CustomPropertyMappingRule.cs" />
     <Compile Include="Mapping\Rules\NodeMappingRule.cs" />
+    <Compile Include="Mapping\Rules\NodeMappingRule_Umbraco6.cs" />
     <Compile Include="Mapping\Rules\PropertyMappingRule.cs" />
     <Compile Include="Mapping\Rules\UmbracoHelperCollectionMappingRule.cs" />
     <Compile Include="Mapping\Rules\UmbracoHelperMappingRule.cs" />

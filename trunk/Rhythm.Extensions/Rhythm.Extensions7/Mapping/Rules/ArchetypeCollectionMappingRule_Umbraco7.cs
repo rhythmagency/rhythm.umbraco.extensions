@@ -1,49 +1,41 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Archetype.Models;
-using Umbraco.Core.Models;
-using Umbraco.Web;
-
-namespace Rhythm.Extensions.Mapping.Rules
-{
-	public partial class ArchetypeCollectionMappingRule<T> : IMappingRule where T : class
-	{
+﻿namespace Rhythm.Extensions.Mapping.Rules {
+	using Archetype.Models;
+	using System;
+	using System.Linq;
+	using System.Reflection;
+	using Umbraco.Core.Models;
+	using Umbraco.Web;
+	public partial class ArchetypeCollectionMappingRule<T> : IMappingRule where T : class {
 		private readonly string _propertyName;
 		private readonly string _propertyAlias;
 		private readonly Type _type;
 
-		public ArchetypeCollectionMappingRule(string propertyName, string alias)
-		{
+		public ArchetypeCollectionMappingRule(string propertyName, string alias) {
 			_propertyName = propertyName;
 			_propertyAlias = alias;
 			_type = typeof(T);
 		}
 
-		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model, Type type, object source)
-		{
+		void IMappingRule.Execute(MappingSession session, MappingOptions options, object model,
+			Type type, object source) {
 			var dataTypeService = UmbracoContext.Current.Application.Services.DataTypeService;
-			var destProperty = type.GetProperty(_propertyName, BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public) ?? type.GetProperty(_propertyName);
+			var destProperty = type.GetProperty(_propertyName, BindingFlags.DeclaredOnly |
+				BindingFlags.Instance | BindingFlags.Public) ?? type.GetProperty(_propertyName);
 
 			ArchetypeModel srcValue;
 			IDataTypeDefinition dataTypeDefinition;
 
-			if (source is ArchetypeFieldsetModel)
-			{
+			if (source is ArchetypeFieldsetModel) {
 				var fieldSet = source as ArchetypeFieldsetModel;
 				var property = fieldSet.Properties.FirstOrDefault(x => x.Alias == _propertyAlias);
 
 				srcValue = fieldSet.GetValue<ArchetypeModel>(_propertyAlias);
 				dataTypeDefinition = dataTypeService.GetDataTypeDefinitionById(property.DataTypeId);
-			}
-
-			else
-			{
+			} else {
 				var content = source as IPublishedContent;
 				var srcProperty = content.GetProperty(_propertyAlias);
 
-				if (srcProperty == null)
-				{
+				if (srcProperty == null) {
 					return;
 				}
 
@@ -54,13 +46,11 @@ namespace Rhythm.Extensions.Mapping.Rules
 				srcValue = srcProperty.Value as ArchetypeModel;
 			}
 
-			if (srcValue == null)
-			{
+			if (srcValue == null) {
 				return;
 			}
 
-			if (!srcValue.Any())
-			{
+			if (!srcValue.Any()) {
 				return;
 			}
 
