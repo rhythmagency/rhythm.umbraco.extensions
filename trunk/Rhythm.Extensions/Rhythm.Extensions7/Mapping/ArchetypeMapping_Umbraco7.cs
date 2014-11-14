@@ -1,4 +1,5 @@
 ﻿namespace Rhythm.Extensions.Mapping {
+	using Archetype.Models;
 	using Rules;
 	using System;
 	using System.Collections.Generic;
@@ -36,6 +37,21 @@
 			}
 
 			var rule = new ArchetypePropertyMappingRule<TModel>(member.Name, alias);
+
+			_rules.Add(member.Name, rule);
+		}
+
+		protected void Property<TModel>(Expression<Func<T, TModel>> property,
+			Func<ArchetypeFieldsetModel, object> sourceProperty)
+		{
+			var member = property.Body.ToMember();
+
+			if (member == null)
+			{
+				throw new Exception("param [property] must be a member expression");
+			}
+
+			var rule = new CustomArchetypePropertyMappingRule<TModel>(member.Name, sourceProperty);
 
 			_rules.Add(member.Name, rule);
 		}
