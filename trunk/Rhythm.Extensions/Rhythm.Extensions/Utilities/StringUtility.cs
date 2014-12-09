@@ -49,9 +49,24 @@ namespace Rhythm.Extensions.Utilities {
 		public static string[] SplitCsv(string csv) {
 			if (string.IsNullOrWhiteSpace(csv)) {
 				return new string[] { };
-			}
-			else {
+			} else {
 				return csv.Split(',').Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+			}
+		}
+
+		/// <summary>
+		/// Splits a CSV into a collection.
+		/// </summary>
+		/// <param name="csv">The semicolon-separated values string.</param>
+		/// <returns>The collection of values.</returns>
+		/// <remarks>
+		/// Items are trimmed of whitespace and empty lines are excluded.
+		/// </remarks>
+		private string[] SplitSemicolon(string csv) {
+			if (string.IsNullOrWhiteSpace(csv)) {
+				return new string[] { };
+			} else {
+				return csv.Split(';').Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 			}
 		}
 

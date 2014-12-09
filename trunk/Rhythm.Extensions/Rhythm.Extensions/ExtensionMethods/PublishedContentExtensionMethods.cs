@@ -27,6 +27,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static readonly Regex CsvRegex = new Regex(@"\s*[0-9](\s*,\s*[0-9]+)+\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly TimeSpan FallbackSettingCacheDuration = TimeSpan.FromMinutes(5);
 		private static readonly Regex TitleRegex = new Regex(@"{(page|page-name|\*|name|parent|parent-name|parent-title)}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		private static readonly Regex PrevalueRegex = new Regex(@"^[0-9]+(,[0-9]+)*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static bool? BypassLocalization = null;
 
 		#endregion
@@ -456,7 +457,34 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		public static string[] LocalizedDropDownValues(this IPublishedContent source, string propertyAlias, bool recursive = false)
 		{
 			var value = source.LocalizedDropDownValue(propertyAlias, recursive);
-			return StringUtility.SplitCsv(value);
+			var parts = StringUtility.SplitCsv(value);
+			if (string.IsNullOrWhiteSpace(value)) {
+				return parts;
+			} else {
+				if (PrevalueRegex.IsMatch(value)) {
+					var values = new List<string>();
+					lock (PrevalueLock) {
+						var strValue = default(string);
+						foreach (var part in parts) {
+							var parsedValue = default(int);
+							if (int.TryParse(part, out parsedValue)) {
+								if (PrevalueCache.TryGetValue(parsedValue, out strValue)) {
+									values.Add(strValue);
+								} else {
+									strValue = UmbracoLibrary.GetPreValueAsString(parsedValue);
+									PrevalueCache[parsedValue] = strValue;
+									values.Add(strValue);
+								}
+							} else {
+								values.Add(part);
+							}
+						}
+					}
+					return values.ToArray();
+				} else {
+					return parts;
+				}
+			}
 		}
 
 		/// <summary>
