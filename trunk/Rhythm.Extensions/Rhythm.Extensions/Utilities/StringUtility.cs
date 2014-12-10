@@ -62,7 +62,7 @@ namespace Rhythm.Extensions.Utilities {
 		/// <remarks>
 		/// Items are trimmed of whitespace and empty lines are excluded.
 		/// </remarks>
-		private string[] SplitSemicolon(string csv) {
+		public static string[] SplitSemicolon(string csv) {
 			if (string.IsNullOrWhiteSpace(csv)) {
 				return new string[] { };
 			} else {
