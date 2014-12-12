@@ -437,6 +437,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 							else {
 								strValue = UmbracoLibrary.GetPreValueAsString(parsedValue);
 								PrevalueCache[parsedValue] = strValue;
+								return strValue;
 							}
 						}
 					} else {

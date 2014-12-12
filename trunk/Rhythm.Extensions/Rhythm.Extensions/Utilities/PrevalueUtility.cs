@@ -20,6 +20,8 @@ namespace Rhythm.Extensions.Utilities {
 		private static object ValuesByTypeLock { get; set; }
 		private static List<Tuple<string, int>> AllPrevalueTypes { get; set; }
 		private static object AllPrevalueTypesLock { get; set; }
+		private static Dictionary<int, string> ValuesById { get; set; }
+		private static object ValuesByIdLock { get; set; }
 
 		#endregion
 
@@ -36,6 +38,8 @@ namespace Rhythm.Extensions.Utilities {
 			ValuesByTypeLock = new object();
 			AllPrevalueTypes = new List<Tuple<string,int>>();
 			AllPrevalueTypesLock = new object();
+			ValuesById = new Dictionary<int, string>();
+			ValuesByIdLock = new object();
 		}
 
 		#endregion
@@ -96,6 +100,28 @@ namespace Rhythm.Extensions.Utilities {
 				}
 			}
 			return AllPrevalueTypes.FirstOrDefault(x => typeName.InvariantEquals(x.Item1)).Item2;
+		}
+
+		/// <summary>
+		/// Gets a text value for a prevalue.
+		/// </summary>
+		/// <param name="prevalue">The prevalue (either a string or integer).</param>
+		/// <returns>The text value.</returns>
+		public static string GetTextValue(string prevalue) {
+			var prevalueId = default(int);
+			if (int.TryParse(prevalue, out prevalueId)) {
+				var strValue = default(string);
+				lock (ValuesByIdLock) {
+					if (!ValuesById.TryGetValue(prevalueId, out strValue)) {
+						strValue = ApplicationContext.Current
+							.Services.DataTypeService.GetPreValueAsString(prevalueId);
+						ValuesById[prevalueId] = strValue;
+					}
+				}
+				return strValue;
+			} else {
+				return prevalue;
+			}
 		}
 
 		#endregion
