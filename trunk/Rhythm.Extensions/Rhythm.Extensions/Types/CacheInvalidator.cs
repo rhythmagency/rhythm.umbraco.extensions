@@ -3,15 +3,13 @@ using Rhythm.Extensions.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace Rhythm.Extensions.Types
-{
+namespace Rhythm.Extensions.Types {
 
 	/// <summary>
 	/// Invalidates an InstanceCache when content of particular content types is changed.
 	/// </summary>
 	/// <typeparam name="T">The type of data being cached.</typeparam>
-	public class CacheInvalidator<T> : ICacheInvalidator
-	{
+	public class CacheInvalidator<T> : ICacheInvalidator {
 
 		#region Properties
 

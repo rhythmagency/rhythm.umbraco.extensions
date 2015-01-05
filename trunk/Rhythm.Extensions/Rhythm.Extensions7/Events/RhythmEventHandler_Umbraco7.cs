@@ -2,8 +2,7 @@
 using Umbraco.Core.Events;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
-namespace Rhythm.Extensions.Events
-{
+namespace Rhythm.Extensions.Events {
 	public partial class RhythmEventHandler {
 
 		/// <summary>
@@ -14,6 +13,15 @@ namespace Rhythm.Extensions.Events
 			var aliases = e.MoveInfoCollection.Select(x => x.Entity.ContentType.Alias)
 				.Distinct().ToList();
 			HandleChangedContent(aliases);
+		}
+
+		/// <summary>
+		/// The Umbraco 7 version of MediaService_Moved.
+		/// This version uses MoveEventArgs.MoveInfoCollection.
+		/// </summary>
+		void Specialized_MediaService_Moved(IMediaService sender, MoveEventArgs<IMedia> e) {
+			var ids = e.MoveInfoCollection.Select(x => x.Entity.Id).ToList();
+			HandleChangedMedia(ids);
 		}
 
 	}

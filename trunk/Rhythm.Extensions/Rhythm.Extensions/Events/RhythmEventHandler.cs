@@ -1,6 +1,8 @@
 ﻿using Rhythm.Extensions.Binding;
+using Rhythm.Extensions.Enums;
 using Rhythm.Extensions.Interfaces;
 using Rhythm.Extensions.Routing;
+using Rhythm.Extensions.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +13,6 @@ using Umbraco.Core.Models;
 using Umbraco.Core.Publishing;
 using Umbraco.Core.Services;
 using Umbraco.Web.Routing;
-using Rhythm.Extensions.Utilities;
-using Rhythm.Extensions.Enums;
 namespace Rhythm.Extensions.Events {
 
 	/// <summary>
@@ -24,6 +24,8 @@ namespace Rhythm.Extensions.Events {
 
 		private static object InvalidatorsLock { get; set; }
 		private static List<WeakReference<ICacheInvalidator>> Invalidators { get; set; }
+		private static object KeyInvalidatorsLock { get; set; }
+		private static List<WeakReference<ICacheByKeyInvalidator>> KeyInvalidators { get; set; }
 
 		#endregion
 
@@ -35,6 +37,8 @@ namespace Rhythm.Extensions.Events {
 		static RhythmEventHandler() {
 			InvalidatorsLock = new object();
 			Invalidators = new List<WeakReference<ICacheInvalidator>>();
+			KeyInvalidatorsLock = new object();
+			KeyInvalidators = new List<WeakReference<ICacheByKeyInvalidator>>();
 		}
 
 		#endregion
@@ -49,6 +53,18 @@ namespace Rhythm.Extensions.Events {
 			if (invalidator != null) {
 				lock (InvalidatorsLock) {
 					Invalidators.Add(new WeakReference<ICacheInvalidator>(invalidator));
+				}
+			}
+		}
+
+		/// <summary>
+		/// Registers a cache by key invalidator so that it can be notified when change vents occur.
+		/// </summary>
+		/// <param name="invalidator">The invalidator.</param>
+		public static void RegisterInvalidator(ICacheByKeyInvalidator invalidator) {
+			if (invalidator != null) {
+				lock (KeyInvalidatorsLock) {
+					KeyInvalidators.Add(new WeakReference<ICacheByKeyInvalidator>(invalidator));
 				}
 			}
 		}
@@ -79,6 +95,34 @@ namespace Rhythm.Extensions.Events {
 			ContentService.Published += ContentService_Published;
 			ContentService.Deleted += ContentService_Deleted;
 
+			// Listen for media change events.
+			MediaService.Moved += MediaService_Moved;
+			MediaService.Saved += MediaService_Saved;
+			MediaService.Deleted += MediaService_Deleted;
+
+		}
+
+		/// <summary>
+		/// Some media was deleted.
+		/// </summary>
+		void MediaService_Deleted(IMediaService sender, DeleteEventArgs<IMedia> e) {
+			var ids = e.DeletedEntities.Select(x => x.Id).ToList();
+			HandleChangedMedia(ids);
+		}
+
+		/// <summary>
+		/// Some media was saved.
+		/// </summary>
+		void MediaService_Saved(IMediaService sender, SaveEventArgs<IMedia> e) {
+			var ids = e.SavedEntities.Select(x => x.Id).ToList();
+			HandleChangedMedia(ids);
+		}
+
+		/// <summary>
+		/// Some media was moved.
+		/// </summary>
+		void MediaService_Moved(IMediaService sender, MoveEventArgs<IMedia> e) {
+			Specialized_MediaService_Moved(sender, e);
 		}
 
 		/// <summary>
@@ -119,24 +163,75 @@ namespace Rhythm.Extensions.Events {
 
 			// Find invalidators that are still in memory.
 			lock (InvalidatorsLock) {
-				for (var i = 0; i < Invalidators.Count; i++) {
-					var weakInvalidator = Invalidators[i];
-					if (weakInvalidator != null) {
-						var invalidator = default(ICacheInvalidator);
-						if (weakInvalidator.TryGetTarget(out invalidator)) {
-							foundInvalidators.Add(invalidator);
-						} else {
-							Invalidators[i] = null;
-						}
-					}
-				}
-				Invalidators = Invalidators.Where(x => x != null).ToList();
+				var invalidators = Invalidators;
+				foundInvalidators = GetLiveValues(ref invalidators);
+				Invalidators = invalidators;
 			}
 
 			// Call invalidators for the changed aliases.
 			foreach (var invalidator in foundInvalidators) {
 				invalidator.InvalidateForAliases(aliases);
 			}
+
+		}
+
+		/// <summary>
+		/// Handles changed media.
+		/// </summary>
+		/// <param name="ids">The ID's of the media items that were changed.</param>
+		private void HandleChangedMedia(IEnumerable<int> ids) {
+
+			// Variables.
+			var foundInvalidators = new List<ICacheByKeyInvalidator>();
+
+			// Find invalidators that are still in memory.
+			lock (KeyInvalidatorsLock) {
+				var invalidators = KeyInvalidators;
+				foundInvalidators = GetLiveValues(ref invalidators);
+				KeyInvalidators = invalidators;
+			}
+
+			// Call invalidators for the changed ID's.
+			foreach (var invalidator in foundInvalidators) {
+				invalidator.InvalidateForIds(ids);
+			}
+
+		}
+
+		/// <summary>
+		/// Gets the values in a list of weak references that aren't stale yet.
+		/// </summary>
+		/// <typeparam name="T">The type of item stored by each weak reference.</typeparam>
+		/// <param name="items">The list of weak references.</param>
+		/// <returns>The list of values that aren't stale.</returns>
+		/// <remarks>
+		/// The supplied item list will have stale references removed.
+		/// </remarks>
+		private List<T> GetLiveValues<T>(ref List<WeakReference<T>> items) where T : class
+		{
+
+			// Variables.
+			var foundItems = new List<T>();
+			var newItems = new List<WeakReference<T>>();
+
+			// Find invalidators that are still in memory.
+			for (var i = 0; i < items.Count; i++) {
+				var weakItem = items[i];
+				if (weakItem != null) {
+					var item = default(T);
+					if (weakItem.TryGetTarget(out item)) {
+						newItems.Add(weakItem);
+						foundItems.Add(item);
+					}
+				}
+			}
+
+			// Remove stale references.
+			items = newItems;
+
+			// Return found items.
+			return foundItems;
+
 		}
 
 		#endregion

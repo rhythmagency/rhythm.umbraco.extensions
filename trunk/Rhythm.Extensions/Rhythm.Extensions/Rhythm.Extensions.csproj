@@ -118,6 +118,7 @@
     <Compile Include="ExtensionMethods\TimeZoneExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\UmbracoHelperExtensionMethods.cs" />
     <Compile Include="Helpers\ContentHelper.cs" />
+    <Compile Include="Interfaces\ICacheByKeyInvalidator.cs" />
     <Compile Include="Interfaces\ICacheInvalidator.cs" />
     <Compile Include="Mapping\ContentMapping.cs" />
     <Compile Include="Mapping\IContentMapping.cs" />
@@ -149,6 +150,8 @@
     <Compile Include="Routing\FragmentUrlProvider.cs" />
     <Compile Include="Types\CacheInvalidator.cs" />
     <Compile Include="Types\InstanceCache.cs" />
+    <Compile Include="Types\InstanceByKeyCache.cs" />
+    <Compile Include="Types\MediaCacheInvalidator.cs" />
     <Compile Include="Types\ValueLabelPair.cs" />
     <Compile Include="Utilities\ActionUtility.cs" />
     <Compile Include="Utilities\ConfigUtility.cs" />

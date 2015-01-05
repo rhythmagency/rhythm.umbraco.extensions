@@ -194,6 +194,9 @@
     <Compile Include="..\Rhythm.Extensions\Helpers\ContentHelper.cs">
       <Link>Helpers\ContentHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Interfaces\ICacheByKeyInvalidator.cs">
+      <Link>Interfaces\ICacheByKeyInvalidator.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Interfaces\ICacheInvalidator.cs">
       <Link>Interfaces\ICacheInvalidator.cs</Link>
     </Compile>
@@ -278,8 +281,14 @@
     <Compile Include="..\Rhythm.Extensions\Types\CacheInvalidator.cs">
       <Link>Types\CacheInvalidator.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Types\InstanceByKeyCache.cs">
+      <Link>Types\InstanceByKeyCache.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Types\InstanceCache.cs">
       <Link>Types\InstanceCache.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Types\MediaCacheInvalidator.cs">
+      <Link>Types\MediaCacheInvalidator.cs</Link>
     </Compile>
     <Compile Include="..\Rhythm.Extensions\Types\ValueLabelPair.cs">
       <Link>Types\ValueLabelPair.cs</Link>

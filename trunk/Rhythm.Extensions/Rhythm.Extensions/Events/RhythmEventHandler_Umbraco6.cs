@@ -14,5 +14,15 @@ namespace Rhythm.Extensions.Events {
 			HandleChangedContent(aliases);
 		}
 
+		/// <summary>
+		/// The Umbraco 6 version of MediaService_Moved.
+		/// This version can't use MoveEventArgs.MoveInfoCollection, so it uses
+		/// MoveEventArgs.Entity instead.
+		/// </summary>
+		void Specialized_MediaService_Moved(IMediaService sender, MoveEventArgs<IMedia> e) {
+			var ids = new[] { e.Entity.Id };
+			HandleChangedMedia(ids);
+		}
+
 	}
 }
