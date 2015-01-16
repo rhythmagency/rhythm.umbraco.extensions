@@ -13,6 +13,9 @@
 				case ConfigKeys.RecaptchaPublicKey:
 					value = ConfigurationManager.AppSettings["RecaptchaPublicKey"];
 					break;
+				case ConfigKeys.CustomUrlProviderName:
+					value = ConfigurationManager.AppSettings["CustomUrlProviderName"];
+					break;
 				default:
 					throw new InvalidOperationException("Unknown string configuration key.");
 			}
@@ -30,9 +33,6 @@
 					break;
 				case ConfigKeys.BypassLocalization:
 					value = GetBoolForKey("BypassLocalization");
-					break;
-				case ConfigKeys.DisableFragmentUrlProvider:
-					value = GetBoolForKey("DisableFragmentUrlProvider");
 					break;
 				default:
 					throw new InvalidOperationException("Unknown bool configuration key.");

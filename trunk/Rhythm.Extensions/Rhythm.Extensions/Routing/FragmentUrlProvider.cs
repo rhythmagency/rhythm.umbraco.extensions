@@ -24,6 +24,11 @@ namespace Rhythm.Extensions.Routing {
 			var url = base.GetUrl(umbracoContext, id, current, mode);
 			var alias = null as string;
 
+			// Avoid unnecessary work when possible by returning early.
+			if (string.IsNullOrWhiteSpace(url)) {
+				return url;
+			}
+
 			// Log errors.
 			try {
 
@@ -48,11 +53,22 @@ namespace Rhythm.Extensions.Routing {
 				}
 
 				// For document fragments, convert the last part to a fragment identifier.
+				// Removes trailing slashes and the ".aspx" extension.
 				if (alias != null && "DocumentFragment".InvariantEquals(alias)) {
+					var originalUrl = url;
+					url = url.TrimEnd("/".ToCharArray());
+					if (url.EndsWith(".aspx", StringComparison.InvariantCultureIgnoreCase)) {
+						url = url.Substring(0, url.Length - 5);
+					}
 					var pos = url.LastIndexOf('/');
 					if (pos >= 0) {
 						var trailLength = url.Length - pos - 1;
 						url = url.Substring(0, pos) + "#" + url.Substring(pos + 1, trailLength);
+						if (url.StartsWith("#")) {
+							url = "/" + url;
+						}
+					} else {
+						url = originalUrl;
 					}
 				}
 

@@ -5,6 +5,6 @@
 		ForceSSL,
 		ForceHttp,
 		BypassLocalization,
-		DisableFragmentUrlProvider
+		CustomUrlProviderName
 	}
 }

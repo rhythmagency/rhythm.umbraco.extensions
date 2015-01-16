@@ -83,10 +83,11 @@ namespace Rhythm.Extensions.Events {
 			ModelBinders.Binders.DefaultBinder = new RhythmModelBinder();
 
 			// URL provider to facilitate linking to fragment identifiers.
-			var disableProvider = ConfigUtility.GetBool(ConfigKeys.DisableFragmentUrlProvider);
-			if (!disableProvider) {
+			var customProvider = ConfigUtility.GetString(ConfigKeys.CustomUrlProviderName);
+			if ("FragmentUrlProvider".InvariantEquals(customProvider)) {
 				try {
 					UrlProviderResolver.Current.InsertTypeBefore<DefaultUrlProvider, FragmentUrlProvider>();
+					UrlProviderResolver.Current.RemoveType<DefaultUrlProvider>();
 				} catch { }
 			}
 

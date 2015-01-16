@@ -11,8 +11,8 @@
 	/// <remarks>
 	/// This model binder should be set to the default on application start.
 	/// Features:
-	///		Bind model property to IP address when decorated with IpAddressBinderAttribute.
-	///	</remarks>
+	///     Bind model property to IP address when decorated with IpAddressBinderAttribute.
+	/// </remarks>
 	public class RhythmModelBinder : DefaultModelBinder {
 		protected override void BindProperty(System.Web.Mvc.ControllerContext controllerContext,
 			ModelBindingContext bindingContext, System.ComponentModel.PropertyDescriptor propertyDescriptor) {
