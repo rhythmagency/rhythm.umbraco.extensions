@@ -56,14 +56,17 @@ namespace Rhythm.Extensions.Routing {
 				// Removes trailing slashes and the ".aspx" extension.
 				if (alias != null && "DocumentFragment".InvariantEquals(alias)) {
 					var originalUrl = url;
-					url = url.TrimEnd("/".ToCharArray());
+					var hashReplace = "#";
+					if (url.EndsWith("/")) {
+						url = url.TrimEnd("/".ToCharArray());
+						hashReplace = "/#";
+					}
 					if (url.EndsWith(".aspx", StringComparison.InvariantCultureIgnoreCase)) {
 						url = url.Substring(0, url.Length - 5);
 					}
 					var pos = url.LastIndexOf('/');
 					if (pos >= 0) {
-						var trailLength = url.Length - pos - 1;
-						url = url.Substring(0, pos) + "#" + url.Substring(pos + 1, trailLength);
+						url = url.Substring(0, pos) + hashReplace + url.Substring(pos + 1);
 						if (url.StartsWith("#")) {
 							url = "/" + url;
 						}
