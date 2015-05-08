@@ -48,7 +48,6 @@
 			return reader.ReadToEnd();
 		}
 
-
 		/// <summary>
 		/// Returns the response string downloaded from the request to the specified URL.
 		/// </summary>
@@ -79,7 +78,7 @@
 					builder.Port = -1;
 				}
 
-				context.Response.Redirect(builder.Uri.AbsoluteUri);
+				context.Response.RedirectPermanent(builder.Uri.AbsoluteUri);
 			}
 		}
 
@@ -99,7 +98,7 @@
 					builder.Port = -1;
 				}
 				
-				context.Response.Redirect(builder.Uri.AbsoluteUri);
+				context.Response.RedirectPermanent(builder.Uri.AbsoluteUri);
 			}
 		}
 	}
