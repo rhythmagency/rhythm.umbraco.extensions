@@ -16,7 +16,7 @@ namespace Rhythm.Extensions.Utilities {
 
 		#region Constants
 
-		private const string PreValueBug = "Encountered Umbraco bug regarding GetPreValueAsString.";
+		private const string PreValueBug = @"Encountered Umbraco bug regarding GetPreValueAsString. Prevalue was ""{0}"".";
 
 		#endregion
 
@@ -123,21 +123,16 @@ namespace Rhythm.Extensions.Utilities {
 				lock (ValuesByIdLock) {
 					if (!ValuesById.TryGetValue(prevalueId, out strValue)) {
 
-						// Try to get the value a couple times.
-						// Attempted workaround for an Umbraco bug in which the first
-						// call to GetPreValueAsString throws an InvalidOperationException
+						// Damage control for an Umbraco bug in which some calls
+						// to GetPreValueAsString throw an InvalidOperationException
 						// indicating "Sequence contains no matching element".
-						for (var i = 0; i < 2; i++) {
-							try {
-								strValue = ApplicationContext.Current
-									.Services.DataTypeService.GetPreValueAsString(prevalueId);
-								success = true;
-							} catch(Exception ex) {
-								LogHelper.Error<PrevalueUtility_NonStatic>(PreValueBug, ex);
-							}
-							if (success) {
-								break;
-							}
+						try {
+							strValue = ApplicationContext.Current
+								.Services.DataTypeService.GetPreValueAsString(prevalueId);
+							success = true;
+						} catch (Exception ex) {
+							var message = string.Format(PreValueBug, prevalue ?? "(Null Value)");
+							LogHelper.Error<PrevalueUtility_NonStatic>(message, ex);
 						}
 						if (success) {
 							ValuesById[prevalueId] = strValue;
