@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Core;
+using Umbraco.Core.Logging;
 using PreValue = umbraco.cms.businesslogic.datatype.PreValue;
 using PreValues = umbraco.cms.businesslogic.datatype.PreValues;
 
@@ -10,7 +11,14 @@ namespace Rhythm.Extensions.Utilities {
 	/// <summary>
 	/// Utility to help work with Umbraco prevalues.
 	/// </summary>
-	public static class PrevalueUtility {
+	public static class PrevalueUtility
+	{
+
+		#region Constants
+
+		private const string PreValueBug = "Encountered Umbraco bug regarding GetPreValueAsString.";
+
+		#endregion
 
 		#region Properties
 
@@ -109,13 +117,34 @@ namespace Rhythm.Extensions.Utilities {
 		/// <returns>The text value.</returns>
 		public static string GetTextValue(string prevalue) {
 			var prevalueId = default(int);
+			var success = false;
 			if (int.TryParse(prevalue, out prevalueId)) {
 				var strValue = default(string);
 				lock (ValuesByIdLock) {
 					if (!ValuesById.TryGetValue(prevalueId, out strValue)) {
-						strValue = ApplicationContext.Current
-							.Services.DataTypeService.GetPreValueAsString(prevalueId);
-						ValuesById[prevalueId] = strValue;
+
+						// Try to get the value a couple times.
+						// Attempted workaround for an Umbraco bug in which the first
+						// call to GetPreValueAsString throws an InvalidOperationException
+						// indicating "Sequence contains no matching element".
+						for (var i = 0; i < 2; i++) {
+							try {
+								strValue = ApplicationContext.Current
+									.Services.DataTypeService.GetPreValueAsString(prevalueId);
+								success = true;
+							} catch(Exception ex) {
+								LogHelper.Error<PrevalueUtility_NonStatic>(PreValueBug, ex);
+							}
+							if (success) {
+								break;
+							}
+						}
+						if (success) {
+							ValuesById[prevalueId] = strValue;
+						} else {
+							return prevalue;
+						}
+
 					}
 				}
 				return strValue;
@@ -127,5 +156,15 @@ namespace Rhythm.Extensions.Utilities {
 		#endregion
 
 	}
+
+	#region PrevalueUtilityNonStatic
+
+	/// <summary>
+	/// This is a dummy class that is only used to pass the type argument
+	/// to LogHelper (can't use static classes as a type argument).
+	/// </summary>
+	internal class PrevalueUtility_NonStatic {}
+
+	#endregion
 
 }
