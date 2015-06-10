@@ -56,6 +56,13 @@ namespace Rhythm.Extensions.Types {
 			}
 		}
 
+		/// <summary>
+		/// Invalidates the instance cache unconditionally.
+		/// </summary>
+		public void Invalidate() {
+			this.InstanceCache.Clear();
+		}
+
 		#endregion
 
 	}

@@ -8,17 +8,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 using Umbraco.Core.Events;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Publishing;
 using Umbraco.Core.Services;
+using Umbraco.Core.Sync;
+using Umbraco.Web.Cache;
 using Umbraco.Web.Routing;
 namespace Rhythm.Extensions.Events {
 
 	/// <summary>
 	/// Handles Umbraco events.
 	/// </summary>
-	public partial class RhythmEventHandler : ApplicationEventHandler {
+	public partial class RhythmEventHandler : ApplicationEventHandler
+	{
+
+		#region Constants
+
+		private const string UpdatingCacheAlias = "Updating cache for document type alias, {0}.";
+		private const string UpdatingCacheAll = "Updating all caches.";
+		private const string ScanningDeleted = "Scanning the recycle bin for deleted nodes. This might be an computationally expensive operation.";
+
+		#endregion
 
 		#region Static Members
 
@@ -95,12 +108,59 @@ namespace Rhythm.Extensions.Events {
 			ContentService.Moved += ContentService_Moved;
 			ContentService.Published += ContentService_Published;
 			ContentService.Deleted += ContentService_Deleted;
+			PageCacheRefresher.CacheUpdated += PageCacheRefresher_CacheUpdated;
 
 			// Listen for media change events.
 			MediaService.Moved += MediaService_Moved;
 			MediaService.Saved += MediaService_Saved;
 			MediaService.Deleted += MediaService_Deleted;
 
+		}
+
+		/// <summary>
+		/// Page cache was updated.
+		/// </summary>
+		void PageCacheRefresher_CacheUpdated(PageCacheRefresher sender, CacheRefresherEventArgs e) {
+			var kind = e.MessageType;
+			if (kind == MessageType.RefreshById || kind == MessageType.RemoveById) {
+
+				// Attempt to update caches by document type alias.
+				var id = e.MessageObject as int?;
+				if (id.HasValue) {
+					var contentService = ApplicationContext.Current.Services.ContentService;
+					var node = contentService.GetById(id.Value);
+					if (node == null) {
+
+						// If the node doesn't exist in the content tree, check the recycle bin.
+						LogHelper.Info<RhythmEventHandler>(ScanningDeleted);
+						var recycled = contentService.GetContentInRecycleBin();
+						foreach (var recycledNode in recycled) {
+							if (recycledNode != null) {
+								var recycledId = recycledNode.Id;
+								if (recycledId == id.Value) {
+									node = recycledNode;
+									break;
+								}
+							}
+						}
+
+					}
+					if (node != null) {
+						var alias = node.ContentType.Alias;
+						if (!string.IsNullOrWhiteSpace(alias)) {
+							LogHelper.Info<RhythmEventHandler>(UpdatingCacheAlias, () => alias);
+							HandleChangedContent(new[] { alias });
+						}
+					}
+				}
+
+			} else if (kind == MessageType.RefreshAll) {
+
+				// Update all caches.
+				LogHelper.Info<RhythmEventHandler>(UpdatingCacheAll);
+				HandleChangedContent(null);
+
+			}
 		}
 
 		/// <summary>
@@ -156,7 +216,10 @@ namespace Rhythm.Extensions.Events {
 		/// <summary>
 		/// Handles changed content.
 		/// </summary>
-		/// <param name="aliases">The aliases of the content types that were changed.</param>
+		/// <param name="aliases">
+		/// The aliases of the content types that were changed.
+		/// If null, all aliases will be assumed.
+		/// </param>
 		private void HandleChangedContent(IEnumerable<string> aliases) {
 
 			// Variables.
@@ -169,9 +232,19 @@ namespace Rhythm.Extensions.Events {
 				Invalidators = invalidators;
 			}
 
-			// Call invalidators for the changed aliases.
+			// Call invalidators for the changed aliases (or unconditionally).
 			foreach (var invalidator in foundInvalidators) {
-				invalidator.InvalidateForAliases(aliases);
+				if (aliases == null) {
+
+					// Invalidate the cache regardless of alias.
+					invalidator.Invalidate();
+
+				} else {
+
+					// Invalidate the cache only for the specified alises.
+					invalidator.InvalidateForAliases(aliases);
+
+				}
 			}
 
 		}
