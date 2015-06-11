@@ -29,7 +29,6 @@ namespace Rhythm.Extensions.Events {
 
 		private const string UpdatingCacheAlias = "Updating cache for document type alias, {0}.";
 		private const string UpdatingCacheAll = "Updating all caches.";
-		private const string ScanningDeleted = "Scanning the recycle bin for deleted nodes. This might be an computationally expensive operation.";
 
 		#endregion
 
@@ -129,22 +128,6 @@ namespace Rhythm.Extensions.Events {
 				if (id.HasValue) {
 					var contentService = ApplicationContext.Current.Services.ContentService;
 					var node = contentService.GetById(id.Value);
-					if (node == null) {
-
-						// If the node doesn't exist in the content tree, check the recycle bin.
-						LogHelper.Info<RhythmEventHandler>(ScanningDeleted);
-						var recycled = contentService.GetContentInRecycleBin();
-						foreach (var recycledNode in recycled) {
-							if (recycledNode != null) {
-								var recycledId = recycledNode.Id;
-								if (recycledId == id.Value) {
-									node = recycledNode;
-									break;
-								}
-							}
-						}
-
-					}
 					if (node != null) {
 						var alias = node.ContentType.Alias;
 						if (!string.IsNullOrWhiteSpace(alias)) {
