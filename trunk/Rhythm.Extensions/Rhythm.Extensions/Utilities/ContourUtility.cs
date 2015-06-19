@@ -106,7 +106,8 @@
 			// Add record.
 			using (var formStorage = new FormStorage()) {
 				var form = formStorage.GetForm(formName);
-				success = success && StoreRecord(form, fieldValues, ipAddress, pageId);
+				var tempGuid = Guid.Empty;
+				success = success && StoreRecord(form, fieldValues, ipAddress, pageId, out tempGuid);
 			}
 
 			// Succeeded?
@@ -134,7 +135,71 @@
 			// Add record.
 			using (var formStorage = new FormStorage()) {
 				var form = formStorage.GetForm(formGuid);
-				success = success && StoreRecord(form, fieldValues, ipAddress, pageId);
+				var tempGuid = Guid.Empty;
+				success = success && StoreRecord(form, fieldValues, ipAddress, pageId, out tempGuid);
+			}
+
+			// Succeeded?
+			return success;
+
+		}
+
+		/// <summary>
+		/// Stores a form submission to Contour.
+		/// </summary>
+		/// <param name="formName">The name of the form.</param>
+		/// <param name="fieldValues">The values to store to contour.</param>
+		/// <param name="ipAddress">The user's IP address.</param>
+		/// <param name="pageId">The ID of the page the user entered the values on.</param>
+		/// <param name="recordId">Outputs the ID of the record stored to Contour.</param>
+		/// <returns>True, if the data was stored successfully; otherwise, false.</returns>
+		public static bool StoreRecord(string formName, Dictionary<string, List<object>> fieldValues,
+			string ipAddress, int pageId, out Guid recordId)
+		{
+
+			// Variables.
+			var success = true;
+			recordId = Guid.Empty;
+
+			// Ensure keys are lowercase.
+			fieldValues = GetLowercaseKeys(fieldValues);
+
+			// Add record.
+			using (var formStorage = new FormStorage())
+			{
+				var form = formStorage.GetForm(formName);
+				success = success && StoreRecord(form, fieldValues, ipAddress, pageId, out recordId);
+			}
+
+			// Succeeded?
+			return success;
+
+		}
+
+		/// <summary>
+		/// Stores a form submission to Contour.
+		/// </summary>
+		/// <param name="formGuid">The GUID of the form.</param>
+		/// <param name="fieldValues">The values to store to contour.</param>
+		/// <param name="ipAddress">The user's IP address.</param>
+		/// <param name="pageId">The ID of the page the user entered the values on.</param>
+		/// <param name="recordId">Outputs the ID of the record stored to Contour.</param>
+		/// <returns>True, if the data was stored successfully; otherwise, false.</returns>
+		public static bool StoreRecord(Guid formGuid, Dictionary<string, List<object>> fieldValues,
+			string ipAddress, int pageId, out Guid recordId) {
+
+			// Variables.
+			var success = true;
+			recordId = Guid.Empty;
+
+			// Ensure keys are lowercase.
+			fieldValues = GetLowercaseKeys(fieldValues);
+
+			// Add record.
+			using (var formStorage = new FormStorage())
+			{
+				var form = formStorage.GetForm(formGuid);
+				success = success && StoreRecord(form, fieldValues, ipAddress, pageId, out recordId);
 			}
 
 			// Succeeded?
@@ -173,9 +238,10 @@
 		/// <param name="fieldValues">The field values to store.</param>
 		/// <param name="ipAddress">The user's IP address.</param>
 		/// <param name="pageId">The current page ID.</param>
+		/// <param name="recordId">Outputs the ID of the record stored to Contour.</param>
 		/// <returns>True, if the record was stored; otherwise, false.</returns>
 		private static bool StoreRecord(Form form, Dictionary<string, List<object>> fieldValues,
-			string ipAddress, int pageId) {
+			string ipAddress, int pageId, out Guid recordId) {
 			using (var recordStorage = new RecordStorage())
 			using (var recordService = new RecordService(form)) {
 
@@ -186,7 +252,7 @@
 				var record = recordService.Record;
 				record.IP = ipAddress;
 				record.UmbracoPageId = pageId;
-				recordStorage.InsertRecord(record, form);
+				record = recordStorage.InsertRecord(record, form);
 
 				// Assign field values for record.
 				foreach (var field in recordService.Form.AllFields) {
@@ -224,7 +290,9 @@
 
 				// Submit / save record.
 				recordService.Submit();
-				return recordService.SaveFormToRecord();
+				var result = recordService.SaveFormToRecord();
+				recordId = record.Id;
+				return result;
 
 			}
 		}
