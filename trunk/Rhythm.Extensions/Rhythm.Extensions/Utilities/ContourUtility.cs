@@ -207,6 +207,22 @@
 
 		}
 
+		/// <summary>
+		/// Returns the GUID that identifies the form with the specified name.
+		/// </summary>
+		/// <param name="formName">The name of the Contour form.</param>
+		/// <returns>The form GUID.</returns>
+		public static Guid GetFormGuid(string formName) {
+			using (var formStorage = new FormStorage()) {
+				var form = formStorage.GetForm(formName);
+				if (form == null) {
+					return Guid.Empty;
+				} else {
+					return form.Id;
+				}
+			}
+		}
+
 		#endregion
 
 		#region Private Methods
