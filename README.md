@@ -7,7 +7,7 @@ Before installing Rhythm Umbraco Extensions, you must install:
 * [Archetype](http://our.umbraco.org/projects/backoffice-extensions/archetype) (only required for Umbraco 7 release).
 
 ## Installation
-
+Once the prerequisites are installed, you can install Rhythm Umbraco Extensions:
 * Go to the releases page: https://github.com/rhythmagency/rhythm.umbraco.extensions/releases
 * Download the latest version compatible with your version of Umbraco, and unzip it into your site's bin folder.
 
