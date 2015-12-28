@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EA1C5A0E-86D8-4745-8554-04259A78739C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rhythm.Extensions</RootNamespace>
+    <AssemblyName>Rhythm.Extensions.Umbraco7.NoContour</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Rhythm.Extensions.Umbraco7.NoContour.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Rhythm.Extensions.Umbraco7.NoContour.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Archetype">
+      <HintPath>..\ref\Archetype_Bin\Archetype.dll</HintPath>
+    </Reference>
+    <Reference Include="businesslogic, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\businesslogic.dll</HintPath>
+    </Reference>
+    <Reference Include="cms, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\cms.dll</HintPath>
+    </Reference>
+    <Reference Include="Dimi.Polyglot, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Polyglot_Bin\Dimi.Polyglot.dll</HintPath>
+    </Reference>
+    <Reference Include="Examine, Version=0.1.52.2941, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\Examine.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="interfaces, Version=1.0.5021.24867, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="umbraco, Version=1.0.5021.24870, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\umbraco.dll</HintPath>
+    </Reference>
+    <Reference Include="Umbraco.Core, Version=1.0.5021.24867, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\Umbraco.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.DataLayer, Version=1.0.5021.24868, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\umbraco.DataLayer.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.MacroEngines, Version=1.0.5021.24871, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ref\Umbraco7\Umbraco_Bin\umbraco.MacroEngines.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Rhythm.Extensions7\Events\RhythmEventHandler_Umbraco7.cs">
+      <Link>Events\RhythmEventHandler_Umbraco7.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions7\Mapping\ArchetypeMappingExecutor_Umbraco7.cs">
+      <Link>Mapping\ArchetypeMappingExecutor_Umbraco7.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions7\Mapping\ArchetypeMapping_Umbraco7.cs">
+      <Link>Mapping\ArchetypeMapping_Umbraco7.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions7\Mapping\MappingBase_Umbraco7.cs">
+      <Link>Mapping\MappingBase_Umbraco7.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions7\Mapping\MappingSession_Umbraco7.cs">
+      <Link>Mapping\MappingSession_Umbraco7.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions7\Mapping\Rules\ArchetypeCollectionMappingRule_Umbraco7.cs">
+      <Link>Mapping\Rules\ArchetypeCollectionMappingRule_Umbraco7.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions7\Mapping\Rules\ArchetypeMappingRule_Umbraco7.cs">
+      <Link>Mapping\Rules\ArchetypeMappingRule_Umbraco7.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions7\Mapping\Rules\ArchetypeNodeMappingRule_Umbraco7.cs">
+      <Link>Mapping\Rules\ArchetypeNodeMappingRule_Umbraco7.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions7\Mapping\Rules\ArchetypePropertyMappingRule_Umbraco7.cs">
+      <Link>Mapping\Rules\ArchetypePropertyMappingRule_Umbraco7.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions7\Mapping\Rules\CustomArchetypePropertyMappingRule_Umbraco7.cs">
+      <Link>Mapping\Rules\CustomArchetypePropertyMappingRule_Umbraco7.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions7\Models\SimpleContent_Umbraco7.cs">
+      <Link>Models\SimpleContent_Umbraco7.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Attributes\IpAddressBinderAttribute.cs">
+      <Link>Attributes\IpAddressBinderAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Attributes\ValidateRecaptchaAttribute.cs">
+      <Link>Attributes\ValidateRecaptchaAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Binding\RhythmModelBinder.cs">
+      <Link>Binding\RhythmModelBinder.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Constants\DocumentTypes.cs">
+      <Link>Constants\DocumentTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Constants\Properties.cs">
+      <Link>Constants\Properties.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Constants\RegexPatterns.cs">
+      <Link>Constants\RegexPatterns.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\AccessCode\Configuration.cs">
+      <Link>DataTypes\AccessCode\Configuration.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\AccessCode\DataEditor.cs">
+      <Link>DataTypes\AccessCode\DataEditor.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\AccessCode\DataType.cs">
+      <Link>DataTypes\AccessCode\DataType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\AccessCode\PrevalueEditor.cs">
+      <Link>DataTypes\AccessCode\PrevalueEditor.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\FontAwesomeIconPicker\DataEditor.cs">
+      <Link>DataTypes\FontAwesomeIconPicker\DataEditor.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\DataTypes\FontAwesomeIconPicker\DataType.cs">
+      <Link>DataTypes\FontAwesomeIconPicker\DataType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Enums\CacheGetMethod.cs">
+      <Link>Enums\CacheGetMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Enums\ConfigKeys.cs">
+      <Link>Enums\ConfigKeys.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Events\RhythmEventHandler.cs">
+      <Link>Events\RhythmEventHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\ControllerExtensionMethods.cs">
+      <Link>ExtensionMethods\ControllerExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\DateTimeExtensionMethods.cs">
+      <Link>ExtensionMethods\DateTimeExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\DictionaryExtensionMethods.cs">
+      <Link>ExtensionMethods\DictionaryExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\ExpandoObjectExtensionMethods.cs">
+      <Link>ExtensionMethods\ExpandoObjectExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\HtmlHelperExtensionMethods.cs">
+      <Link>ExtensionMethods\HtmlHelperExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\ObjectExtensionMethods.cs">
+      <Link>ExtensionMethods\ObjectExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\PublishedContentExtensionMethods.cs">
+      <Link>ExtensionMethods\PublishedContentExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\StringExtensionMethods.cs">
+      <Link>ExtensionMethods\StringExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\TimeZoneExtensionMethods.cs">
+      <Link>ExtensionMethods\TimeZoneExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\UmbracoHelperExtensionMethods.cs">
+      <Link>ExtensionMethods\UmbracoHelperExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\ExtensionMethods\XmlExtensionMethods.cs">
+      <Link>ExtensionMethods\XmlExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Helpers\ContentHelper.cs">
+      <Link>Helpers\ContentHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Interfaces\ICacheByKeyInvalidator.cs">
+      <Link>Interfaces\ICacheByKeyInvalidator.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Interfaces\ICacheInvalidator.cs">
+      <Link>Interfaces\ICacheInvalidator.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\ComponentMapping.cs">
+      <Link>Mapping\ComponentMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\ContentMapping.cs">
+      <Link>Mapping\ContentMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\IContentMapping.cs">
+      <Link>Mapping\IContentMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\IMapping.cs">
+      <Link>Mapping\IMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\IMappingRule.cs">
+      <Link>Mapping\IMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\IMappingSession.cs">
+      <Link>Mapping\IMappingSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\MappingBase.cs">
+      <Link>Mapping\MappingBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\MappingExecutor.cs">
+      <Link>Mapping\MappingExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\MappingOptions.cs">
+      <Link>Mapping\MappingOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\MappingSession.cs">
+      <Link>Mapping\MappingSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\PublishedContentBase.cs">
+      <Link>Mapping\PublishedContentBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\PublishedContentBaseMap.cs">
+      <Link>Mapping\PublishedContentBaseMap.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\ReflectionHelper.cs">
+      <Link>Mapping\ReflectionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\ComponentMappingRule.cs">
+      <Link>Mapping\Rules\ComponentMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\ContentCollectionMappingRule.cs">
+      <Link>Mapping\Rules\ContentCollectionMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\ContentMappingRule.cs">
+      <Link>Mapping\Rules\ContentMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\CustomPropertyMappingRule.cs">
+      <Link>Mapping\Rules\CustomPropertyMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\NodeMappingRule.cs">
+      <Link>Mapping\Rules\NodeMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\PropertyMappingRule.cs">
+      <Link>Mapping\Rules\PropertyMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\UmbracoHelperCollectionMappingRule.cs">
+      <Link>Mapping\Rules\UmbracoHelperCollectionMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\Rules\UmbracoHelperMappingRule.cs">
+      <Link>Mapping\Rules\UmbracoHelperMappingRule.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Mapping\UmbracoMapper.cs">
+      <Link>Mapping\UmbracoMapper.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Models\SimpleContent.cs">
+      <Link>Models\SimpleContent.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Models\SimpleContentType.cs">
+      <Link>Models\SimpleContentType.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Models\SimpleTemplate.cs">
+      <Link>Models\SimpleTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Routing\FragmentUrlProvider.cs">
+      <Link>Routing\FragmentUrlProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Types\CacheInvalidator.cs">
+      <Link>Types\CacheInvalidator.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Types\InstanceByKeyCache.cs">
+      <Link>Types\InstanceByKeyCache.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Types\InstanceCache.cs">
+      <Link>Types\InstanceCache.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Types\MediaCacheInvalidator.cs">
+      <Link>Types\MediaCacheInvalidator.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Types\ValueLabelPair.cs">
+      <Link>Types\ValueLabelPair.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\ActionUtility.cs">
+      <Link>Utilities\ActionUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\ConfigUtility.cs">
+      <Link>Utilities\ConfigUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\FontAwesomeCssParser.cs">
+      <Link>Utilities\FontAwesomeCssParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\NetUtility.cs">
+      <Link>Utilities\NetUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\NotNull.cs">
+      <Link>Utilities\NotNull.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\PasswordGenerator.cs">
+      <Link>Utilities\PasswordGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\PrevalueUtility.cs">
+      <Link>Utilities\PrevalueUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\ReflectionUtility.cs">
+      <Link>Utilities\ReflectionUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\StringUtility.cs">
+      <Link>Utilities\StringUtility.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
