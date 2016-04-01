@@ -23,6 +23,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 
 		#region Variables
 
+		private static readonly Regex UrlLangRegex = new Regex(@"(?<=^/)[a-z]{2}(-[a-z]{2})(?=$|/|\?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex LangRegex = new Regex(@"^[a-z]{2}(-[a-z]{2})?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex CsvRegex = new Regex(@"\s*[0-9](\s*,\s*[0-9]+)+\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly TimeSpan FallbackSettingCacheDuration = TimeSpan.FromMinutes(5);
@@ -844,6 +845,12 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static string LocalizationSelectedLanguage() {
 			var selectedLanguage = string.Empty;
 			var lang = HttpContext.Current.Request.Params["lang"];
+			if (string.IsNullOrWhiteSpace(lang)) {
+				var url = HttpContext.Current.Request.Url.ToString();
+				if (UrlLangRegex.IsMatch(url)) {
+					lang = UrlLangRegex.Match(url).Value;
+				}
+			}
 
 			if (!string.IsNullOrEmpty(lang) && LangRegex.IsMatch(lang)) {
 				selectedLanguage = lang.Length == 5 ? string.Format("{0}{1}", lang.Substring(0, 3).ToLower(),
