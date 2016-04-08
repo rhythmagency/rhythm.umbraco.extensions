@@ -846,7 +846,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 			var selectedLanguage = string.Empty;
 			var lang = HttpContext.Current.Request.Params["lang"];
 			if (string.IsNullOrWhiteSpace(lang)) {
-				var url = HttpContext.Current.Request.Url.ToString();
+				var url = HttpContext.Current.Request.Url.PathAndQuery;
 				if (UrlLangRegex.IsMatch(url)) {
 					lang = UrlLangRegex.Match(url).Value;
 				}
