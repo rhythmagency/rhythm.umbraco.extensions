@@ -721,9 +721,15 @@ namespace Rhythm.Extensions.ExtensionMethods {
 					// Repopulate the cache?
 					if (recache) {
 						foreach (DynamicNode child in page.GetChildrenAsList) {
-							if (!string.Equals(child.NodeTypeAlias, page.NodeTypeAlias + "_TranslationFolder", ignoreCase)) continue;
-							translationId = child.Id;
-							break;
+							var folderAliases = new[] {
+								page.NodeTypeAlias + "_TranslationFolder",
+								page.NodeTypeAlias + "TranslationFolder"
+							};
+							var isFolder = folderAliases.InvariantContains(child.NodeTypeAlias);
+							if (isFolder) {
+								translationId = child.Id;
+								break;
+							}
 						}
 						TranslationCache[page.Id] = new Tuple<int?,DateTime>(translationId, DateTime.Now);
 					}
@@ -731,9 +737,30 @@ namespace Rhythm.Extensions.ExtensionMethods {
 					// Check translations under translation folder.
 					if (translationId.HasValue) {
 						var translationFolder = new DynamicNode(translationId.Value);
-						foreach (DynamicNode translation in translationFolder.GetChildrenAsList) {
-							var language = translation.GetPropertyValue("language");
-							if (language == null || !string.Equals(language, selectedLanguage, ignoreCase)) continue;
+
+						// For the best match, "es-mx" must match "es-mx".
+						var bestMatch = translationFolder.GetChildrenAsList
+							.Where(x => {
+								var language = x.GetPropertyValue("language");
+								if (language == null) return false;
+								return selectedLanguage.InvariantEquals(language);
+							}).FirstOrDefault();
+
+						// For the second match, "es" matches "es-mx".
+						var secondMatch = bestMatch ?? translationFolder.GetChildrenAsList
+							.Where(x => {
+								var language = x.GetPropertyValue("language");
+								if (language == null) return false;
+								if (language.Length == 2 && selectedLanguage.Length == 5) {
+									var shortLanguage = selectedLanguage.Substring(0, 2);
+									if (string.Equals(language, shortLanguage, ignoreCase)) return true;
+								}
+								return false;
+							}).FirstOrDefault();
+
+						// Get value if a translation node was found.
+						var translation = bestMatch ?? secondMatch;
+						if (translation != null) {
 							if (translation.HasProperty(propertyAlias)) {
 								var translationValue = translation.GetPropertyValue(propertyAlias);
 								if (!string.IsNullOrEmpty(translationValue)
@@ -742,6 +769,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 								}
 							}
 						}
+
 					}
 
 				}
