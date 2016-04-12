@@ -1,7 +1,8 @@
 ﻿using Dimi.Polyglot.BLL;
 using Newtonsoft.Json.Linq;
-using Rhythm.Extensions.Models;
 using Rhythm.Extensions.Enums;
+using Rhythm.Extensions.Helpers;
+using Rhythm.Extensions.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,12 @@ using System.Web;
 using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Web;
+using ConfigUtility = Rhythm.Extensions.Utilities.ConfigUtility;
 using DocumentTypes = Rhythm.Extensions.Constants.DocumentTypes;
 using DynamicNode = umbraco.MacroEngines.DynamicNode;
 using DynamicXml = Umbraco.Core.Dynamics.DynamicXml;
 using Properties = Rhythm.Extensions.Constants.Properties;
 using StringUtility = Rhythm.Extensions.Utilities.StringUtility;
-using ConfigUtility = Rhythm.Extensions.Utilities.ConfigUtility;
 using UmbracoLibrary = global::umbraco.library;
 
 namespace Rhythm.Extensions.ExtensionMethods {
@@ -803,7 +804,13 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static T GetPropertyValue<T>(int nodeId, string propertyAlias) {
 
 			// Variables.
-			var page = (new UmbracoHelper(UmbracoContext.Current)).TypedContent(nodeId);
+			var helper = ContentHelper.GetHelper();
+			var page = helper.TypedContent(nodeId) ?? helper.TypedMedia(nodeId);
+
+			// Valid page?
+			if (page == null) {
+				return default(T);
+			}
 
 			// Special case for a multiple textstring.
 			if (typeof(T) == typeof(string[]))
@@ -850,7 +857,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 				var result = page.GetPropertyValue<string>(propertyAlias) ?? string.Empty;
 				var resultItems = StringUtility.SplitCsv(result);
 				var intItems = new List<int>();
-				int intItem;
+				var intItem = default(int);
 				foreach (var item in resultItems)
 				{
 					if (int.TryParse(item, out intItem))
