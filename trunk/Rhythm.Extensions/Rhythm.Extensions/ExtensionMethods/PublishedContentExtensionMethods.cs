@@ -1,7 +1,8 @@
 ﻿using Dimi.Polyglot.BLL;
 using Newtonsoft.Json.Linq;
-using Rhythm.Extensions.Models;
 using Rhythm.Extensions.Enums;
+using Rhythm.Extensions.Helpers;
+using Rhythm.Extensions.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,12 @@ using System.Web;
 using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Web;
+using ConfigUtility = Rhythm.Extensions.Utilities.ConfigUtility;
 using DocumentTypes = Rhythm.Extensions.Constants.DocumentTypes;
 using DynamicNode = umbraco.MacroEngines.DynamicNode;
 using DynamicXml = Umbraco.Core.Dynamics.DynamicXml;
 using Properties = Rhythm.Extensions.Constants.Properties;
 using StringUtility = Rhythm.Extensions.Utilities.StringUtility;
-using ConfigUtility = Rhythm.Extensions.Utilities.ConfigUtility;
 using UmbracoLibrary = global::umbraco.library;
 
 namespace Rhythm.Extensions.ExtensionMethods {
@@ -23,6 +24,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 
 		#region Variables
 
+		private static readonly Regex UrlLangRegex = new Regex(@"(?<=^/)[a-z]{2}(-[a-z]{2})(?=$|/|\?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex LangRegex = new Regex(@"^[a-z]{2}(-[a-z]{2})?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex CsvRegex = new Regex(@"\s*[0-9](\s*,\s*[0-9]+)+\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly TimeSpan FallbackSettingCacheDuration = TimeSpan.FromMinutes(5);
@@ -720,9 +722,15 @@ namespace Rhythm.Extensions.ExtensionMethods {
 					// Repopulate the cache?
 					if (recache) {
 						foreach (DynamicNode child in page.GetChildrenAsList) {
-							if (!string.Equals(child.NodeTypeAlias, page.NodeTypeAlias + "_TranslationFolder", ignoreCase)) continue;
-							translationId = child.Id;
-							break;
+							var folderAliases = new[] {
+								page.NodeTypeAlias + "_TranslationFolder",
+								page.NodeTypeAlias + "TranslationFolder"
+							};
+							var isFolder = folderAliases.InvariantContains(child.NodeTypeAlias);
+							if (isFolder) {
+								translationId = child.Id;
+								break;
+							}
 						}
 						TranslationCache[page.Id] = new Tuple<int?,DateTime>(translationId, DateTime.Now);
 					}
@@ -730,9 +738,30 @@ namespace Rhythm.Extensions.ExtensionMethods {
 					// Check translations under translation folder.
 					if (translationId.HasValue) {
 						var translationFolder = new DynamicNode(translationId.Value);
-						foreach (DynamicNode translation in translationFolder.GetChildrenAsList) {
-							var language = translation.GetPropertyValue("language");
-							if (language == null || !string.Equals(language, selectedLanguage, ignoreCase)) continue;
+
+						// For the best match, "es-mx" must match "es-mx".
+						var bestMatch = translationFolder.GetChildrenAsList
+							.Where(x => {
+								var language = x.GetPropertyValue("language");
+								if (language == null) return false;
+								return selectedLanguage.InvariantEquals(language);
+							}).FirstOrDefault();
+
+						// For the second match, "es" matches "es-mx".
+						var secondMatch = bestMatch ?? translationFolder.GetChildrenAsList
+							.Where(x => {
+								var language = x.GetPropertyValue("language");
+								if (language == null) return false;
+								if (language.Length == 2 && selectedLanguage.Length == 5) {
+									var shortLanguage = selectedLanguage.Substring(0, 2);
+									if (string.Equals(language, shortLanguage, ignoreCase)) return true;
+								}
+								return false;
+							}).FirstOrDefault();
+
+						// Get value if a translation node was found.
+						var translation = bestMatch ?? secondMatch;
+						if (translation != null) {
 							if (translation.HasProperty(propertyAlias)) {
 								var translationValue = translation.GetPropertyValue(propertyAlias);
 								if (!string.IsNullOrEmpty(translationValue)
@@ -741,6 +770,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 								}
 							}
 						}
+
 					}
 
 				}
@@ -774,7 +804,13 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static T GetPropertyValue<T>(int nodeId, string propertyAlias) {
 
 			// Variables.
-			var page = (new UmbracoHelper(UmbracoContext.Current)).TypedContent(nodeId);
+			var helper = ContentHelper.GetHelper();
+			var page = helper.TypedContent(nodeId) ?? helper.TypedMedia(nodeId);
+
+			// Valid page?
+			if (page == null) {
+				return default(T);
+			}
 
 			// Special case for a multiple textstring.
 			if (typeof(T) == typeof(string[]))
@@ -821,7 +857,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 				var result = page.GetPropertyValue<string>(propertyAlias) ?? string.Empty;
 				var resultItems = StringUtility.SplitCsv(result);
 				var intItems = new List<int>();
-				int intItem;
+				var intItem = default(int);
 				foreach (var item in resultItems)
 				{
 					if (int.TryParse(item, out intItem))
@@ -844,6 +880,12 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static string LocalizationSelectedLanguage() {
 			var selectedLanguage = string.Empty;
 			var lang = HttpContext.Current.Request.Params["lang"];
+			if (string.IsNullOrWhiteSpace(lang)) {
+				var url = HttpContext.Current.Request.Url.PathAndQuery;
+				if (UrlLangRegex.IsMatch(url)) {
+					lang = UrlLangRegex.Match(url).Value;
+				}
+			}
 
 			if (!string.IsNullOrEmpty(lang) && LangRegex.IsMatch(lang)) {
 				selectedLanguage = lang.Length == 5 ? string.Format("{0}{1}", lang.Substring(0, 3).ToLower(),
