@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Rhythm.Extensions.Website", "http://localhost:51295", "{9245C122-02C1-4E76-8A1B-70F9721E13F0}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhythm.Extensions.Umbraco7"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhythm.Extensions.Umbraco7.NoContour", "Rhythm.Extensions7.NoContour\Rhythm.Extensions.Umbraco7.NoContour.csproj", "{EA1C5A0E-86D8-4745-8554-04259A78739C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhythm.Extensions.Test", "Rhythm.Extensions.Test\Rhythm.Extensions.Test.csproj", "{48651CAF-F8A2-4C84-9F3D-27A859EBF575}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{EA1C5A0E-86D8-4745-8554-04259A78739C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA1C5A0E-86D8-4745-8554-04259A78739C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA1C5A0E-86D8-4745-8554-04259A78739C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48651CAF-F8A2-4C84-9F3D-27A859EBF575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48651CAF-F8A2-4C84-9F3D-27A859EBF575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48651CAF-F8A2-4C84-9F3D-27A859EBF575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48651CAF-F8A2-4C84-9F3D-27A859EBF575}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

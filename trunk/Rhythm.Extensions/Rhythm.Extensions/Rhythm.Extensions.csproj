@@ -149,6 +149,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routing\FragmentUrlProvider.cs" />
     <Compile Include="Types\CacheInvalidator.cs" />
+    <Compile Include="Types\InstanceByKeyCacheEx.cs" />
     <Compile Include="Types\InstanceCache.cs" />
     <Compile Include="Types\InstanceByKeyCache.cs" />
     <Compile Include="Types\MediaCacheInvalidator.cs" />
