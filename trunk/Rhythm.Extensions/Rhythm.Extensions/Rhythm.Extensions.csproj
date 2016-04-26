@@ -160,6 +160,7 @@
     <Compile Include="Utilities\FontAwesomeCssParser.cs" />
     <Compile Include="Utilities\NetUtility.cs" />
     <Compile Include="Utilities\NotNull.cs" />
+    <Compile Include="Utilities\ParseUtility.cs" />
     <Compile Include="Utilities\PasswordGenerator.cs" />
     <Compile Include="ExtensionMethods\StringExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\XmlExtensionMethods.cs" />

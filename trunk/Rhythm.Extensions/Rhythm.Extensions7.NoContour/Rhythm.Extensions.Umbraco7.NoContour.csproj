@@ -325,6 +325,9 @@
     <Compile Include="..\Rhythm.Extensions\Utilities\NotNull.cs">
       <Link>Utilities\NotNull.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Utilities\ParseUtility.cs">
+      <Link>Utilities\ParseUtility.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Utilities\PasswordGenerator.cs">
       <Link>Utilities\PasswordGenerator.cs</Link>
     </Compile>
