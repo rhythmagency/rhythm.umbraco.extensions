@@ -44,10 +44,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ref\Umbraco7\Umbraco_Bin\cms.dll</HintPath>
     </Reference>
-    <Reference Include="Dimi.Polyglot, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ref\Umbraco7\Polyglot_Bin\Dimi.Polyglot.dll</HintPath>
-    </Reference>
     <Reference Include="Examine, Version=0.1.52.2941, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ref\Umbraco7\Umbraco_Bin\Examine.dll</HintPath>

@@ -1,10 +1,10 @@
-﻿using Dimi.Polyglot.BLL;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Rhythm.Extensions.Enums;
 using Rhythm.Extensions.Helpers;
 using Rhythm.Extensions.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -17,6 +17,7 @@ using DynamicNode = umbraco.MacroEngines.DynamicNode;
 using DynamicXml = Umbraco.Core.Dynamics.DynamicXml;
 using Properties = Rhythm.Extensions.Constants.Properties;
 using StringUtility = Rhythm.Extensions.Utilities.StringUtility;
+using UmbracoLanguage = umbraco.cms.businesslogic.language.Language;
 using UmbracoLibrary = global::umbraco.library;
 
 namespace Rhythm.Extensions.ExtensionMethods {
@@ -891,7 +892,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 				selectedLanguage = lang.Length == 5 ? string.Format("{0}{1}", lang.Substring(0, 3).ToLower(),
 					lang.Substring(3, 2).ToUpper()) : lang.ToLower();
 			} else {
-				selectedLanguage = Languages.GetDefaultLanguage();
+				selectedLanguage = GetDefaultLanguage();
 			}
 
 			return selectedLanguage;
@@ -926,6 +927,66 @@ namespace Rhythm.Extensions.ExtensionMethods {
 					}
 				}));
 			}
+		}
+
+		/// <summary>
+		/// Returns the default language to use.
+		/// </summary>
+		/// <returns>
+		/// The default language.
+		/// </returns>
+		/// <remarks>
+		/// Modified from: https://github.com/coding3d/Polyglot/blob/a4ca9c48d78a55a9a6dbbcc99e2e164edbe4544b/Dimi.Polyglot/BLL/Languages.cs
+		/// </remarks>
+		private static string GetDefaultLanguage() {
+			var defaultLanguage = default(string);
+			try {
+				defaultLanguage = ConfigurationManager.AppSettings["uPolyglotDefaultLanguage"];
+			} catch {
+				defaultLanguage = string.Empty;
+			}
+			if (string.IsNullOrWhiteSpace(defaultLanguage)) {
+				defaultLanguage = GetLanguages().FirstOrDefault();
+			}
+			return defaultLanguage;
+		}
+
+		/// <summary>
+		/// Gets the list of languages defined in Umbraco in the Settings section, under "Languages".
+		/// </summary>
+		/// <returns>The list of languages.</returns>
+		public static IEnumerable<string> GetLanguages() {
+
+			// Variables.
+			var languages = new List<string>();
+			var umbracoLanguages = UmbracoLanguage.GetAllAsList();
+
+			// Get configuration.
+			var appendLanguageCodes = default(string);
+			try {
+				appendLanguageCodes = ConfigurationManager.AppSettings["uPolyglotAppendLanguageCodes"];
+			} catch {
+				appendLanguageCodes = string.Empty;
+			}
+
+			// Check if culture info is going to be used.
+			var useCultureInLanguageCodeCfg =
+				ConfigurationManager.AppSettings["uPolyglotUseCultureInLanguageCode"];
+			var usingCultureInLanguageCode = "true".InvariantEquals(useCultureInLanguageCodeCfg ?? string.Empty);
+
+			// Get languages.
+			foreach (var umbLanguage in umbracoLanguages) {
+				var isoCode = usingCultureInLanguageCode
+					? umbLanguage.CultureAlias
+					: umbLanguage.CultureAlias.Substring(0, 2);
+				if (!languages.Any(x => x == isoCode)) {
+					languages.Add(isoCode);
+				}
+			}
+
+			// Return language ISO codes.
+			return languages;
+
 		}
 
 		#endregion

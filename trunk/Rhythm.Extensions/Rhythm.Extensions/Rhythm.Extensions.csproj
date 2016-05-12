@@ -40,9 +40,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ref\Umbraco_Bin\cms.dll</HintPath>
     </Reference>
-    <Reference Include="Dimi.Polyglot">
-      <HintPath>..\ref\Polyglot_Bin\Dimi.Polyglot.dll</HintPath>
-    </Reference>
     <Reference Include="Examine">
       <HintPath>..\ref\Umbraco_Bin\Examine.dll</HintPath>
     </Reference>
