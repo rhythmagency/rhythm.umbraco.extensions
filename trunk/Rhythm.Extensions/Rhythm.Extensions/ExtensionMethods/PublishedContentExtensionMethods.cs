@@ -32,6 +32,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static readonly Regex TitleRegex = new Regex(@"{(page|page-name|\*|name|parent|parent-name|parent-title)}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static readonly Regex PrevalueRegex = new Regex(@"^[0-9]+(,[0-9]+)*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		private static bool? BypassLocalization = null;
+		private static string DefaultLanguage = null;
 
 		#endregion
 
@@ -44,6 +45,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		private static Dictionary<Tuple<int, string, Type>, Tuple<object, DateTime>> SettingCache { get; set; }
 		private static Dictionary<int, Tuple<int, TimeSpan>> SettingsNodeCache { get; set; }
 		private static object SettingLock { get; set; }
+		private static object DefaultLanguageLock { get; set; }
 
 		#endregion
 
@@ -57,6 +59,7 @@ namespace Rhythm.Extensions.ExtensionMethods {
 			SettingCache = new Dictionary<Tuple<int,string,Type>,Tuple<object,DateTime>>();
 			SettingsNodeCache = new Dictionary<int,Tuple<int,TimeSpan>>();
 			SettingLock = new object();
+			DefaultLanguageLock = new object();
 		}
 
 		#endregion
@@ -939,16 +942,20 @@ namespace Rhythm.Extensions.ExtensionMethods {
 		/// Modified from: https://github.com/coding3d/Polyglot/blob/a4ca9c48d78a55a9a6dbbcc99e2e164edbe4544b/Dimi.Polyglot/BLL/Languages.cs
 		/// </remarks>
 		private static string GetDefaultLanguage() {
-			var defaultLanguage = default(string);
-			try {
-				defaultLanguage = ConfigurationManager.AppSettings["uPolyglotDefaultLanguage"];
-			} catch {
-				defaultLanguage = string.Empty;
+			if (!string.IsNullOrWhiteSpace(DefaultLanguage)) {
+				return DefaultLanguage;
 			}
-			if (string.IsNullOrWhiteSpace(defaultLanguage)) {
-				defaultLanguage = GetLanguages().FirstOrDefault();
+			lock (DefaultLanguageLock) {
+				try {
+					DefaultLanguage = ConfigurationManager.AppSettings["uPolyglotDefaultLanguage"];
+				} catch {
+					DefaultLanguage = string.Empty;
+				}
+				if (string.IsNullOrWhiteSpace(DefaultLanguage)) {
+					DefaultLanguage = GetLanguages().FirstOrDefault();
+				}
+				return DefaultLanguage;
 			}
-			return defaultLanguage;
 		}
 
 		/// <summary>
