@@ -518,16 +518,43 @@ namespace Rhythm.Extensions.ExtensionMethods {
 			return null;
 		}
 
-		/// <summary>
-		/// Returns all siblings of the specified types.
-		/// </summary>
-		/// <param name="source">The node to start the search at.</param>
-		/// <param name="typeAliases">The aliases of the content types.</param>
-		/// <returns>The siblings.</returns>
-		/// <remarks>
-		/// The source node is excluded from the results.
-		/// </remarks>
-		public static IEnumerable<IPublishedContent> SiblingsOfTypes(this IPublishedContent source,
+        /// <summary>
+        /// Searches for the nearest ancestors with the specified content types.
+        /// </summary>
+        /// <param name="source">The node to start searching from.</param>
+        /// <param name="typeAliases">The aliases of the content types.</param>
+        /// <param name="includeSelf">Include the supplied node in the search (by default the search will start at the parent)?</param>
+        /// <returns>The nearest matching ancestor, or null.</returns>
+        public static IPublishedContent NearestAncestorOfTypes(this IPublishedContent source, bool includeSelf = false, params string[] typeAliases)
+        {
+            if (!includeSelf && source != null)
+            {
+                source = source.Parent;
+            }
+            while (source != null)
+            {
+                for (int i = 0; i < typeAliases.Length; i++)
+                {
+                    if (typeAliases[i].InvariantEquals(source.DocumentTypeAlias))
+                    {
+                        return source;
+                    }
+                }
+                source = source.Parent;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Returns all siblings of the specified types.
+        /// </summary>
+        /// <param name="source">The node to start the search at.</param>
+        /// <param name="typeAliases">The aliases of the content types.</param>
+        /// <returns>The siblings.</returns>
+        /// <remarks>
+        /// The source node is excluded from the results.
+        /// </remarks>
+        public static IEnumerable<IPublishedContent> SiblingsOfTypes(this IPublishedContent source,
 			params string[] typeAliases) {
 			return source.Siblings()
 				.Where(x => x.Id != source.Id && typeAliases.Any(y => y.InvariantEquals(x.DocumentTypeAlias)));
