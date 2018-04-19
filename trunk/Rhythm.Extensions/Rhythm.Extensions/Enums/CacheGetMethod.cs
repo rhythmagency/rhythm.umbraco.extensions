@@ -33,7 +33,15 @@
 		/// Gets the cached value, or null.
 		/// Does not modify the cached value or call the replenisher.
 		/// </summary>
-		FromCache
+		FromCache,
+
+		/// <summary>
+		/// Gets a value from the cache, replenishing the cache with a new value if it doesn't have one yet.
+		/// If the cache has a value but is due for replenishment, the current value is returned, and replenishment
+		/// is run afterward in a child process.
+		/// Useful for long-running replenishment processes.
+		/// </summary>
+		DefaultRecacheAfter
 
 	}
 

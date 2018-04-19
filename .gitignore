@@ -13,3 +13,4 @@ _ReSharper.*
 Ankh.NoLoad
 trunk/Rhythm.Extensions/Rhythm.Extensions.Website/*
 !trunk/Rhythm.Extensions/Rhythm.Extensions.Website/App_Plugins/
+.vs/
