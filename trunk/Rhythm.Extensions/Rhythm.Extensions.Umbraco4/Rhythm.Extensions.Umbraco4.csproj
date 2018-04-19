@@ -47,6 +47,9 @@
     <Compile Include="..\Rhythm.Extensions\Types\InstanceCache.cs">
       <Link>Types\InstanceCache.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Types\InstanceCacheV2.cs">
+      <Link>Types\InstanceCacheV2.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

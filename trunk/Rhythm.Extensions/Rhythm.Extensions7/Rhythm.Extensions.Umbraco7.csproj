@@ -283,6 +283,9 @@
     <Compile Include="..\Rhythm.Extensions\Types\InstanceCache.cs">
       <Link>Types\InstanceCache.cs</Link>
     </Compile>
+    <Compile Include="..\Rhythm.Extensions\Types\InstanceCacheV2.cs">
+      <Link>Types\InstanceCacheV2.cs</Link>
+    </Compile>
     <Compile Include="..\Rhythm.Extensions\Types\MediaCacheInvalidator.cs">
       <Link>Types\MediaCacheInvalidator.cs</Link>
     </Compile>
